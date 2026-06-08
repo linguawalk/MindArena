@@ -21,18 +21,30 @@
       --t:#1a1a1a;--t2:#5f5e5a;--t3:#888780;
       --bd:rgba(0,0,0,0.09);--bd2:rgba(0,0,0,0.18);
       --bg:#fff;--bg2:#f8f7f4;
-      --sw:220px;--nh:56px;--r:10px
+      --nh:56px;--r:10px
     }
     html{scroll-behavior:smooth}
     body{font-family:'Noto Sans KR',sans-serif;color:var(--t);background:var(--bg);font-size:14px;line-height:1.6}
-    nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;height:var(--nh);background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:.5px solid var(--bd)}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:.5px solid var(--bd)}
+    .nav-top{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:var(--nh)}
     .logo{font-size:16px;font-weight:500;color:var(--pu);text-decoration:none;display:flex;align-items:center;gap:7px}
     .logo svg{width:20px;height:20px}
-    .nl{display:flex;gap:2px}
-    .nl a{padding:5px 14px;border-radius:7px;font-size:13px;color:var(--t2);text-decoration:none;transition:background .12s,color .12s}
-    .nl a:hover{background:var(--bg2);color:var(--t)}
-    .page{display:flex;min-height:calc(100vh - var(--nh))}
-    .sb{width:var(--sw);flex-shrink:0;border-right:.5px solid var(--bd);padding:1.25rem 0;position:sticky;top:var(--nh);height:calc(100vh - var(--nh));overflow-y:auto}
+
+    /* TAB BAR */
+    .tab-bar{display:flex;gap:0;border-top:.5px solid var(--bd);padding:0 2rem}
+    .tab{padding:10px 20px;font-size:14px;font-weight:500;cursor:pointer;color:var(--t3);border:none;background:transparent;font-family:inherit;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;display:flex;align-items:center;gap:6px}
+    .tab:hover{color:var(--t2)}
+    .tab.on{color:var(--pu);border-bottom-color:var(--pu)}
+    .tab-count{font-size:11px;background:var(--bg2);padding:1px 7px;border-radius:20px;color:var(--t3)}
+    .tab.on .tab-count{background:var(--pu-l);color:var(--pu)}
+
+    /* LAYOUT */
+    .page{display:flex;min-height:calc(100vh - var(--nh) - 41px)}
+
+    /* SIDEBAR */
+    .sb{width:200px;flex-shrink:0;border-right:.5px solid var(--bd);padding:1.25rem 0;position:sticky;top:calc(var(--nh) + 41px);height:calc(100vh - var(--nh) - 41px);overflow-y:auto}
     .sb::-webkit-scrollbar{width:4px}
     .sb::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
     .sbs{margin-bottom:1.5rem}
@@ -42,17 +54,27 @@
     .sbi.on{color:var(--pu);border-left-color:var(--pu);background:var(--pu-l);font-weight:500}
     .sbc{margin-left:auto;font-size:10px;background:var(--bg2);padding:1px 6px;border-radius:20px;color:var(--t3)}
     .sbi.on .sbc{background:rgba(83,74,183,.12)}
+
+    /* MAIN */
     .main{flex:1;padding:1.75rem 2rem;min-width:0}
+
+    /* FILTER */
     .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem}
     .mh h1{font-size:18px;font-weight:500}
     .fb{display:flex;gap:6px}
     .fb button{padding:5px 13px;border:.5px solid var(--bd);border-radius:20px;font-size:12px;cursor:pointer;background:transparent;color:var(--t2);font-family:inherit;transition:all .12s}
     .fb button:hover{border-color:var(--bd2);color:var(--t)}
     .fb button.on{background:var(--pu);color:#fff;border-color:var(--pu)}
+
+    /* SECTION DIVIDER */
     .sd{font-size:12.5px;font-weight:500;color:var(--t2);margin:1.75rem 0 .9rem;padding-bottom:.5rem;border-bottom:.5px solid var(--bd);display:flex;align-items:center;gap:6px}
     .sd:first-of-type{margin-top:0}
     .sd svg{width:14px;height:14px;color:var(--t3)}
+
+    /* GRID */
     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:.5rem}
+
+    /* CARD */
     .card{background:var(--bg);border:.5px solid var(--bd);border-radius:var(--r);padding:1.1rem;cursor:pointer;transition:border-color .15s,transform .15s;text-decoration:none;color:inherit;display:block}
     .card:hover{border-color:var(--bd2);transform:translateY(-1px)}
     .ct{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.6rem}
@@ -84,6 +106,11 @@
     .card p{font-size:11.5px;color:var(--t2);line-height:1.5}
     .cf{display:flex;gap:4px;margin-top:.65rem;flex-wrap:wrap}
     .mt{font-size:10px;color:var(--t3);background:var(--bg2);padding:2px 7px;border-radius:20px}
+
+    /* PANEL VISIBILITY */
+    .panel{display:none}
+    .panel.on{display:block}
+
     @media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:800px){.sb{display:none}.grid{grid-template-columns:1fr 1fr}}
     @media(max-width:500px){.grid{grid-template-columns:1fr}}
@@ -92,321 +119,426 @@
   </style>
 </head>
 <body>
+
 <nav>
-  <a href="/" class="logo">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a5 5 0 0 1 5 5c0 2-1 3.5-2.5 4.5L12 22l-2.5-10.5C8 10.5 7 9 7 7a5 5 0 0 1 5-5z"/><circle cx="12" cy="7" r="2"/></svg>
-    MindArena
-  </a>
-  <div class="nl">
-    <a href="#sim">시뮬레이션</a>
-    <a href="#puzzle">퍼즐</a>
-    <a href="#boardgame">보드게임</a>
-    <a href="#about">소개</a>
+  <div class="nav-top">
+    <a href="/" class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a5 5 0 0 1 5 5c0 2-1 3.5-2.5 4.5L12 22l-2.5-10.5C8 10.5 7 9 7 7a5 5 0 0 1 5-5z"/><circle cx="12" cy="7" r="2"/></svg>
+      MindArena
+    </a>
+  </div>
+  <div class="tab-bar">
+    <button class="tab on" onclick="showTab('sim',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      시뮬레이션 <span class="tab-count">25</span>
+    </button>
+    <button class="tab" onclick="showTab('puzzle',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11V9a2 2 0 0 0-2-2h-2V5a2 2 0 0 0-4 0v2H9a2 2 0 0 0-2 2v2H5a2 2 0 0 0 0 4h2v2a2 2 0 0 0 2 2h2v2a2 2 0 0 0 4 0v-2h2a2 2 0 0 0 2-2v-2h2a2 2 0 0 0 0-4h-2z"/></svg>
+      퍼즐 <span class="tab-count">135</span>
+    </button>
+    <button class="tab" onclick="showTab('board',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+      보드게임 <span class="tab-count">120</span>
+    </button>
   </div>
 </nav>
+
 <div class="page">
-<aside class="sb">
-  <div class="sbs">
-    <div class="sbt">카테고리</div>
-    <a href="#" class="sbi on" onclick="fAll(event)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      전체<span class="sbc">280+</span>
-    </a>
-    <a href="#sim" class="sbi">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      시뮬레이션<span class="sbc">25</span>
-    </a>
-    <a href="#puzzle" class="sbi">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11V9a2 2 0 0 0-2-2h-2V5a2 2 0 0 0-4 0v2H9a2 2 0 0 0-2 2v2H5a2 2 0 0 0 0 4h2v2a2 2 0 0 0 2 2h2v2a2 2 0 0 0 4 0v-2h2a2 2 0 0 0 2-2v-2h2a2 2 0 0 0 0-4h-2z"/></svg>
-      퍼즐<span class="sbc">135</span>
-    </a>
-    <a href="#boardgame" class="sbi">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
-      보드게임<span class="sbc">120</span>
-    </a>
-  </div>
-  <div class="sbs">
-    <div class="sbt">시뮬레이션</div>
-    <a href="#sim-biz" class="sbi">기업 경영<span class="sbc">8</span></a>
-    <a href="#sim-pol" class="sbi">국가 정책<span class="sbc">8</span></a>
-    <a href="#sim-int" class="sbi">국제·위기·미래<span class="sbc">9</span></a>
-  </div>
-  <div class="sbs">
-    <div class="sbt">보드게임</div>
-    <a href="#bg-cl" class="sbi">기본 6종<span class="sbc">30</span></a>
-    <a href="#bg-la" class="sbi">언어·스토리텔링<span class="sbc">5</span></a>
-    <a href="#bg-ma" class="sbi">수학·확률<span class="sbc">5</span></a>
-    <a href="#bg-sp" class="sbi">공간·시각<span class="sbc">5</span></a>
-    <a href="#bg-me" class="sbi">기억·집중<span class="sbc">5</span></a>
-    <a href="#bg-hi" class="sbi">역사·문명<span class="sbc">5</span></a>
-    <a href="#bg-ec" class="sbi">경제·투자<span class="sbc">5</span></a>
-    <a href="#bg-sc" class="sbi">과학·발명<span class="sbc">5</span></a>
-    <a href="#bg-et" class="sbi">윤리·철학<span class="sbc">5</span></a>
-    <a href="#bg-in" class="sbi">정보 비대칭<span class="sbc">5</span></a>
-    <a href="#bg-te" class="sbi">팀 전략<span class="sbc">5</span></a>
-    <a href="#bg-mu" class="sbi">음악·리듬<span class="sbc">5</span></a>
-    <a href="#bg-ar" class="sbi">미술·디자인<span class="sbc">5</span></a>
-    <a href="#bg-so" class="sbi">체육·스포츠<span class="sbc">5</span></a>
-    <a href="#bg-dr" class="sbi">연극·표현<span class="sbc">5</span></a>
-    <a href="#bg-ps" class="sbi">심리·감정<span class="sbc">5</span></a>
-    <a href="#bg-cu" class="sbi">문화·다양성<span class="sbc">5</span></a>
-    <a href="#bg-en" class="sbi">환경·생태<span class="sbc">5</span></a>
-    <a href="#bg-fu" class="sbi">미래·기술<span class="sbc">5</span></a>
-  </div>
-  <div class="sbs">
-    <div class="sbt">소요 시간</div>
-    <a href="#" class="sbi" onclick="fShort(event)">1-2시간</a>
-    <a href="#" class="sbi" onclick="fLong(event)">3일+</a>
-  </div>
-</aside>
-<main class="main">
-  <div class="mh">
-    <h1>전체 콘텐츠</h1>
-    <div class="fb">
-      <button class="on" onclick="fAll(event)">전체</button>
-      <button onclick="fShort(event)">1-2시간</button>
-      <button onclick="fLong(event)">3일+</button>
+
+  <!-- ══ 시뮬레이션 사이드바 ══ -->
+  <aside class="sb" id="sb-sim">
+    <div class="sbs">
+      <div class="sbt">주제별</div>
+      <a href="#sim-biz" class="sbi">기업 경영<span class="sbc">8</span></a>
+      <a href="#sim-pol" class="sbi">국가 정책<span class="sbc">8</span></a>
+      <a href="#sim-int" class="sbi">국제 관계<span class="sbc">3</span></a>
+      <a href="#sim-cri" class="sbi">위기 관리<span class="sbc">3</span></a>
+      <a href="#sim-fut" class="sbi">미래 시나리오<span class="sbc">3</span></a>
     </div>
-  </div>
+    <div class="sbs">
+      <div class="sbt">소요 시간</div>
+      <a href="#" class="sbi" onclick="fShort(event,'sim')">1-2시간</a>
+      <a href="#" class="sbi" onclick="fLong(event,'sim')">3일+</a>
+      <a href="#" class="sbi on" onclick="fAll(event,'sim')">전체</a>
+    </div>
+  </aside>
 
-  <!-- 시뮬레이션 기업경영 -->
-  <div id="sim-biz" class="sd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>시뮬레이션 — 기업 경영</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐</span></div><h3>스타트업의 첫 번째 위기</h3><p>투자금 3개월치. 긴축·피벗·매각 중 선택.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">60-90분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>구조조정의 딜레마</h3><p>매출 30% 감소. 누구를 내보낼 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>글로벌 시장 진출</h3><p>불완전한 준비, 신뢰하기 어려운 파트너.</p><div class="cf"><span class="mt">4-6명</span><span class="mt">90-120분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>ESG 경영의 선택</h3><p>단기 비용 vs 장기 브랜드 가치.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>인수합병 협상</h3><p>시가 대비 35% 높은 인수 제안. 팔 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>국가 경제 위기 대응</h3><p>외환보유액 급감. IMF 구제금융. 72시간.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>글로벌 M&amp;A 전쟁</h3><p>반도체 기업에 미국·중국 동시 인수 제안.</p><div class="cf"><span class="mt">12-24명</span><span class="mt">3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>산업 패권 경쟁</h3><p>배터리 패권 전쟁. 미국 IRA vs 중국 저가 공세.</p><div class="cf"><span class="mt">15-30명</span><span class="mt">3-4일</span></div></a>
-  </div>
+  <!-- ══ 퍼즐 사이드바 ══ -->
+  <aside class="sb" id="sb-puzzle" style="display:none">
+    <div class="sbs">
+      <div class="sbt">종류</div>
+      <a href="#pz-num" class="sbi">숫자 퍼즐<span class="sbc">15</span></a>
+      <a href="#pz-log" class="sbi">논리 퍼즐<span class="sbc">15</span></a>
+      <a href="#pz-lan" class="sbi">언어 퍼즐<span class="sbc">15</span></a>
+      <a href="#pz-pro" class="sbi">확률 퍼즐<span class="sbc">15</span></a>
+      <a href="#pz-spa" class="sbi">공간 퍼즐<span class="sbc">15</span></a>
+      <a href="#pz-pat" class="sbi">패턴 퍼즐<span class="sbc">15</span></a>
+      <a href="#pz-str" class="sbi">전략 퍼즐<span class="sbc">15</span></a>
+      <a href="#pz-cre" class="sbi">창의 퍼즐<span class="sbc">15</span></a>
+      <a href="#pz-fus" class="sbi">융합 퍼즐<span class="sbc">15</span></div>
+    </div>
+    <div class="sbs">
+      <div class="sbt">레벨</div>
+      <a href="#" class="sbi">Lv.1-5 입문</a>
+      <a href="#" class="sbi">Lv.6-10 중급</a>
+      <a href="#" class="sbi">Lv.11-15 심화</a>
+    </div>
+  </aside>
 
-  <!-- 시뮬레이션 국가정책 -->
-  <div id="sim-pol" class="sd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>시뮬레이션 — 국가 정책</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>인구 감소 대응 정책</h3><p>출산율 0.7. 돈으로 아이를 낳게 할 수 있는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>에너지 전환 정책</h3><p>석탄·원전·재생에너지. 탄소중립 에너지 믹스 선택.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>플랫폼 규제 딜레마</h3><p>배달앱 수수료 27%. 규제할 것인가?</p><div class="cf"><span class="mt">4-6명</span><span class="mt">90-120분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>부동산 정책의 선택</h3><p>집값 잡기 vs 공급 확대. 모두를 만족시킬 수 없다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>인공지능 규제 설계</h3><p>혁신 vs 안전. 한국은 어떤 선택을 해야 하는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>국가 재정 위기 대응</h3><p>국가 부채 GDP 100% 초과. 세금 vs 복지 삭감.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>헌법 개정 협상</h3><p>권력 구조·기본권·지방분권. 2/3 합의가 필요하다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>선거 제도 개혁</h3><p>소선거구제 vs 비례대표제. 모든 정당이 자신에게 유리한 제도를 원한다.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">3일</span></div></a>
-  </div>
+  <!-- ══ 보드게임 사이드바 ══ -->
+  <aside class="sb" id="sb-board" style="display:none">
+    <div class="sbs">
+      <div class="sbt">분야</div>
+      <a href="#bg-cl" class="sbi">기본 6종<span class="sbc">30</span></a>
+      <a href="#bg-la" class="sbi">언어·스토리텔링<span class="sbc">5</span></a>
+      <a href="#bg-ma" class="sbi">수학·확률<span class="sbc">5</span></a>
+      <a href="#bg-sp" class="sbi">공간·시각<span class="sbc">5</span></a>
+      <a href="#bg-me" class="sbi">기억·집중<span class="sbc">5</span></a>
+      <a href="#bg-hi" class="sbi">역사·문명<span class="sbc">5</span></a>
+      <a href="#bg-ec" class="sbi">경제·투자<span class="sbc">5</span></a>
+      <a href="#bg-sc" class="sbi">과학·발명<span class="sbc">5</span></a>
+      <a href="#bg-et" class="sbi">윤리·철학<span class="sbc">5</span></a>
+      <a href="#bg-in" class="sbi">정보 비대칭<span class="sbc">5</span></a>
+      <a href="#bg-te" class="sbi">팀 전략<span class="sbc">5</span></a>
+      <a href="#bg-mu" class="sbi">음악·리듬<span class="sbc">5</span></a>
+      <a href="#bg-ar" class="sbi">미술·디자인<span class="sbc">5</span></a>
+      <a href="#bg-so" class="sbi">체육·스포츠<span class="sbc">5</span></a>
+      <a href="#bg-dr" class="sbi">연극·표현<span class="sbc">5</span></a>
+      <a href="#bg-ps" class="sbi">심리·감정<span class="sbc">5</span></a>
+      <a href="#bg-cu" class="sbi">문화·다양성<span class="sbc">5</span></a>
+      <a href="#bg-en" class="sbi">환경·생태<span class="sbc">5</span></a>
+      <a href="#bg-fu" class="sbi">미래·기술<span class="sbc">5</span></a>
+    </div>
+    <div class="sbs">
+      <div class="sbt">인원</div>
+      <a href="#" class="sbi">2-4명</a>
+      <a href="#" class="sbi">5-8명</a>
+      <a href="#" class="sbi">9명 이상</a>
+    </div>
+  </aside>
 
-  <!-- 시뮬레이션 국제·위기·미래 -->
-  <div id="sim-int" class="sd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>시뮬레이션 — 국제 관계 · 위기 관리 · 미래 시나리오</div>
-  <div class="grid">
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>한반도 평화 협상</h3><p>6자 협상. 비핵화·평화체제·경제협력이 충돌한다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>동아시아 경제 블록</h3><p>미국 블록 vs 중국 블록. 동아시아는 어느 편에?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>기후 협약 재협상</h3><p>파리협정 붕괴 직전. 선진국 vs 개발도상국.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>팬데믹 대응</h3><p>경제 vs 생명. 72시간 안에 국가 대응 방향 결정.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>금융 위기 대응</h3><p>은행 뱅크런. 48시간 내 결정. 구제 vs 파산.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>사이버 전쟁 대응</h3><p>전력망·금융·교통 동시 공격. 반격할 것인가?</p><div class="cf"><span class="mt">10-20명</span><span class="mt">2-3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>AI 전환 사회 설계</h3><p>2040년, 일자리 45% 소멸. 어떤 사회를 만들 것인가?</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>탄소중립 2050 이행</h3><p>산업 전환의 비용은 누가 부담하는가?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>인구 절벽 사회 적응</h3><p>2045년 인구 4,200만. 줄어드는 사회에서 지속되는 법.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-  </div>
+  <main class="main">
 
-  <!-- 퍼즐 -->
-  <div id="puzzle" class="sd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11V9a2 2 0 0 0-2-2h-2V5a2 2 0 0 0-4 0v2H9a2 2 0 0 0-2 2v2H5a2 2 0 0 0 0 4h2v2a2 2 0 0 0 2 2h2v2a2 2 0 0 0 4 0v-2h2a2 2 0 0 0 2-2v-2h2a2 2 0 0 0 0-4h-2z"/></svg>퍼즐 (9종 135단계)</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>숫자 퍼즐</h3><p>수열·연산·암호 해독. 수학적 사고력 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>논리 퍼즐</h3><p>연역·귀납·역설. 논리적 추론 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>언어 퍼즐</h3><p>단어·문장·의미 추론 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>확률 퍼즐</h3><p>확률·통계·불확실성 사고 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>공간 퍼즐</h3><p>도형·공간 지각·시각화 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>패턴 퍼즐</h3><p>규칙 발견·패턴 인식 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>전략 퍼즐</h3><p>게임 이론·의사결정·최적 선택.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>창의 퍼즐</h3><p>틀을 깨는 사고. 창의적 문제 해결.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>융합 퍼즐</h3><p>여러 영역을 넘나드는 복합 문제.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-  </div>
+    <!-- ══ 시뮬레이션 패널 ══ -->
+    <div id="panel-sim" class="panel on">
+      <div class="mh">
+        <h1>시뮬레이션</h1>
+        <div class="fb">
+          <button class="on" onclick="fAll(event,'sim')">전체</button>
+          <button onclick="fShort(event,'sim')">1-2시간</button>
+          <button onclick="fLong(event,'sim')">3일+</button>
+        </div>
+      </div>
 
-  <!-- 보드게임 기본 6종 -->
-  <div id="bg-cl" class="sd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>보드게임 — 기본 6종 (30개)</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">2-4명</span></div><h3>추상 전략</h3><p>순수한 전략 대결. 운 없이 실력으로만 승부.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">3-6명</span></div><h3>추리·연역</h3><p>단서를 모아 범인을 찾아라.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">2-8명</span></div><h3>지식·퀴즈</h3><p>다양한 분야의 지식을 겨루는 게임.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">3-6명</span></div><h3>협력</h3><p>모두 함께 이기거나, 모두 함께 진다.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">3-5명</span></div><h3>전략·경영</h3><p>자원을 관리하고 제국을 건설하라.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">4-8명</span></div><h3>협상·외교</h3><p>설득하고, 거래하고, 배신하라.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
-  </div>
+      <div id="sim-biz" class="sd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        기업 경영
+      </div>
+      <div class="grid" data-group="sim">
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐</span></div><h3>스타트업의 첫 번째 위기</h3><p>투자금 3개월치. 긴축·피벗·매각 중 선택.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">60-90분</span></div></a>
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>구조조정의 딜레마</h3><p>매출 30% 감소. 누구를 내보낼 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>글로벌 시장 진출</h3><p>불완전한 준비, 신뢰하기 어려운 파트너.</p><div class="cf"><span class="mt">4-6명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>ESG 경영의 선택</h3><p>단기 비용 vs 장기 브랜드 가치.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>인수합병 협상</h3><p>시가 대비 35% 높은 인수 제안. 팔 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>국가 경제 위기 대응</h3><p>외환보유액 급감. IMF 구제금융. 72시간.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>글로벌 M&amp;A 전쟁</h3><p>반도체 기업에 미국·중국 동시 인수 제안.</p><div class="cf"><span class="mt">12-24명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>산업 패권 경쟁</h3><p>배터리 패권 전쟁. 미국 IRA vs 중국 저가 공세.</p><div class="cf"><span class="mt">15-30명</span><span class="mt">3-4일</span></div></a>
+      </div>
 
-  <!-- 보드게임 신규 분야들 -->
-  <div id="bg-la" class="sd">언어·스토리텔링</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐</span></div><h3>단어 사슬</h3><p>끊어지면 지는 게임. 마지막 글자로 새 단어를 연결하라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">30-45분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐⭐</span></div><h3>이야기 짓기</h3><p>카드 3장으로 이야기를 만드세요. 황당할수록 점수.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">45-60분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐⭐</span></div><h3>금지어 탈출</h3><p>핵심 단어 없이 설명하라. 막힐수록 진짜 실력이 드러난다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-45분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐</span></div><h3>한 문장 게임</h3><p>같은 상황을 한 문장으로. 가장 정확하거나 아름다운 문장이 이긴다.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐⭐⭐</span></div><h3>은유 배틀</h3><p>"인생은 ___이다." 왜 그것인지 설득하는 자가 이긴다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">40-50분</span></div></a>
-  </div>
+      <div id="sim-pol" class="sd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        국가 정책
+      </div>
+      <div class="grid" data-group="sim">
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>인구 감소 대응 정책</h3><p>출산율 0.7. 돈으로 아이를 낳게 할 수 있는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>에너지 전환 정책</h3><p>석탄·원전·재생에너지. 탄소중립 에너지 믹스.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>플랫폼 규제 딜레마</h3><p>배달앱 수수료 27%. 규제할 것인가?</p><div class="cf"><span class="mt">4-6명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>부동산 정책의 선택</h3><p>집값 잡기 vs 공급 확대. 모두를 만족시킬 수 없다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
+        <a class="card" data-t="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>인공지능 규제 설계</h3><p>혁신 vs 안전. 한국은 어떤 선택을 해야 하는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>국가 재정 위기 대응</h3><p>국가 부채 GDP 100% 초과. 세금 vs 복지 삭감.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>헌법 개정 협상</h3><p>권력 구조·기본권·지방분권. 2/3 합의가 필요하다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>선거 제도 개혁</h3><p>소선거구제 vs 비례대표제.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">3일</span></div></a>
+      </div>
 
-  <div id="bg-ma" class="sd">수학·확률</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐</span></div><h3>확률 도박사</h3><p>공의 색을 맞혀야 한다. 정보가 쌓일수록 확률이 바뀐다.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">30-45분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐</span></div><h3>소수 전쟁</h3><p>카드를 조합해 소수를 만들거나 상대의 합성수를 공격하라.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐</span></div><h3>균형 저울</h3><p>숫자를 배치해 등식의 균형을 맞춰라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐⭐</span></div><h3>기댓값 경매</h3><p>가치를 정확히 계산한 사람이 경매에서 이긴다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐</span></div><h3>피보나치 빌더</h3><p>자연의 수열로 탑을 쌓으세요. 규칙을 이해한 자가 이긴다.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">30-40분</span></div></a>
-  </div>
+      <div id="sim-int" class="sd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        국제 관계
+      </div>
+      <div class="grid" data-group="sim">
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>한반도 평화 협상</h3><p>6자 협상. 비핵화·평화체제·경제협력이 충돌한다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>동아시아 경제 블록</h3><p>미국 블록 vs 중국 블록. 동아시아는 어느 편에?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>기후 협약 재협상</h3><p>파리협정 붕괴 직전. 선진국 vs 개발도상국.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
+      </div>
 
-  <div id="bg-sp" class="sd">공간·시각</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐</span></div><h3>도형 퍼즐 레이스</h3><p>조각을 빠르게 맞추는 자가 이긴다. 속도보다 정확성이 먼저.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐⭐</span></div><h3>그림자 맞추기</h3><p>3D 물체의 그림자를 보고 원래 형태를 추론한다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>미로 건축가</h3><p>한 명은 미로를 설계하고 다른 한 명은 탈출해야 한다.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">35-45분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐⭐</span></div><h3>회전 배틀</h3><p>머릿속에서 도형을 회전해 일치 여부를 판단하라.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐⭐</span></div><h3>시점 탐정</h3><p>다른 방향에서 보면 전혀 다른 모습. 어느 시점인지 맞혀라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
-  </div>
+      <div id="sim-cri" class="sd">위기 관리</div>
+      <div class="grid" data-group="sim">
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>팬데믹 대응</h3><p>경제 vs 생명. 72시간 안에 국가 대응 방향 결정.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>금융 위기 대응</h3><p>은행 뱅크런. 48시간 내 결정. 구제 vs 파산.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>사이버 전쟁 대응</h3><p>전력망·금융·교통 동시 공격. 반격할 것인가?</p><div class="cf"><span class="mt">10-20명</span><span class="mt">2-3일</span></div></a>
+      </div>
 
-  <div id="bg-me" class="sd">기억·집중</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐</span></div><h3>순서 기억</h3><p>순서를 기억하는 것은 단순하지만 길어질수록 누구나 무너진다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐</span></div><h3>변화를 찾아라</h3><p>1분 전과 지금이 다르다. 무엇이 바뀌었는가?</p><div class="cf"><span class="mt">2-8명</span><span class="mt">15-25분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐⭐⭐</span></div><h3>이중 과제</h3><p>두 가지를 동시에 해야 한다. 멀티태스킹의 한계를 체험.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐⭐⭐</span></div><h3>기억 궁전</h3><p>고대 그리스인의 최강 기억술. 장소에 기억을 걸어두라.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐⭐</span></div><h3>집중력 배틀</h3><p>방해를 무시하고 목표에만 집중할 수 있는가?</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
-  </div>
+      <div id="sim-fut" class="sd">미래 시나리오</div>
+      <div class="grid" data-group="sim">
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>AI 전환 사회 설계</h3><p>2040년, 일자리 45% 소멸. 어떤 사회를 만들 것인가?</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>탄소중립 2050 이행</h3><p>산업 전환의 비용은 누가 부담하는가?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>인구 절벽 사회 적응</h3><p>2045년 인구 4,200만. 줄어드는 사회에서 지속되는 법.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+      </div>
+    </div>
 
-  <div id="bg-hi" class="sd">역사·문명</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐⭐⭐</span></div><h3>문명의 선택</h3><p>당신이 고대 문명의 지도자. 농업·군사·문화·교역 중 무엇에?</p><div class="cf"><span class="mt">2-5명</span><span class="mt">60-90분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐⭐⭐</span></div><h3>역사 재판</h3><p>나폴레옹이 법정에 섰다. 변호하거나 기소하라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">45-60분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐</span></div><h3>타임라인 배틀</h3><p>사건을 시간 순서에 맞게 배치하며 역사의 흐름을 익힌다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐⭐⭐</span></div><h3>제국의 흥망</h3><p>모든 제국은 흥하고 망한다. 당신의 제국은 얼마나 오래갈 수 있는가?</p><div class="cf"><span class="mt">2-4명</span><span class="mt">50-70분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐⭐</span></div><h3>역사적 순간</h3><p>역사의 분기점. 다른 선택을 했다면 역사가 어떻게 달라졌을까?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
-  </div>
+    <!-- ══ 퍼즐 패널 ══ -->
+    <div id="panel-puzzle" class="panel">
+      <div class="mh">
+        <h1>퍼즐 (9종 135단계)</h1>
+        <div class="fb">
+          <button class="on">개인 학습</button>
+          <button>입문 (Lv.1-5)</button>
+          <button>심화 (Lv.11-15)</button>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="card" href="#" id="pz-num"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>숫자 퍼즐</h3><p>수열·연산·암호 해독. 수학적 사고력 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" id="pz-log"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>논리 퍼즐</h3><p>연역·귀납·역설. 논리적 추론 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" id="pz-lan"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>언어 퍼즐</h3><p>단어·문장·의미 추론 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" id="pz-pro"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>확률 퍼즐</h3><p>확률·통계·불확실성 사고 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" id="pz-spa"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>공간 퍼즐</h3><p>도형·공간 지각·시각화 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" id="pz-pat"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>패턴 퍼즐</h3><p>규칙 발견·패턴 인식 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" id="pz-str"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>전략 퍼즐</h3><p>게임 이론·의사결정·최적 선택.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" id="pz-cre"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>창의 퍼즐</h3><p>틀을 깨는 사고. 창의적 문제 해결.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" id="pz-fus"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>융합 퍼즐</h3><p>여러 영역을 넘나드는 복합 문제.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+      </div>
+    </div>
 
-  <div id="bg-ec" class="sd">경제·투자</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐⭐</span></div><h3>시장을 움직여라</h3><p>수요와 공급이 가격을 결정한다. 보이지 않는 손을 직접 느껴보라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">45-60분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐⭐</span></div><h3>포트폴리오 대전</h3><p>계란을 한 바구니에 담지 마세요. 위험과 수익의 균형.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐⭐</span></div><h3>버블과 붕괴</h3><p>버블인 줄 알면서도 올라타는 이유. 금융 위기의 심리 체험.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐</span></div><h3>협력 경제</h3><p>분업과 교역이 모두를 풍요롭게 한다. 비교 우위를 체험하라.</p><div class="cf"><span class="mt">3-5명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐</span></div><h3>가격 탐정</h3><p>이 물건의 적정 가격은 얼마인가? 가치와 가격의 차이를 탐구.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">25-35분</span></div></a>
-  </div>
+    <!-- ══ 보드게임 패널 ══ -->
+    <div id="panel-board" class="panel">
+      <div class="mh">
+        <h1>보드게임 (24분야 120개)</h1>
+        <div class="fb">
+          <button class="on">전체</button>
+          <button>2-4명</button>
+          <button>5명 이상</button>
+        </div>
+      </div>
 
-  <div id="bg-sc" class="sd">과학·발명</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>발명 공방</h3><p>문제가 있는 곳에 발명이 있다. 주어진 재료로 세상의 문제를 해결하라.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">45-60분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>가설 배틀</h3><p>좋은 가설을 세우는 능력이 과학적 사고의 핵심이다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>원소 전쟁</h3><p>주기율표는 자연의 설계도. 원소를 조합해 화합물을 만들어라.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐⭐</span></div><h3>진화 게임</h3><p>가장 강한 자가 아닌 가장 잘 적응한 자가 살아남는다.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>과학자 탐정</h3><p>단서를 모아 현상을 설명하라. 귀납 추론의 즐거움.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-45분</span></div></a>
-  </div>
+      <div id="bg-cl" class="sd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>기본 6종 (30개)</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">2-4명</span></div><h3>추상 전략</h3><p>순수한 전략 대결. 운 없이 실력으로만 승부.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">3-6명</span></div><h3>추리·연역</h3><p>단서를 모아 범인을 찾아라.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">2-8명</span></div><h3>지식·퀴즈</h3><p>다양한 분야의 지식을 겨루는 게임.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">3-6명</span></div><h3>협력</h3><p>모두 함께 이기거나, 모두 함께 진다.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">3-5명</span></div><h3>전략·경영</h3><p>자원을 관리하고 제국을 건설하라.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">4-8명</span></div><h3>협상·외교</h3><p>설득하고, 거래하고, 배신하라.</p><div class="cf"><span class="mt">5개 게임</span></div></a>
+      </div>
 
-  <div id="bg-et" class="sd">윤리·철학</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>트롤리 문제 변형</h3><p>레버를 당기면 1명이 죽는다. 이 단순한 질문이 왜 어려운가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐</span></div><h3>가치관 경매</h3><p>자유·평등·안전·행복. 돈이 있다면 무엇을 먼저 사겠습니까?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>철학자 배틀</h3><p>소크라테스라면 어떻게 말했을까? 역사 속 철학자로 현대 문제를 논한다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>사회 계약</h3><p>무인도에 표류했다. 함께 살아가기 위한 규칙을 처음부터 만들어라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">45-60분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>도덕적 딜레마 법정</h3><p>법적으로 유죄지만 도덕적으로 옳을 수 있다. 판결을 내려라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
-  </div>
+      <div id="bg-la" class="sd">언어·스토리텔링</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐</span></div><h3>단어 사슬</h3><p>끊어지면 지는 게임. 마지막 글자로 새 단어를 연결하라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">30-45분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐⭐</span></div><h3>이야기 짓기</h3><p>카드 3장으로 이야기를 만드세요.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">45-60분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐⭐</span></div><h3>금지어 탈출</h3><p>핵심 단어 없이 설명하라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-45분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐</span></div><h3>한 문장 게임</h3><p>가장 정확하거나 아름다운 한 문장이 이긴다.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐⭐⭐</span></div><h3>은유 배틀</h3><p>"인생은 ___이다." 왜 그것인지 설득하는 자가 이긴다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">40-50분</span></div></a>
+      </div>
 
-  <div id="bg-in" class="sd">정보 비대칭</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐</span></div><h3>내부자 게임</h3><p>그룹 안에 내부자가 있다. 답을 알지만 들키지 않아야 한다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐⭐</span></div><h3>신호와 소음</h3><p>진짜 정보와 가짜 정보가 섞여 있다. 신호를 찾고 소음을 걸러내라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>이중 첩자</h3><p>두 편을 동시에 섬기는 첩자. 양쪽을 만족시키면서 정보를 흘려라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐⭐</span></div><h3>정보 시장</h3><p>정보는 곧 돈이다. 사고팔고 속이고 활용하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐</span></div><h3>진실 게임</h3><p>세 가지 중 하나는 거짓이다. 어느 것이 거짓인지 찾아내라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">25-35분</span></div></a>
-  </div>
+      <div id="bg-ma" class="sd">수학·확률</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐</span></div><h3>확률 도박사</h3><p>공의 색을 맞혀야 한다. 정보가 쌓일수록 확률이 바뀐다.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">30-45분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐</span></div><h3>소수 전쟁</h3><p>카드를 조합해 소수를 만들거나 상대의 합성수를 공격하라.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐</span></div><h3>균형 저울</h3><p>숫자를 배치해 등식의 균형을 맞춰라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐⭐</span></div><h3>기댓값 경매</h3><p>가치를 정확히 계산한 사람이 경매에서 이긴다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐</span></div><h3>피보나치 빌더</h3><p>자연의 수열로 탑을 쌓으세요.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">30-40분</span></div></a>
+      </div>
 
-  <div id="bg-te" class="sd">팀 전략</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐</span></div><h3>침묵의 팀</h3><p>말 없이 협력할 수 있는가? 언어 없이 공동 목표를 달성하라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-40분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐</span></div><h3>역할 교환</h3><p>리더가 실무자가 되고, 실무자가 리더가 된다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐</span></div><h3>집단 지성</h3><p>한 명의 전문가보다 다양한 비전문가 집단이 더 정확할 수 있다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-45분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐⭐</span></div><h3>리더 없는 팀</h3><p>공식 리더 없이 팀은 어떻게 움직이는가? 리더십의 본질을 탐구.</p><div class="cf"><span class="mt">4-6명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>최후의 합의</h3><p>단 한 명의 반대도 허용되지 않는다. 완전한 합의는 가능한가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">45-60분</span></div></a>
-  </div>
+      <div id="bg-sp" class="sd">공간·시각</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐</span></div><h3>도형 퍼즐 레이스</h3><p>조각을 빠르게 맞추는 자가 이긴다.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐⭐</span></div><h3>그림자 맞추기</h3><p>3D 물체의 그림자를 보고 원래 형태를 추론한다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>미로 건축가</h3><p>한 명은 미로를 설계하고 다른 한 명은 탈출해야 한다.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">35-45분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐⭐</span></div><h3>회전 배틀</h3><p>머릿속에서 도형을 회전해 일치 여부를 판단하라.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐⭐</span></div><h3>시점 탐정</h3><p>다른 방향에서 보면 전혀 다른 모습.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
+      </div>
 
-  <div id="bg-mu" class="sd">음악·리듬</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐</span></div><h3>박자 배틀</h3><p>손뼉·발구르기·목소리로 복잡한 리듬을 만들고 따라하라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div><h3>음계 탐정</h3><p>들리는 음이 어떤 음계인지 맞혀보세요. 귀를 훈련하는 게임.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div><h3>작곡가 대결</h3><p>주어진 재료로 짧은 곡을 만드세요. 누구나 작곡가가 될 수 있다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐</span></div><h3>리듬 전달</h3><p>귓속말처럼 리듬을 전달한다. 처음과 끝이 같을 수 있을까?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div><h3>음악 기억</h3><p>멜로디를 기억하고 음악과 감정의 연결을 탐구한다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">25-35분</span></div></a>
-  </div>
+      <div id="bg-me" class="sd">기억·집중</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐</span></div><h3>순서 기억</h3><p>길어질수록 누구나 무너진다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐</span></div><h3>변화를 찾아라</h3><p>1분 전과 지금이 다르다. 무엇이 바뀌었는가?</p><div class="cf"><span class="mt">2-8명</span><span class="mt">15-25분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐⭐⭐</span></div><h3>이중 과제</h3><p>두 가지를 동시에 해야 한다.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐⭐⭐</span></div><h3>기억 궁전</h3><p>고대 그리스인의 최강 기억술.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐⭐</span></div><h3>집중력 배틀</h3><p>방해를 무시하고 목표에만 집중할 수 있는가?</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
+      </div>
 
-  <div id="bg-ar" class="sd">미술·디자인</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐</span></div><h3>색깔 감정</h3><p>빨강은 정말 열정인가? 색과 감정의 관계를 탐구한다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div><h3>관찰 드로잉 배틀</h3><p>정확하게 보는 것이 먼저. 그림 실력보다 관찰 능력이 중요하다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">30-40분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div><h3>디자인 심판</h3><p>좋은 디자인이란 무엇인가? 아름다운 것과 기능적인 것.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div><h3>명화 탐정</h3><p>위대한 그림에는 이야기가 있다. 숨겨진 의미를 찾아라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div><h3>추상 표현</h3><p>형태 없이 감정을 표현할 수 있는가? 선 하나에도 의미가 있다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
-  </div>
+      <div id="bg-hi" class="sd">역사·문명</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐⭐⭐</span></div><h3>문명의 선택</h3><p>당신이 고대 문명의 지도자.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">60-90분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐⭐⭐</span></div><h3>역사 재판</h3><p>나폴레옹이 법정에 섰다. 변호하거나 기소하라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">45-60분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐</span></div><h3>타임라인 배틀</h3><p>사건을 시간 순서에 맞게 배치하라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐⭐⭐</span></div><h3>제국의 흥망</h3><p>모든 제국은 흥하고 망한다.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">50-70분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐⭐</span></div><h3>역사적 순간</h3><p>역사의 분기점. 다른 선택을 했다면?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
+      </div>
 
-  <div id="bg-so" class="sd">체육·스포츠</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐⭐</span></div><h3>전술 감독</h3><p>감독은 11명을 어떻게 배치할 것인가? 스포츠 전략의 세계.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐</span></div><h3>스포츠 룰 메이커</h3><p>공정하고 재미있는 규칙은 어떻게 만들어지는가? 새로운 스포츠를 설계하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐⭐</span></div><h3>올림픽 기획자</h3><p>올림픽은 외교·경제·문화·도시가 얽힌 세계 최대의 이벤트.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐</span></div><h3>스포츠 과학</h3><p>왜 어떤 선수는 더 빠른가? 스포츠와 과학의 만남.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐⭐</span></div><h3>페어플레이 딜레마</h3><p>이기기 위해 반칙을 해도 되는가? 스포츠맨십의 본질을 탐구.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
-  </div>
+      <div id="bg-ec" class="sd">경제·투자</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐⭐</span></div><h3>시장을 움직여라</h3><p>수요와 공급이 가격을 결정한다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">45-60분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐⭐</span></div><h3>포트폴리오 대전</h3><p>위험과 수익의 균형을 찾아라.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐⭐</span></div><h3>버블과 붕괴</h3><p>금융 위기의 심리를 체험한다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐</span></div><h3>협력 경제</h3><p>분업과 교역이 모두를 풍요롭게 한다.</p><div class="cf"><span class="mt">3-5명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐</span></div><h3>가격 탐정</h3><p>이 물건의 적정 가격은 얼마인가?</p><div class="cf"><span class="mt">2-6명</span><span class="mt">25-35분</span></div></a>
+      </div>
 
-  <div id="bg-dr" class="sd">연극·표현</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐⭐</span></div><h3>즉흥극 배틀</h3><p>대본 없이 무대에 서세요. 실수가 허용되는 안전한 공간.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-45분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐</span></div><h3>감정 연기</h3><p>같은 대사도 감정에 따라 달라진다. "안녕하세요"가 분노로, 슬픔으로.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐⭐</span></div><h3>장면 전환</h3><p>"전환!" 한 마디에 완전히 다른 장면이 펼쳐진다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-40분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐</span></div><h3>한 줄 연극</h3><p>한 줄의 대사로 모든 것을 표현한다. 어떤 한 줄을 선택하느냐가 이야기를 결정한다.</p><div class="cf"><span class="mt">3-8명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐⭐⭐</span></div><h3>캐릭터 빌더</h3><p>인물은 어떻게 만들어지는가? 직업·욕망·두려움·과거로 캐릭터를 설계하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
-  </div>
+      <div id="bg-sc" class="sd">과학·발명</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>발명 공방</h3><p>주어진 재료로 세상의 문제를 해결하라.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">45-60분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>가설 배틀</h3><p>좋은 가설을 세우는 능력이 과학적 사고의 핵심.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>원소 전쟁</h3><p>원소를 조합해 화합물을 만들어라.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐⭐</span></div><h3>진화 게임</h3><p>가장 잘 적응한 자가 살아남는다.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>과학자 탐정</h3><p>단서를 모아 현상을 설명하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-45분</span></div></a>
+      </div>
 
-  <div id="bg-ps" class="sd">심리·감정</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐</span></div><h3>편향 사냥꾼</h3><p>우리는 모두 편향되어 있다. 편향을 알면 더 나은 판단을 할 수 있다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐</span></div><h3>동기 탐정</h3><p>사람들은 왜 그런 행동을 할까? 겉으로 보이는 이유와 진짜 이유는 다르다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐</span></div><h3>감정 날씨</h3><p>감정은 날씨 같다. 맑음·흐림·비·폭풍. 감정을 인식하고 다루는 법.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>방어기제 게임</h3><p>우리는 마음의 고통으로부터 자신을 보호하려 한다. 건강한 방어와 그렇지 않은 방어.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐</span></div><h3>심리 유형 배틀</h3><p>사람마다 다르게 생각하고 느끼고 행동한다. 다양성을 이해하고 협력하라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
-  </div>
+      <div id="bg-et" class="sd">윤리·철학</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>트롤리 문제 변형</h3><p>이 단순한 질문이 왜 이렇게 어려운가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐</span></div><h3>가치관 경매</h3><p>돈이 있다면 무엇을 먼저 사겠습니까?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>철학자 배틀</h3><p>역사 속 철학자로 현대 문제를 논한다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>사회 계약</h3><p>함께 살아가기 위한 규칙을 처음부터 만들어라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">45-60분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>도덕적 딜레마 법정</h3><p>법적으로 유죄지만 도덕적으로 옳을 수 있다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
+      </div>
 
-  <div id="bg-cu" class="sd">문화·다양성</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐⭐</span></div><h3>문화 충돌</h3><p>같은 행동이 문화마다 다른 의미를 갖는다. 선의가 오해를 만들기도 한다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐⭐⭐</span></div><h3>고정관념 탐정</h3><p>고정관념은 어디서 오는가? 어떻게 극복할 수 있는가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐</span></div><h3>세계 관습 퀴즈</h3><p>세계는 넓고 관습은 다양하다. 어떤 나라에서는 당연한 것이 금기이다.</p><div class="cf"><span class="mt">2-8명</span><span class="mt">25-35분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐⭐⭐</span></div><h3>이민자의 하루</h3><p>새로운 나라에서 하루를 보낸다. 이민자·난민의 경험을 직접 체험.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐⭐</span></div><h3>문화 번역가</h3><p>번역은 단어가 아닌 문화를 옮기는 것이다. 직역하면 틀리는 표현들.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
-  </div>
+      <div id="bg-in" class="sd">정보 비대칭</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐</span></div><h3>내부자 게임</h3><p>답을 알지만 들키지 않아야 한다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐⭐</span></div><h3>신호와 소음</h3><p>신호를 찾고 소음을 걸러내라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>이중 첩자</h3><p>양쪽을 만족시키면서 정보를 흘려라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐⭐</span></div><h3>정보 시장</h3><p>정보는 곧 돈이다. 사고팔고 속이고 활용하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐</span></div><h3>진실 게임</h3><p>세 가지 중 하나는 거짓이다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">25-35분</span></div></a>
+      </div>
 
-  <div id="bg-en" class="sd">환경·생태</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐</span></div><h3>먹이 사슬 전략</h3><p>먹이 사슬의 균형이 무너지면 생태계 전체가 흔들린다.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">35-50분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐</span></div><h3>탄소 발자국</h3><p>하루 동안 당신은 얼마나 많은 탄소를 배출하는가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐⭐</span></div><h3>생태계 설계자</h3><p>황폐해진 땅에 생태계를 복원한다. 순서가 틀리면 실패한다.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>기후 협상가</h3><p>기후 변화는 모두의 문제. 해결 비용은 불평등하게 분배된다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">45-60분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐⭐</span></div><h3>멸종 위기 구출</h3><p>하루에 150종이 사라진다. 제한된 자원으로 어떤 종을 구할 것인가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
-  </div>
+      <div id="bg-te" class="sd">팀 전략</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐</span></div><h3>침묵의 팀</h3><p>말 없이 협력할 수 있는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-40분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐</span></div><h3>역할 교환</h3><p>역할이 바뀌면 관점이 바뀐다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐</span></div><h3>집단 지성</h3><p>다양한 비전문가 집단이 더 정확할 수 있다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-45분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐⭐</span></div><h3>리더 없는 팀</h3><p>리더십의 본질을 탐구한다.</p><div class="cf"><span class="mt">4-6명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>최후의 합의</h3><p>단 한 명의 반대도 허용되지 않는다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">45-60분</span></div></a>
+      </div>
 
-  <div id="bg-fu" class="sd">미래·기술</div>
-  <div class="grid">
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐⭐</span></div><h3>AI 판사</h3><p>AI가 판결을 내린다. 공정한가? 편향되지 않았는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐</span></div><h3>기술 예언자</h3><p>10년 후 세상은 어떻게 변할까? 기술 발전의 패턴을 이해하고 미래를 예측하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐</span></div><h3>디지털 시민</h3><p>온라인에서도 시민이다. 가짜 뉴스·개인정보·사이버 폭력.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐⭐</span></div><h3>미래 도시 설계</h3><p>2050년의 도시를 설계한다. 모든 사람이 행복하게 살 수 있는 도시는?</p><div class="cf"><span class="mt">3-5명</span><span class="mt">45-60분</span></div></a>
-    <a class="card" data-t="s" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>특이점 이후</h3><p>AI가 인간을 능가했다. 인간은 무엇을 하며 살 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
-  </div>
+      <div id="bg-mu" class="sd">음악·리듬</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐</span></div><h3>박자 배틀</h3><p>복잡한 리듬을 만들고 따라하라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div><h3>음계 탐정</h3><p>들리는 음이 어떤 음계인지 맞혀보세요.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div><h3>작곡가 대결</h3><p>누구나 작곡가가 될 수 있다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐</span></div><h3>리듬 전달</h3><p>귓속말처럼 리듬을 전달한다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div><h3>음악 기억</h3><p>음악과 감정의 연결을 탐구한다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">25-35분</span></div></a>
+      </div>
 
-</main>
+      <div id="bg-ar" class="sd">미술·디자인</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐</span></div><h3>색깔 감정</h3><p>색과 감정의 관계를 탐구한다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div><h3>관찰 드로잉 배틀</h3><p>정확하게 보는 것이 먼저.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">30-40분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div><h3>디자인 심판</h3><p>좋은 디자인이란 무엇인가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div><h3>명화 탐정</h3><p>위대한 그림에는 이야기가 있다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div><h3>추상 표현</h3><p>형태 없이 감정을 표현할 수 있는가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
+      </div>
+
+      <div id="bg-so" class="sd">체육·스포츠</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐⭐</span></div><h3>전술 감독</h3><p>감독은 11명을 어떻게 배치할 것인가?</p><div class="cf"><span class="mt">2-4명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐</span></div><h3>스포츠 룰 메이커</h3><p>새로운 스포츠를 설계하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐⭐</span></div><h3>올림픽 기획자</h3><p>세계 최대 이벤트를 기획하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐</span></div><h3>스포츠 과학</h3><p>왜 어떤 선수는 더 빠른가?</p><div class="cf"><span class="mt">2-5명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐⭐</span></div><h3>페어플레이 딜레마</h3><p>스포츠맨십의 본질을 탐구한다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
+      </div>
+
+      <div id="bg-dr" class="sd">연극·표현</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐⭐</span></div><h3>즉흥극 배틀</h3><p>대본 없이 무대에 서세요.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-45분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐</span></div><h3>감정 연기</h3><p>"안녕하세요"가 분노로, 슬픔으로.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐⭐</span></div><h3>장면 전환</h3><p>"전환!" 한 마디에 다른 장면이 펼쳐진다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-40분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐</span></div><h3>한 줄 연극</h3><p>한 줄의 대사로 모든 것을 표현한다.</p><div class="cf"><span class="mt">3-8명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐⭐⭐</span></div><h3>캐릭터 빌더</h3><p>직업·욕망·두려움·과거로 캐릭터를 설계하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
+      </div>
+
+      <div id="bg-ps" class="sd">심리·감정</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐</span></div><h3>편향 사냥꾼</h3><p>편향을 알면 더 나은 판단을 할 수 있다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐</span></div><h3>동기 탐정</h3><p>겉으로 보이는 이유와 진짜 이유는 다르다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐</span></div><h3>감정 날씨</h3><p>감정을 인식하고 다루는 능력.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>방어기제 게임</h3><p>건강한 방어와 그렇지 않은 방어.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐</span></div><h3>심리 유형 배틀</h3><p>다양성을 이해하고 협력하라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
+      </div>
+
+      <div id="bg-cu" class="sd">문화·다양성</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐⭐</span></div><h3>문화 충돌</h3><p>선의가 오해를 만들기도 한다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐⭐⭐</span></div><h3>고정관념 탐정</h3><p>고정관념은 어디서 오는가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐</span></div><h3>세계 관습 퀴즈</h3><p>어떤 나라에서는 당연한 것이 금기이다.</p><div class="cf"><span class="mt">2-8명</span><span class="mt">25-35분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐⭐⭐</span></div><h3>이민자의 하루</h3><p>이민자·난민의 경험을 직접 체험.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐⭐</span></div><h3>문화 번역가</h3><p>직역하면 틀리는 표현들.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
+      </div>
+
+      <div id="bg-en" class="sd">환경·생태</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐</span></div><h3>먹이 사슬 전략</h3><p>생태계 전체가 연결되어 있다.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">35-50분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐</span></div><h3>탄소 발자국</h3><p>하루 동안 얼마나 많은 탄소를 배출하는가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐⭐</span></div><h3>생태계 설계자</h3><p>황폐해진 땅에 생태계를 복원한다.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>기후 협상가</h3><p>해결 비용은 불평등하게 분배된다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">45-60분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐⭐</span></div><h3>멸종 위기 구출</h3><p>어떤 종을 구할 것인가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
+      </div>
+
+      <div id="bg-fu" class="sd">미래·기술</div>
+      <div class="grid">
+        <a class="card" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐⭐</span></div><h3>AI 판사</h3><p>AI가 판결을 내린다. 공정한가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐</span></div><h3>기술 예언자</h3><p>10년 후 세상은 어떻게 변할까?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐</span></div><h3>디지털 시민</h3><p>온라인에서도 시민이다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐⭐</span></div><h3>미래 도시 설계</h3><p>2050년의 도시를 설계한다.</p><div class="cf"><span class="mt">3-5명</span><span class="mt">45-60분</span></div></a>
+        <a class="card" href="#"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>특이점 이후</h3><p>AI가 인간을 능가했다. 인간은 무엇을 하며 살 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
+      </div>
+    </div>
+
+  </main>
 </div>
+
 <footer><p>© 2025 MindArena — 생각하는 힘을 키우는 플랫폼 · <a href="mailto:hello@mind-arena.org">hello@mind-arena.org</a></p></footer>
+
 <script>
-const cards=document.querySelectorAll('.card');
-const btns=document.querySelectorAll('.fb button');
-function clr(){btns.forEach(b=>b.classList.remove('on'))}
-function fAll(e){if(e)e.preventDefault();clr();btns[0].classList.add('on');cards.forEach(c=>c.style.display='')}
-function fShort(e){if(e)e.preventDefault();clr();if(e&&e.currentTarget)e.currentTarget.classList.add('on');cards.forEach(c=>{c.style.display=c.dataset.t==='s'?'':'none'})}
-function fLong(e){if(e)e.preventDefault();clr();if(e&&e.currentTarget)e.currentTarget.classList.add('on');cards.forEach(c=>{c.style.display=c.dataset.t==='l'?'':'none'})}
+function showTab(name, el) {
+  // 탭 버튼
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  // 패널
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.getElementById('panel-' + name).classList.add('on');
+  // 사이드바
+  document.querySelectorAll('.sb').forEach(s => s.style.display = 'none');
+  document.getElementById('sb-' + name).style.display = 'block';
+  // 맨 위로
+  window.scrollTo(0, 0);
+}
+
+function fAll(e, group) {
+  if (e) e.preventDefault();
+  const btns = document.querySelectorAll('#panel-' + group + ' .fb button');
+  btns.forEach(b => b.classList.remove('on'));
+  btns[0].classList.add('on');
+  document.querySelectorAll('#panel-' + group + ' .card').forEach(c => c.style.display = '');
+}
+
+function fShort(e, group) {
+  if (e) e.preventDefault();
+  const btns = document.querySelectorAll('#panel-' + group + ' .fb button');
+  btns.forEach(b => b.classList.remove('on'));
+  btns[1].classList.add('on');
+  document.querySelectorAll('#panel-' + group + ' .card').forEach(c => {
+    c.style.display = c.dataset.t === 's' ? '' : 'none';
+  });
+}
+
+function fLong(e, group) {
+  if (e) e.preventDefault();
+  const btns = document.querySelectorAll('#panel-' + group + ' .fb button');
+  btns.forEach(b => b.classList.remove('on'));
+  btns[2].classList.add('on');
+  document.querySelectorAll('#panel-' + group + ' .card').forEach(c => {
+    c.style.display = c.dataset.t === 'l' ? '' : 'none';
+  });
+}
 </script>
 </body>
 </html>
