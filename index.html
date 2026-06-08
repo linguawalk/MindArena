@@ -113,6 +113,45 @@
     @media(max-width:500px){.grid{grid-template-columns:1fr}}
     footer{text-align:center;padding:1.5rem;font-size:12px;color:var(--t3);border-top:.5px solid var(--bd)}
     footer a{color:inherit}
+
+    /* ── SLIDE OVER ── */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s}
+    .overlay.open{opacity:1;pointer-events:all}
+    .drawer{position:fixed;top:0;right:0;width:560px;max-width:100vw;height:100vh;background:var(--bg);z-index:301;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
+    .drawer.open{transform:translateX(0)}
+    .drawer::-webkit-scrollbar{width:4px}
+    .drawer::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+    .dh{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:.5px solid var(--bd);position:sticky;top:0;background:var(--bg);z-index:1}
+    .dh-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--t2);cursor:pointer;border:none;background:transparent;font-family:inherit;padding:4px 8px;border-radius:6px;transition:background .1s}
+    .dh-back:hover{background:var(--bg2)}
+    .dc{padding:1.5rem}
+    .d-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:.75rem}
+    .d-badge{font-size:10px;padding:2px 9px;border-radius:20px;font-weight:500}
+    .d-title{font-size:20px;font-weight:500;line-height:1.3;margin-bottom:.5rem}
+    .d-sub{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:1rem}
+    .d-meta{display:flex;gap:20px;flex-wrap:wrap;padding:.9rem 1rem;background:var(--bg2);border-radius:8px;margin-bottom:1.25rem}
+    .d-mi{display:flex;flex-direction:column;gap:2px}
+    .d-ml{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em}
+    .d-mv{font-size:13px;font-weight:500}
+    .d-sec{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin:1.25rem 0 .6rem}
+    .d-box{background:var(--bg2);border-radius:8px;padding:1rem;margin-bottom:.75rem;font-size:13px;color:var(--t2);line-height:1.6}
+    .d-option{border:.5px solid var(--bd);border-radius:8px;padding:.75rem 1rem;margin-bottom:.5rem}
+    .d-option-t{font-size:13px;font-weight:500;margin-bottom:.25rem}
+    .d-option-d{font-size:12px;color:var(--t2)}
+    .d-roles{border:.5px solid var(--bd);border-radius:8px;overflow:hidden}
+    .d-role{display:flex;align-items:center;gap:10px;padding:.6rem 1rem;border-bottom:.5px solid var(--bd);font-size:13px}
+    .d-role:last-child{border-bottom:none}
+    .d-role-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .d-role-name{font-weight:500;flex:1}
+    .d-role-desc{font-size:11.5px;color:var(--t2)}
+    .d-effect{display:flex;gap:10px;margin-bottom:.75rem;align-items:flex-start}
+    .d-effect-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+    .d-effect-t{font-size:13px;font-weight:500;margin-bottom:.2rem}
+    .d-effect-d{font-size:12px;color:var(--t2);line-height:1.5}
+    .d-qs{background:var(--bg2);border-radius:8px;padding:1rem}
+    .d-q{display:flex;gap:8px;margin-bottom:.6rem;font-size:13px;color:var(--t2);line-height:1.5}
+    .d-q:last-child{margin-bottom:0}
+    .d-qn{font-weight:500;color:var(--t3);min-width:16px}
   </style>
 </head>
 <body>
@@ -220,14 +259,14 @@
         기업 경영
       </div>
       <div class="grid">
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐</span></div><h3>스타트업의 첫 번째 위기</h3><p>투자금 3개월치. 긴축·피벗·매각 중 선택.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">60-90분</span></div></a>
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>구조조정의 딜레마</h3><p>매출 30% 감소. 누구를 내보낼 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>글로벌 시장 진출</h3><p>불완전한 준비, 신뢰하기 어려운 파트너.</p><div class="cf"><span class="mt">4-6명</span><span class="mt">90-120분</span></div></a>
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>ESG 경영의 선택</h3><p>단기 비용 vs 장기 브랜드 가치.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>인수합병 협상</h3><p>시가 대비 35% 높은 인수 제안. 팔 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>국가 경제 위기 대응</h3><p>외환보유액 급감. IMF 구제금융. 72시간.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>글로벌 M&amp;A 전쟁</h3><p>반도체 기업에 미국·중국 동시 인수 제안.</p><div class="cf"><span class="mt">12-24명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>산업 패권 경쟁</h3><p>배터리 패권 전쟁. 미국 IRA vs 중국 저가 공세.</p><div class="cf"><span class="mt">15-30명</span><span class="mt">3-4일</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_biz_1');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐</span></div><h3>스타트업의 첫 번째 위기</h3><p>투자금 3개월치. 긴축·피벗·매각 중 선택.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">60-90분</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_biz_2');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>구조조정의 딜레마</h3><p>매출 30% 감소. 누구를 내보낼 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_biz_3');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>글로벌 시장 진출</h3><p>불완전한 준비, 신뢰하기 어려운 파트너.</p><div class="cf"><span class="mt">4-6명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_biz_4');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>ESG 경영의 선택</h3><p>단기 비용 vs 장기 브랜드 가치.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_biz_5');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>인수합병 협상</h3><p>시가 대비 35% 높은 인수 제안. 팔 것인가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_biz_6');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>국가 경제 위기 대응</h3><p>외환보유액 급감. IMF 구제금융. 72시간.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_biz_7');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>글로벌 M&amp;A 전쟁</h3><p>반도체 기업에 미국·중국 동시 인수 제안.</p><div class="cf"><span class="mt">12-24명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_biz_8');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>산업 패권 경쟁</h3><p>배터리 패권 전쟁. 미국 IRA vs 중국 저가 공세.</p><div class="cf"><span class="mt">15-30명</span><span class="mt">3-4일</span></div></a>
       </div>
 
       <div id="sim-pol" class="sec">
@@ -235,14 +274,14 @@
         국가 정책
       </div>
       <div class="grid">
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>인구 감소 대응 정책</h3><p>출산율 0.7. 돈으로 아이를 낳게 할 수 있는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>에너지 전환 정책</h3><p>석탄·원전·재생에너지. 탄소중립 에너지 믹스.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>플랫폼 규제 딜레마</h3><p>배달앱 수수료 27%. 규제할 것인가?</p><div class="cf"><span class="mt">4-6명</span><span class="mt">90-120분</span></div></a>
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>부동산 정책의 선택</h3><p>집값 잡기 vs 공급 확대. 모두를 만족시킬 수 없다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
-        <a class="card" data-dur="s" href="#"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>인공지능 규제 설계</h3><p>혁신 vs 안전. 한국은 어떤 선택을 해야 하는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>국가 재정 위기 대응</h3><p>국가 부채 GDP 100% 초과. 세금 vs 복지 삭감.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>헌법 개정 협상</h3><p>권력 구조·기본권·지방분권. 2/3 합의가 필요하다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>선거 제도 개혁</h3><p>소선거구제 vs 비례대표제.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_1');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>인구 감소 대응 정책</h3><p>출산율 0.7. 돈으로 아이를 낳게 할 수 있는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_2');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>에너지 전환 정책</h3><p>석탄·원전·재생에너지. 탄소중립 에너지 믹스.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_3');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>플랫폼 규제 딜레마</h3><p>배달앱 수수료 27%. 규제할 것인가?</p><div class="cf"><span class="mt">4-6명</span><span class="mt">90-120분</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_4');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>부동산 정책의 선택</h3><p>집값 잡기 vs 공급 확대. 모두를 만족시킬 수 없다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_5');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>인공지능 규제 설계</h3><p>혁신 vs 안전. 한국은 어떤 선택을 해야 하는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_pol_6');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>국가 재정 위기 대응</h3><p>국가 부채 GDP 100% 초과. 세금 vs 복지 삭감.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_pol_7');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>헌법 개정 협상</h3><p>권력 구조·기본권·지방분권. 2/3 합의가 필요하다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_pol_8');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>선거 제도 개혁</h3><p>소선거구제 vs 비례대표제.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">3일</span></div></a>
       </div>
 
       <div id="sim-int" class="sec">
@@ -250,23 +289,23 @@
         국제 관계
       </div>
       <div class="grid">
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>한반도 평화 협상</h3><p>6자 협상. 비핵화·평화체제·경제협력이 충돌한다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>동아시아 경제 블록</h3><p>미국 블록 vs 중국 블록. 동아시아는 어느 편에?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>기후 협약 재협상</h3><p>파리협정 붕괴 직전. 선진국 vs 개발도상국.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_int_1');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>한반도 평화 협상</h3><p>6자 협상. 비핵화·평화체제·경제협력이 충돌한다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_int_2');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>동아시아 경제 블록</h3><p>미국 블록 vs 중국 블록. 동아시아는 어느 편에?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_int_3');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>기후 협약 재협상</h3><p>파리협정 붕괴 직전. 선진국 vs 개발도상국.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
       </div>
 
       <div id="sim-cri" class="sec">위기 관리</div>
       <div class="grid">
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>팬데믹 대응</h3><p>경제 vs 생명. 72시간 안에 국가 대응 방향 결정.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>금융 위기 대응</h3><p>은행 뱅크런. 48시간 내 결정. 구제 vs 파산.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>사이버 전쟁 대응</h3><p>전력망·금융·교통 동시 공격. 반격할 것인가?</p><div class="cf"><span class="mt">10-20명</span><span class="mt">2-3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_cri_1');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>팬데믹 대응</h3><p>경제 vs 생명. 72시간 안에 국가 대응 방향 결정.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_cri_2');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>금융 위기 대응</h3><p>은행 뱅크런. 48시간 내 결정. 구제 vs 파산.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_cri_3');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>사이버 전쟁 대응</h3><p>전력망·금융·교통 동시 공격. 반격할 것인가?</p><div class="cf"><span class="mt">10-20명</span><span class="mt">2-3일</span></div></a>
       </div>
 
       <div id="sim-fut" class="sec">미래 시나리오</div>
       <div class="grid">
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>AI 전환 사회 설계</h3><p>2040년, 일자리 45% 소멸. 어떤 사회를 만들 것인가?</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>탄소중립 2050 이행</h3><p>산업 전환의 비용은 누가 부담하는가?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>인구 절벽 사회 적응</h3><p>2045년 인구 4,200만. 줄어드는 사회에서 지속되는 법.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_fut_1');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>AI 전환 사회 설계</h3><p>2040년, 일자리 45% 소멸. 어떤 사회를 만들 것인가?</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_fut_2');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>탄소중립 2050 이행</h3><p>산업 전환의 비용은 누가 부담하는가?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_fut_3');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>인구 절벽 사회 적응</h3><p>2045년 인구 4,200만. 줄어드는 사회에서 지속되는 법.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
       </div>
     </div>
 
@@ -476,7 +515,359 @@
 
 <footer><p>© 2025 MindArena — 생각하는 힘을 키우는 플랫폼 · <a href="mailto:hello@mind-arena.org">hello@mind-arena.org</a></p></footer>
 
+<!-- SLIDE OVER -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="dh">
+    <button class="dh-back" onclick="closeDrawer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      목록으로
+    </button>
+    <button onclick="closeDrawer()" style="border:none;background:transparent;cursor:pointer;padding:4px;color:var(--t2)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="dc" id="drawer-content"></div>
+</div>
+
 <script>
+/* ── 게임 데이터 ── */
+const GAMES = {
+  /* 시뮬레이션 */
+  sim_biz_1:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐ 기초',
+    title:'스타트업의 첫 번째 위기',
+    sub:'창업 2년 차, 투자금이 3개월치밖에 남지 않았습니다. 긴축·피벗·매각 중 어떤 선택을 할 것인가?',
+    people:'3-6명',dur:'60-90분',topic:'자금 관리 · 팀 운영 · 피벗 전략',
+    situation:'스타트업 코리아나랩은 B2B SaaS 서비스를 개발 중입니다. 현재 현금은 1억 2천만 원(3개월치), 월 번-레이트 4천만 원, 유료 고객 12개사(목표 20개사), 팀 6명입니다.',
+    options:[{t:'긴축·버티기',d:'개발자 1명 정리해고, 마케팅 삭감, 6개월 런웨이 확보'},{t:'피벗',d:'B2B→B2C 전환, 신규 투자 유치 집중'},{t:'인수합병',d:'경쟁사에 매각 협상, 팀 고용 보장 조건'}],
+    roles:[{n:'대표이사',d:'회사 생존 + 비전 유지',c:'#534AB7'},{n:'CTO',d:'기술 방향 + 팀 사기',c:'#0F6E56'},{n:'투자자',d:'ROI + 출구 전략',c:'#854F0B'},{n:'핵심 개발자',d:'커리어 + 스톡옵션',c:'#185FA5'},{n:'영업팀장',d:'현실적 매출 전망',c:'#993C1D'}],
+    effects:[{e:'💡',t:'자금 관리 사고',d:'번-레이트와 런웨이의 의미를 실전으로 체험합니다.'},{e:'🤝',t:'이해관계자 협상',d:'투자자·팀원·고객의 서로 다른 이익을 조율하는 경험을 합니다.'},{e:'🎯',t:'의사결정 역량',d:'불완전한 정보 속에서 최선의 결정을 내리는 훈련을 합니다.'}],
+    qs:['스타트업에서 언제 피벗을 결정해야 하는가?','투자자와 직원의 이익이 충돌할 때 어떻게 해야 하는가?','실패를 인정하는 것과 포기하는 것의 차이는?']
+  },
+  sim_biz_2:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐⭐ 중급',
+    title:'구조조정의 딜레마',
+    sub:'매출이 30% 감소했습니다. 이사회는 인력 20% 감축을 요구합니다. 당신은 누구를 내보낼 것인가?',
+    people:'4-8명',dur:'90-120분',topic:'구조조정 · 리더십 · 조직 문화',
+    situation:'코리아나제조는 500명 규모 중견 제조업체입니다. 매출이 전년 대비 30% 감소해 100명 감원이 요구되고 있으며, 노조가 결성된 지 6개월이 됩니다.',
+    options:[{t:'희망퇴직 우선',d:'자발적 퇴직 모집 후 부족분 추가 처리'},{t:'성과 기반 선별',d:'성과 평가 결과에 따라 감원 대상 결정'},{t:'부서 통폐합',d:'중복 부서 통합으로 구조 개편'}],
+    roles:[{n:'CEO',d:'회사 생존 + 주주 가치',c:'#534AB7'},{n:'HR 팀장',d:'공정한 절차 + 법적 리스크',c:'#0F6E56'},{n:'노조 위원장',d:'고용 보호 + 조합원 권리',c:'#993C1D'},{n:'중간 관리자',d:'팀 유지 + 성과',c:'#185FA5'},{n:'이사회 대표',d:'비용 절감 + ROI',c:'#854F0B'}],
+    effects:[{e:'⚖️',t:'공정성 사고',d:'해고 기준의 공정성과 절차적 정당성을 탐구합니다.'},{e:'🗣️',t:'어려운 소통',d:'힘든 결정을 어떻게 전달하는지 실전 경험합니다.'},{e:'🏢',t:'조직 이해',d:'기업 내 다양한 이해관계자의 관점을 체험합니다.'}],
+    qs:['구조조정은 피할 수 없는 것인가?','공정한 해고 기준이란 존재하는가?','리더는 어려운 결정을 어떻게 소통해야 하는가?']
+  },
+  sim_biz_3:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐⭐ 중급',
+    title:'글로벌 시장 진출',
+    sub:'동남아시아 시장 진출 기회가 생겼습니다. 준비가 불완전하고 파트너는 신뢰하기 어렵습니다.',
+    people:'4-6명',dur:'90-120분',topic:'글로벌 전략 · 리스크 관리 · 파트너십',
+    situation:'코리아나푸드는 국내 식품 브랜드입니다. 베트남 대형 유통사 파트너십 제안이 들어왔으며 투자 50억 원이 필요합니다. 현지 파트너의 재무 상황은 불투명합니다.',
+    options:[{t:'즉시 진출 (합작법인)',d:'파트너와 합작법인 설립, 50% 지분 확보'},{t:'단계적 진출',d:'소규모 테스트 수출 먼저, 파트너 검증 후 확대'},{t:'독자 진출',d:'현지 법인 직접 설립, 파트너 없이 운영'}],
+    roles:[{n:'CEO',d:'성장 전략 + 리스크 균형',c:'#534AB7'},{n:'CFO',d:'재무 리스크 + 투자 회수',c:'#0F6E56'},{n:'해외사업팀장',d:'현지 시장 이해',c:'#854F0B'},{n:'법무팀장',d:'계약 리스크 + 법적 보호',c:'#185FA5'},{n:'현지 파트너',d:'사업 기회 + 자국 이익',c:'#993C1D'}],
+    effects:[{e:'🌏',t:'글로벌 사고',d:'해외 시장 진입 전략의 다양한 옵션을 비교합니다.'},{e:'🤔',t:'불확실성 관리',d:'불완전한 정보 속 의사결정 능력을 키웁니다.'},{e:'🤝',t:'파트너십 이해',d:'신뢰 구축과 계약 리스크를 실전으로 체험합니다.'}],
+    qs:['불확실한 기회를 잡는 것과 무모한 것의 차이는?','파트너십에서 신뢰는 어떻게 구축하는가?','글로벌 진출 실패의 가장 큰 원인은 무엇인가?']
+  },
+  sim_biz_4:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐⭐ 중급',
+    title:'ESG 경영의 선택',
+    sub:'환경 규제가 강화됩니다. ESG 도입 비용 vs 장기 브랜드 가치. 주주들은 지금 당장 수익을 원합니다.',
+    people:'4-8명',dur:'90-120분',topic:'ESG · 지속가능경영 · 이해관계자',
+    situation:'코리아나케미컬은 탄소 배출이 업계 평균 대비 40% 높습니다. ESG 도입 비용은 3년간 200억 원이 필요하며, 기관투자자는 ESG 공시를 요구하고 있습니다.',
+    options:[{t:'전면 도입 (E+S+G)',d:'환경·사회·지배구조 모두 전면 개선'},{t:'환경(E) 우선 도입',d:'탄소 배출 감소에만 집중'},{t:'공시만 강화',d:'실질 변화 최소화, 공시만 개선'}],
+    roles:[{n:'CEO',d:'장기 생존 + 단기 수익',c:'#534AB7'},{n:'기관투자자',d:'ESG 리스크 + 포트폴리오',c:'#0F6E56'},{n:'환경단체',d:'실질적 변화 요구',c:'#1A6B3C'},{n:'노동조합',d:'고용 안정 + 근무 환경',c:'#185FA5'},{n:'지역 주민',d:'환경 피해 개선',c:'#993C1D'}],
+    effects:[{e:'🌱',t:'지속가능성 사고',d:'단기 수익과 장기 생존의 균형을 탐구합니다.'},{e:'📊',t:'이해관계자 분석',d:'다양한 주체의 서로 다른 요구를 조율합니다.'},{e:'🔍',t:'그린워싱 이해',d:'진정한 ESG와 마케팅 ESG를 구분하는 능력을 키웁니다.'}],
+    qs:['ESG는 진정한 변화인가, 마케팅인가?','기업의 사회적 책임과 주주 이익은 양립 가능한가?','그린워싱을 어떻게 판단할 수 있는가?']
+  },
+  sim_biz_5:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐⭐⭐ 심화',
+    title:'인수합병 협상',
+    sub:'경쟁사가 시가 대비 35% 높은 인수 제안을 해왔습니다. 팔 것인가, 독립을 지킬 것인가?',
+    people:'4-8명',dur:'120분+',topic:'M&A 협상 · 기업 가치 · 이해관계자',
+    situation:'코리아나테크(피인수 대상)와 메가코프(인수 기업). 인수 제안가는 주당 45,000원(시가 대비 +35%), 직원 200명, 창업주 지분 28%입니다. 브랜드 통합 및 구조조정 가능성이 있습니다.',
+    options:[{t:'인수 수용',d:'최고가 실현, 팀 미래는 협상으로 보호'},{t:'인수 거부',d:'독립 유지, 자체 성장 전략 추진'},{t:'조건부 수용',d:'고용 보장·브랜드 유지 조건으로 협상'}],
+    roles:[{n:'코리아나테크 창업주',d:'가치 실현 + 유산',c:'#534AB7'},{n:'코리아나테크 CFO',d:'재무적 최적화',c:'#0F6E56'},{n:'메가코프 M&A팀',d:'저가 인수 + 시너지',c:'#993C1D'},{n:'코리아나테크 노조',d:'고용 보장',c:'#185FA5'},{n:'소액주주 대표',d:'최고가 실현',c:'#854F0B'}],
+    effects:[{e:'💰',t:'기업 가치 평가',d:'기업의 가치는 어떻게 측정되는지 탐구합니다.'},{e:'🏗️',t:'협상 전략',d:'다자 협상에서 포지션과 이익을 구분합니다.'},{e:'👥',t:'이해관계자 관리',d:'창업주·직원·주주의 서로 다른 이익을 조율합니다.'}],
+    qs:['기업의 가치는 어떻게 측정하는가?','창업주에게 회사 매각은 어떤 의미인가?','M&A에서 직원은 어떻게 보호받을 수 있는가?']
+  },
+  /* 기업 경영 3일+ */
+  sim_biz_6:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'국가 경제 위기 대응',
+    sub:'외환보유액이 급감하고 있습니다. IMF 구제금융과 대기업 동시 유동성 위기. 72시간 안에 결정해야 합니다.',
+    people:'10-20명',dur:'3일',topic:'거시경제 · 위기 관리 · 국제 협상',
+    situation:'가상 국가의 외환보유액이 6개월간 1/3 감소하고, 국가 신용등급 강등 경고와 3대 그룹 동시 유동성 위기 상황입니다. IMF 긴급 협의가 요청됩니다.',
+    options:[{t:'IMF 구제금융 수용',d:'조건 수용으로 유동성 확보, 긴축 감수'},{t:'자체 해결 시도',d:'국내 자원 동원, 독립적 해결 추진'},{t:'양측 협상',d:'IMF 조건 일부 수정을 전제로 협상'}],
+    roles:[{n:'정부 경제팀',d:'위기 대응 총괄',c:'#534AB7'},{n:'대기업 경영진',d:'자구 방안 마련',c:'#0F6E56'},{n:'IMF 대표단',d:'구제금융 조건 협상',c:'#993C1D'},{n:'시민사회',d:'서민 피해 최소화',c:'#185FA5'},{n:'외국인 투자자',d:'투자금 회수 전략',c:'#854F0B'}],
+    effects:[{e:'🌐',t:'거시경제 이해',d:'환율·외환·금리의 상호작용을 실전으로 체험합니다.'},{e:'⏱️',t:'위기 의사결정',d:'극도의 시간 압박 속 최선의 결정을 내리는 훈련입니다.'},{e:'🤝',t:'국제 협상',d:'IMF와 같은 국제 기구와의 협상 경험을 쌓습니다.'}],
+    qs:['IMF 구제금융의 조건은 왜 논란이 되는가?','위기 시 고통의 공평한 분담은 가능한가?','1997년 한국 외환위기에서 무엇을 배울 수 있는가?']
+  },
+  sim_biz_7:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'글로벌 M&A 전쟁',
+    sub:'반도체 기업 아시아반도체에 미국·중국 동시 인수 제안. 지정학적 M&A 전쟁이 시작됩니다.',
+    people:'12-24명',dur:'3일',topic:'지정학 · M&A · 반도체 산업',
+    situation:'가상 반도체 기업 아시아반도체에 미국 테크자이언트(주당 85달러, 적대적)와 중국 드래곤칩(주당 92달러, 우호적)이 동시에 인수를 제안합니다.',
+    options:[{t:'미국 측 인수 수용',d:'낮은 가격이지만 동맹국 안보 협력'},{t:'중국 측 인수 수용',d:'높은 가격, 기술 이전 리스크'},{t:'독립 유지',d:'양측 모두 거부, 자체 성장 추진'}],
+    roles:[{n:'아시아반도체 경영진',d:'인수 수용 여부 결정',c:'#534AB7'},{n:'미국 인수팀',d:'인수 성공',c:'#185FA5'},{n:'중국 인수팀',d:'기술 확보',c:'#993C1D'},{n:'정부 관계자',d:'국가 안보 보호',c:'#0F6E56'},{n:'주주 연합',d:'가치 극대화',c:'#854F0B'}],
+    effects:[{e:'🏭',t:'반도체 지정학',d:'기술 패권 경쟁에서 기업의 역할을 이해합니다.'},{e:'💹',t:'M&A 가치 평가',d:'전략적 가치 vs 재무적 가치를 비교합니다.'},{e:'🛡️',t:'안보와 경제',d:'국가 안보와 기업 이익의 충돌을 탐구합니다.'}],
+    qs:['반도체는 시장 상품인가, 국가 자산인가?','주주 민주주의 vs 국가 이익, 어느 것이 우선인가?','한국 반도체 산업은 어떤 전략을 취해야 하는가?']
+  },
+  sim_biz_8:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'산업 패권 경쟁',
+    sub:'2030년 배터리 패권 전쟁. 중국 저가 공세와 미국 IRA 역차별. 코리아나 배터리 3사의 생존 전략.',
+    people:'15-30명',dur:'3-4일',topic:'산업 전략 · 통상 정책 · 기술 패권',
+    situation:'코리아나 배터리 3사가 중국 CATL의 저가 공세와 미국 IRA(인플레이션 감축법)의 역차별로 동시에 위기를 맞이하고 있습니다.',
+    options:[{t:'미국 중심 재편',d:'IRA 혜택 수용, 미국 공장 확대'},{t:'글로벌 균형',d:'미중 양쪽에 균형 있게 공급'},{t:'독자 기술 리더십',d:'차세대 배터리 기술 투자 집중'}],
+    roles:[{n:'코리아나 정부',d:'산업 전략 총괄',c:'#534AB7'},{n:'배터리 3사 경영진',d:'생존 전략',c:'#0F6E56'},{n:'미국 에너지부',d:'IRA 압박',c:'#185FA5'},{n:'중국 상무부',d:'시장 공세',c:'#993C1D'},{n:'글로벌 완성차 연합',d:'공급사 선택',c:'#854F0B'}],
+    effects:[{e:'⚡',t:'산업 생태계',d:'배터리 산업의 글로벌 가치 사슬을 이해합니다.'},{e:'🌍',t:'통상 외교',d:'무역 규제와 산업 정책의 상호작용을 체험합니다.'},{e:'🔋',t:'기술 전략',d:'단기 생존과 장기 기술 투자의 균형을 탐구합니다.'}],
+    qs:['IRA는 자유무역 원칙에 위배되는가?','한국은 미국 편인가, 중국 편인가, 독자 노선인가?','기술 패권 경쟁에서 중소국은 어떤 전략을 취해야 하는가?']
+  },
+  /* 국가 정책 */
+  sim_pol_1:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐⭐ 중급',
+    title:'인구 감소 대응 정책',
+    sub:'출산율 0.7, 세계 최저. 지방 도시가 소멸하고 있습니다. 돈으로 아이를 낳게 할 수 있는가?',
+    people:'4-8명',dur:'90-120분',topic:'저출산 · 고령화 · 이민 · 지방 소멸',
+    situation:'한국은 출산율 0.7로 세계 최저입니다. 지방 도시는 소멸 위기이며 이민 확대와 출산 장려 중 어느 방향으로 정책을 펼칠지 결정해야 합니다.',
+    options:[{t:'출산 장려',d:'아이 1명당 1억 원 지원, 공공 보육 무상화'},{t:'이민 확대',d:'연간 이민 50만 명 수용, 귀화 요건 완화'},{t:'지방 집중 투자',d:'지방 거점 도시 육성, 원격근무 인프라 구축'}],
+    roles:[{n:'보건복지부 장관',d:'저출산 해결',c:'#534AB7'},{n:'지방 소도시 시장',d:'지역 생존',c:'#0F6E56'},{n:'이민자 단체 대표',d:'이민자 권리',c:'#854F0B'},{n:'청년 세대 대표',d:'출산 당사자 관점',c:'#185FA5'},{n:'재정 전문가',d:'지속 가능한 재원',c:'#993C1D'}],
+    effects:[{e:'👶',t:'인구 정책 이해',d:'저출산의 원인과 해결책을 다각도로 탐구합니다.'},{e:'🏘️',t:'지역 불균형',d:'수도권 집중과 지방 소멸 문제를 이해합니다.'},{e:'🌏',t:'다문화 사회',d:'이민 정책의 사회적 영향을 탐구합니다.'}],
+    qs:['20년간 280조 원을 써도 출산율이 내려간 이유는?','한국 사회가 이민을 받아들일 준비가 됐는가?','인구 감소를 문제로만 볼 것인가?']
+  },
+  sim_pol_2:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐⭐ 중급',
+    title:'에너지 전환 정책',
+    sub:'탄소중립 2050을 약속했습니다. 석탄·원전·재생에너지 중 어떤 에너지 믹스를 선택할 것인가?',
+    people:'4-8명',dur:'90-120분',topic:'에너지 전환 · 탄소중립 · 원전',
+    situation:'한국은 탄소중립 2050을 약속했지만, 석탄을 폐지하면 전기요금이 오르고, 원전을 유지하면 안전 문제가 남으며, 재생에너지는 아직 불안정합니다.',
+    options:[{t:'재생에너지 중심',d:'2035년 재생에너지 70%, 석탄 2030 폐지'},{t:'원전+재생에너지',d:'원전 유지·신규 건설, 재생에너지 병행'},{t:'현실적 전환',d:'석탄 2038년 단계적 폐지, 에너지 안보 우선'}],
+    roles:[{n:'산업부 장관',d:'에너지 안보 + 산업 경쟁력',c:'#534AB7'},{n:'환경부 장관',d:'탄소중립 목표 달성',c:'#1A6B3C'},{n:'석탄 발전소 지역 주민',d:'일자리 + 지역 경제',c:'#993C1D'},{n:'환경 단체',d:'기후 위기 대응',c:'#0F6E56'},{n:'에너지 경제학자',d:'비용 최적화',c:'#185FA5'}],
+    effects:[{e:'⚡',t:'에너지 정책',d:'에너지 믹스 결정의 복잡한 트레이드오프를 이해합니다.'},{e:'🌡️',t:'기후 과학',d:'탄소중립의 필요성과 경로를 체험합니다.'},{e:'💰',t:'전환 비용',d:'에너지 전환의 사회적 비용과 수혜를 탐구합니다.'}],
+    qs:['원전은 탄소중립의 해결책인가, 새로운 문제인가?','에너지 전환의 비용을 누가 부담해야 하는가?','기후 위기와 에너지 안보는 양립 가능한가?']
+  },
+  sim_pol_3:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐⭐ 중급',
+    title:'플랫폼 규제 딜레마',
+    sub:'배달앱이 수수료를 27%로 올렸습니다. 음식점은 남는 게 없고 소비자는 배달비가 너무 비쌉니다.',
+    people:'4-6명',dur:'90-120분',topic:'플랫폼 독점 · 규제 · 공정 경쟁',
+    situation:'배달앱 수수료가 27%로 올라 음식점과 소비자 모두 부담이 커졌습니다. 하지만 플랫폼 없이는 장사가 안 되는 상황입니다.',
+    options:[{t:'수수료 상한제',d:'법정 상한 15%, 위반 시 과징금'},{t:'공공 플랫폼',d:'정부 운영 배달 앱, 수수료 2-3%'},{t:'자율 규제',d:'수수료 공개 의무화, 시장 경쟁에 맡김'}],
+    roles:[{n:'공정거래위원회',d:'시장 공정성',c:'#534AB7'},{n:'배달 플랫폼 대표',d:'사업 지속성',c:'#993C1D'},{n:'음식점 협회',d:'수수료 인하',c:'#0F6E56'},{n:'소비자 단체',d:'가격 안정',c:'#185FA5'},{n:'배달 라이더',d:'노동 권리',c:'#854F0B'}],
+    effects:[{e:'🏢',t:'플랫폼 경제',d:'디지털 플랫폼의 시장 지배력과 영향을 이해합니다.'},{e:'⚖️',t:'규제 설계',d:'가격 규제의 효과와 한계를 탐구합니다.'},{e:'🔗',t:'플랫폼 종속',d:'우리가 얼마나 플랫폼에 의존하는지 인식합니다.'}],
+    qs:['플랫폼 독점은 왜 생기는가?','정부의 가격 규제는 효과적인가?','우리는 얼마나 플랫폼에 종속되어 있는가?']
+  },
+  sim_pol_4:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐⭐⭐ 심화',
+    title:'부동산 정책의 선택',
+    sub:'서울 아파트 평균가 11억 원. 집값을 잡으면 집주인이 반발하고 오르면 무주택자가 절망합니다.',
+    people:'4-8명',dur:'120분+',topic:'주거권 · 투자 자산 · 세금 · 공급',
+    situation:'서울 아파트 평균가가 11억 원에 달합니다. 집값 잡기 vs 공급 확대 사이에서 정책 방향을 결정해야 합니다.',
+    options:[{t:'공급 확대',d:'그린벨트 해제, 재건축 완화, 용적률 상향'},{t:'수요 억제',d:'다주택자 세금 강화, 대출 규제, 갭투자 금지'},{t:'공공 임대 확충',d:'공공임대 20% 목표, 토지임대부 주택'}],
+    roles:[{n:'국토부 장관',d:'집값 안정 + 공급',c:'#534AB7'},{n:'다주택 임대인',d:'재산권 보호',c:'#993C1D'},{n:'무주택 청년',d:'내 집 마련 기회',c:'#0F6E56'},{n:'건설업계',d:'사업성 확보',c:'#854F0B'},{n:'환경단체',d:'그린벨트 보호',c:'#185FA5'}],
+    effects:[{e:'🏠',t:'주거 정의',d:'집은 거주 공간인가 투자 자산인가를 탐구합니다.'},{e:'📈',t:'부동산 경제',d:'수요·공급·정책의 상호작용을 이해합니다.'},{e:'🔄',t:'정책 실패',d:'왜 부동산 정책이 반복적으로 실패하는지 분석합니다.'}],
+    qs:['집은 거주 공간인가, 투자 자산인가?','왜 한국의 부동산 정책은 번번이 실패하는가?','내 집 마련은 개인의 노력인가, 국가의 책임인가?']
+  },
+  sim_pol_5:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐⭐⭐ 심화',
+    title:'인공지능 규제 설계',
+    sub:'AI는 의료·교육·산업을 혁신하지만 일자리·프라이버시·안보를 위협합니다. 한국은 어떤 선택을 해야 하는가?',
+    people:'4-8명',dur:'120분+',topic:'AI 규제 · 혁신과 안전 · 일자리',
+    situation:'AI가 급속도로 발전하면서 혁신과 안전 사이의 균형을 어떻게 잡을지 결정해야 합니다. 너무 강하게 규제하면 혁신이 죽고, 너무 약하면 통제 불가능해집니다.',
+    options:[{t:'강력 사전 규제 (EU 모델)',d:'고위험 AI 사전 승인 의무, 딥페이크 형사 처벌'},{t:'사후 규제 (미국 모델)',d:'자율 규제 + 업계 윤리 기준, 피해 발생 후 법적 책임'},{t:'위험 비례 규제',d:'저위험 자율, 고위험 사전 심사, 중간은 투명성 공개'}],
+    roles:[{n:'과기부 장관',d:'혁신 육성 + 안전',c:'#534AB7'},{n:'AI 스타트업',d:'규제 최소화',c:'#0F6E56'},{n:'AI 피해자',d:'구제 + 재발 방지',c:'#993C1D'},{n:'노동조합',d:'일자리 보호',c:'#185FA5'},{n:'AI 윤리 전문가',d:'인간 중심 원칙',c:'#854F0B'}],
+    effects:[{e:'🤖',t:'AI 리터러시',d:'AI의 작동 원리와 사회적 영향을 이해합니다.'},{e:'⚖️',t:'기술 규제',d:'혁신과 안전 사이의 균형점을 탐구합니다.'},{e:'🔮',t:'미래 노동',d:'AI 시대의 일자리 변화를 대비합니다.'}],
+    qs:['AI를 규제하는 것과 인터넷을 규제하는 것은 같은가?','AI가 내 직업을 빼앗는다면 누구의 책임인가?','AI는 결국 인류에게 이득인가, 위협인가?']
+  },
+  /* 국가 정책 3일+ */
+  sim_pol_6:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'국가 재정 위기 대응',
+    sub:'국가 부채가 GDP의 100%를 넘었습니다. 국민연금은 15년 후 고갈됩니다. 세금 vs 복지 삭감의 딜레마.',
+    people:'12-20명',dur:'3일',topic:'재정 정책 · 세대 간 형평성 · 연금 개혁',
+    situation:'국가 부채가 GDP 100%를 초과하고 국민연금이 15년 후 고갈 예정입니다. 세금 인상도 복지 삭감도 국민 저항이 심각합니다.',
+    options:[{t:'세금 인상',d:'소득세·법인세 인상으로 재원 마련'},{t:'복지 삭감',d:'연금 수급 연령 상향, 급여 축소'},{t:'성장을 통한 해결',d:'경제 성장으로 세수 자연 증가 기대'}],
+    roles:[{n:'행정부',d:'재정 건전화 총괄',c:'#534AB7'},{n:'여당',d:'집권 유지 + 개혁',c:'#0F6E56'},{n:'야당',d:'서민 보호',c:'#993C1D'},{n:'소수정당',d:'캐스팅 보트',c:'#185FA5'},{n:'이익단체',d:'각자 이익 보호',c:'#854F0B'}],
+    effects:[{e:'💸',t:'재정 이해',d:'국가 부채와 재정 건전성의 의미를 이해합니다.'},{e:'⏳',t:'세대 간 공정성',d:'현재 세대 vs 미래 세대의 부담을 탐구합니다.'},{e:'🗳️',t:'민주주의의 한계',d:'장기 과제를 해결하기 어려운 민주주의의 딜레마를 이해합니다.'}],
+    qs:['세금 인상 vs 복지 삭감, 누가 더 많은 고통을 감수해야 하는가?','현재 세대가 미래 세대에게 빚을 지는 것은 공정한가?','민주주의는 왜 장기 문제 해결이 어려운가?']
+  },
+  sim_pol_7:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'헌법 개정 협상',
+    sub:'권력 구조·기본권·지방분권·경제 조항·안보 5대 쟁점. 2/3 합의가 필요합니다.',
+    people:'15-25명',dur:'3-4일',topic:'헌법 · 권력 구조 · 민주주의',
+    situation:'헌법 개정을 위한 특별위원회가 구성됩니다. 대통령제 vs 내각제, 새로운 기본권, 지방분권 강화 등 핵심 쟁점에 대해 2/3 합의를 도출해야 합니다.',
+    options:[{t:'대통령제 유지·강화',d:'현행 단임 5년제 유지 또는 중임제 전환'},{t:'이원집정부제',d:'대통령·총리 권한 분산'},{t:'의원내각제',d:'국회 중심 정치 체제'}],
+    roles:[{n:'여당 헌법특위',d:'집권당 유리 구조',c:'#534AB7'},{n:'야당 헌법특위',d:'민주주의 강화',c:'#993C1D'},{n:'소수정당 연합',d:'소수 의견 반영',c:'#185FA5'},{n:'시민사회',d:'시민 참여',c:'#0F6E56'},{n:'헌법학자·전문가',d:'헌법적 관점',c:'#854F0B'}],
+    effects:[{e:'📜',t:'헌법 이해',d:'헌법의 의미와 개정 역사를 이해합니다.'},{e:'🏛️',t:'권력 구조',d:'다양한 정부 형태의 장단점을 비교합니다.'},{e:'🤝',t:'정치적 합의',d:'극도로 어려운 다자 합의 도출을 경험합니다.'}],
+    qs:['어떤 권력 구조가 한국에 가장 적합한가?','헌법은 얼마나 자주 바뀌어야 하는가?','시민이 헌법 개정에 참여하는 방법은?']
+  },
+  sim_pol_8:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'선거 제도 개혁',
+    sub:'소선거구제 vs 비례대표제. 정당마다 자신에게 유리한 제도를 원합니다.',
+    people:'10-20명',dur:'3일',topic:'선거 제도 · 민주주의 · 정치 개혁',
+    situation:'국회 의원 선거 제도를 전면 개편하는 논의가 시작됩니다. 소선거구제, 비례대표제, 혼합형 중 어떤 제도가 가장 공정하고 효과적인지 합의해야 합니다.',
+    options:[{t:'소선거구제 유지',d:'현행 지역구 중심 유지, 지역 대표성 강화'},{t:'완전 비례대표제',d:'득표율 그대로 의석 배분'},{t:'혼합 연동형',d:'지역구 + 비례 연동, 독일식 모델'}],
+    roles:[{n:'여당',d:'기득권 방어',c:'#534AB7'},{n:'야당',d:'제도 개혁',c:'#993C1D'},{n:'소수정당',d:'비례 확대',c:'#185FA5'},{n:'선관위',d:'기술적 검토',c:'#0F6E56'},{n:'시민사회·언론',d:'유권자 관점',c:'#854F0B'}],
+    effects:[{e:'🗳️',t:'선거 제도',d:'다양한 선거 제도의 특성과 영향을 이해합니다.'},{e:'⚖️',t:'공정성',d:'어떤 제도가 더 공정한지 탐구합니다.'},{e:'🔄',t:'정치 개혁',d:'제도 변화의 어려움과 필요성을 이해합니다.'}],
+    qs:['어떤 선거 제도가 가장 민주적인가?','왜 선거 제도 개혁은 항상 어렵게 되는가?','투표율을 높이기 위해 무엇을 바꿔야 하는가?']
+  },
+  /* 국제 관계 */
+  sim_int_1:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'한반도 평화 협상',
+    sub:'70년 이상 지속된 분단. 비핵화·평화 체제·경제 협력·인권. 모든 것이 연결되어 있습니다.',
+    people:'15-25명',dur:'3-4일',topic:'한반도 · 비핵화 · 국제 관계',
+    situation:'6자회담이 재개됩니다. 한국·북한·미국·중국·일본·러시아와 유엔이 참여하며, 비핵화·평화체제·경제협력 의제를 동시에 다룹니다.',
+    options:[{t:'일괄 타결',d:'모든 의제를 패키지로 동시 합의'},{t:'단계적 접근',d:'신뢰 구축 → 비핵화 → 평화협정 순서'},{t:'인도주의 우선',d:'인권·인도지원을 먼저 해결'}],
+    roles:[{n:'한국',d:'평화 + 동맹 균형',c:'#0F6E56'},{n:'북한',d:'체제 보장 + 경제',c:'#993C1D'},{n:'미국',d:'비핵화 + 동맹',c:'#185FA5'},{n:'중국',d:'한반도 현상 유지',c:'#854F0B'},{n:'일본',d:'납치 + 안보',c:'#534AB7'}],
+    effects:[{e:'🕊️',t:'외교 협상',d:'복잡한 다자 협상에서 이익과 포지션을 구분합니다.'},{e:'🔬',t:'한반도 이해',d:'분단의 역사와 비핵화 과제를 깊이 이해합니다.'},{e:'🌏',t:'동북아 지정학',d:'강대국 경쟁 속 한국의 외교 전략을 탐구합니다.'}],
+    qs:['비핵화가 먼저인가, 평화협정이 먼저인가?','북한은 왜 핵을 포기하지 않는가?','통일은 우리에게 이득인가?']
+  },
+  sim_int_2:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'동아시아 경제 블록',
+    sub:'미국과 중국이 경제 전쟁을 벌이는 사이 동아시아 국가들은 선택의 기로에 섰습니다.',
+    people:'12-20명',dur:'3일',topic:'지역 경제 · 미중 갈등 · 공급망',
+    situation:'미중 무역 전쟁이 격화되면서 동아시아 국가들은 미국 주도 IPEF와 중국 주도 RCEP 사이에서 선택해야 합니다.',
+    options:[{t:'미국 블록 참여',d:'IPEF 강화, 인도태평양 경제 프레임워크'},{t:'중국 블록 참여',d:'RCEP 강화, 위안화 결제 확대'},{t:'전략적 중립',d:'동아시아 독자 블록 형성'}],
+    roles:[{n:'한국',d:'전략적 자율성',c:'#0F6E56'},{n:'일본',d:'미일 동맹 + 경제',c:'#185FA5'},{n:'대만',d:'생존 + TSMC',c:'#534AB7'},{n:'아세안',d:'중립 + 실리',c:'#854F0B'},{n:'중국',d:'블록 형성',c:'#993C1D'}],
+    effects:[{e:'🔗',t:'공급망 이해',d:'글로벌 공급망과 경제 블록화를 이해합니다.'},{e:'⚖️',t:'전략적 선택',d:'강대국 경쟁 사이 중소국의 전략을 탐구합니다.'},{e:'💱',t:'통화 전쟁',d:'달러 vs 위안화 패권 경쟁을 이해합니다.'}],
+    qs:['한국은 미국과 중국 중 어느 쪽을 선택해야 하는가?','동아시아 독자 블록은 가능한가?','경제 의존과 안보 동맹이 충돌할 때 어떻게 해야 하는가?']
+  },
+  sim_int_3:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'기후 협약 재협상',
+    sub:'파리협정이 붕괴 직전입니다. 선진국 vs 개발도상국, 현재 세대 vs 미래 세대.',
+    people:'15-25명',dur:'3일',topic:'기후 협상 · 탄소 감축 · 기후 재원',
+    situation:'파리협정 이행이 지지부진한 상황에서 새로운 글로벌 기후 협약을 협상해야 합니다. 감축 목표, 재원, 손실과 피해 보상이 핵심 쟁점입니다.',
+    options:[{t:'구속력 있는 강한 합의',d:'법적 구속력 있는 감축 목표, 탄소세 도입'},{t:'자발적 약속 강화',d:'각국 자발적 목표 상향, 투명한 검증'},{t:'기술 중심 해결',d:'청정 기술 이전 + 재원 확대로 개도국 지원'}],
+    roles:[{n:'EU·선도국',d:'강력 기후 행동',c:'#1A6B3C'},{n:'미국',d:'실용적 접근',c:'#185FA5'},{n:'중국',d:'공정 책임 분담',c:'#993C1D'},{n:'기후 취약국',d:'생존 + 보상',c:'#854F0B'},{n:'산유국',d:'화석연료 유지',c:'#534AB7'}],
+    effects:[{e:'🌡️',t:'기후 과학',d:'온도 상승과 영향을 수치로 이해합니다.'},{e:'🌍',t:'국제 협력',d:'글로벌 공공재 문제의 협력 가능성을 탐구합니다.'},{e:'⚖️',t:'기후 정의',d:'역사적 배출 책임과 미래 개발권을 탐구합니다.'}],
+    qs:['선진국은 개발도상국에게 기후 피해를 보상해야 하는가?','1.5°C 목표는 달성 가능한가?','기후 변화는 협력으로 해결 가능한가, 아니면 근본적 한계가 있는가?']
+  },
+  /* 위기 관리 */
+  sim_cri_1:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'팬데믹 대응',
+    sub:'새로운 바이러스가 빠르게 확산되고 있습니다. 경제를 살릴 것인가, 생명을 지킬 것인가?',
+    people:'15-25명',dur:'3일',topic:'보건 위기 · 경제 충격 · 정부 대응',
+    situation:'X 바이러스가 발생했습니다. 치명률은 0.8-3.8%(불확실), 전파력 R0 2.5-4.0, 백신·치료제 없음. 72시간 내 국가 대응 방향을 결정해야 합니다.',
+    options:[{t:'강력한 봉쇄',d:'학교·사업장 폐쇄, 이동 제한'},{t:'스웨덴식 집단면역',d:'취약계층만 보호, 경제 활동 유지'},{t:'단계적 대응',d:'상황에 따라 단계별 대응 강도 조절'}],
+    roles:[{n:'총리실',d:'위기 총괄 지휘',c:'#534AB7'},{n:'보건부·질병청',d:'방역 지침',c:'#1A6B3C'},{n:'경제부처',d:'경제 충격 최소화',c:'#0F6E56'},{n:'지방정부',d:'지역 대응',c:'#185FA5'},{n:'언론·시민',d:'정보 소통',c:'#993C1D'}],
+    effects:[{e:'🦠',t:'감염병 이해',d:'전파율·치명률·집단면역 개념을 이해합니다.'},{e:'⚡',t:'위기 의사결정',d:'불완전한 정보로 빠른 결정을 내리는 훈련입니다.'},{e:'🏥',t:'의료 시스템',d:'의료 자원 배분과 대응 능력을 이해합니다.'}],
+    qs:['경제와 생명 사이에서 어떻게 균형을 잡아야 하는가?','한국의 코로나19 대응에서 무엇을 배울 수 있는가?','다음 팬데믹을 대비하기 위해 지금 무엇을 해야 하는가?']
+  },
+  sim_cri_2:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'금융 위기 대응',
+    sub:'은행이 무너지고 있습니다. 구제금융은 도덕적 해이를 낳고, 방치하면 시스템이 붕괴됩니다.',
+    people:'12-20명',dur:'3일',topic:'금융 위기 · 뱅크런 · 시스템 리스크',
+    situation:'금요일 오후 3시, 코리아나뱅크(4위)에 뱅크런이 시작됩니다. 부실 자산은 공시의 3.4배, 예금자 620만 명. 48시간 내 처리 방안을 결정해야 합니다.',
+    options:[{t:'공적 자금으로 정상화',d:'국민 세금으로 구제, 시스템 안정 우선'},{t:'합병 주도',d:'다른 은행이 인수하도록 조율'},{t:'파산 정리',d:'시장 원리에 따라 파산 처리'}],
+    roles:[{n:'금융위원회',d:'처리 방안 결정',c:'#534AB7'},{n:'한국은행',d:'유동성 공급',c:'#0F6E56'},{n:'기획재정부',d:'재정 지원',c:'#185FA5'},{n:'코리아나뱅크 경영진',d:'자구 방안',c:'#993C1D'},{n:'예금자 대표',d:'예금 보호',c:'#854F0B'}],
+    effects:[{e:'🏦',t:'금융 시스템',d:'은행의 역할과 금융 시스템 리스크를 이해합니다.'},{e:'⚖️',t:'도덕적 해이',d:'구제금융의 필요성과 문제점을 탐구합니다.'},{e:'⏱️',t:'위기 관리',d:'극도의 시간 압박 속 최선의 결정을 내리는 훈련입니다.'}],
+    qs:['은행을 구제하는 것은 정당한가?','금융 위기는 예방 가능한가?','리먼 브라더스를 구제했다면 2008년 금융위기가 달라졌을까?']
+  },
+  sim_cri_3:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'사이버 전쟁 대응',
+    sub:'전쟁은 총성 없이 시작됩니다. 전력망이 꺼지고 금융 시스템이 멈추며 병원이 마비됩니다.',
+    people:'10-20명',dur:'2-3일',topic:'사이버 안보 · 국가 인프라 · 반격 전략',
+    situation:'화요일 오전 6시 30분, 전력망 15% 차단, 금융 결제 시스템 오류, 국방부 내부망 침투. 공격자는 미확인 상태입니다.',
+    options:[{t:'수세적 대응',d:'방어·복구에 집중, 반격 자제'},{t:'외교적 대응',d:'동맹국 공조, 외교 채널 활용'},{t:'사이버 반격',d:'공격자에게 사이버 역공격 실시'}],
+    roles:[{n:'국가사이버안전센터',d:'탐지·분석·대응',c:'#534AB7'},{n:'국가안보실',d:'군사·외교 대응',c:'#993C1D'},{n:'행안부·과기부',d:'복구 총괄',c:'#0F6E56'},{n:'군 사이버사령부',d:'방어·반격',c:'#185FA5'},{n:'동맹국',d:'국제 협력',c:'#854F0B'}],
+    effects:[{e:'🛡️',t:'사이버 안보',d:'국가 사이버 위협의 실체와 대응 방법을 이해합니다.'},{e:'⚡',t:'위기 대응',d:'예상치 못한 위기 상황에서의 의사결정을 훈련합니다.'},{e:'🌐',t:'디지털 취약성',d:'우리 사회가 얼마나 디지털에 의존하는지 인식합니다.'}],
+    qs:['사이버 공격에 군사적으로 대응할 수 있는가?','중요 인프라 보호는 누구의 책임인가?','북한의 사이버 공격에 한국은 어떻게 대비해야 하는가?']
+  },
+  /* 미래 시나리오 */
+  sim_fut_1:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'AI 전환 사회 설계',
+    sub:'2040년, AI는 모든 인지 업무를 대체할 수 있게 되었습니다. 일자리의 절반이 사라진 사회를 설계합니다.',
+    people:'15-25명',dur:'3일',topic:'AI 전환 · 기본소득 · 미래 노동',
+    situation:'2040년, 일자리 45% 소멸, GDP +35%, 하지만 하위 40% 소득 -18%. AI가 모든 것을 할 수 있는 세상에서 인간은 무엇을 해야 하는가?',
+    options:[{t:'AI세 + 기본소득',d:'AI 활용 기업에 세금, 전 국민 기본소득 지급'},{t:'전환 교육 강화',d:'AI가 못하는 영역으로 인력 재교육'},{t:'노동 시간 단축',d:'일자리 나누기, 주 3일제 도입'}],
+    roles:[{n:'정부 AI위원회',d:'정책 총괄',c:'#534AB7'},{n:'AI 기업 연합',d:'혁신 보호',c:'#0F6E56'},{n:'실직 노동자',d:'생계 보장',c:'#993C1D'},{n:'청년·미래 세대',d:'새로운 사회',c:'#185FA5'},{n:'철학자·윤리학자',d:'인간 존엄성',c:'#854F0B'}],
+    effects:[{e:'🤖',t:'AI 사회 이해',d:'AI 전환이 사회에 미치는 영향을 심층 탐구합니다.'},{e:'💭',t:'인간의 역할',d:'AI 시대에 인간이 무엇을 해야 하는지 탐구합니다.'},{e:'🔮',t:'미래 설계',d:'원하는 미래 사회를 능동적으로 설계하는 경험을 합니다.'}],
+    qs:['일자리가 없어도 행복할 수 있는가?','기본소득은 해결책인가?','AI 시대에 교육은 어떻게 바뀌어야 하는가?']
+  },
+  sim_fut_2:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'탄소중립 2050 이행',
+    sub:'2035년, 탄소중립 목표까지 15년이 남았습니다. 산업 전환의 비용은 누가 부담하는가?',
+    people:'12-20명',dur:'3일',topic:'탄소중립 · 공정 전환 · 산업 구조 개편',
+    situation:'2035년, 2030년 목표 40% 감축에서 28%밖에 달성하지 못했습니다. 나머지 72%를 15년 안에 감축하려면 산업 전환 비용 400조 원이 필요합니다.',
+    options:[{t:'강제적 전환',d:'석탄 발전 즉시 폐지, 탄소세 대폭 인상'},{t:'인센티브 중심',d:'청정 에너지 보조금, 녹색 금융 확대'},{t:'기술 혁신 기대',d:'핵융합·청정수소 등 기술 돌파구 기다림'}],
+    roles:[{n:'기후환경부',d:'목표 달성 총괄',c:'#1A6B3C'},{n:'산업계 연합',d:'전환 속도 협상',c:'#993C1D'},{n:'노동·지역사회',d:'공정 전환',c:'#534AB7'},{n:'청년·미래 세대',d:'빠른 전환 요구',c:'#185FA5'},{n:'녹색 기술 스타트업',d:'기술 해결책',c:'#0F6E56'}],
+    effects:[{e:'🌿',t:'탄소중립 경로',d:'실제로 가능한 탄소중립 달성 방법을 탐구합니다.'},{e:'⚖️',t:'공정 전환',d:'전환의 비용과 혜택이 공정하게 분배되는지 탐구합니다.'},{e:'💡',t:'기술과 정책',d:'기술 혁신과 정책 변화의 역할을 이해합니다.'}],
+    qs:['탄소중립은 경제 성장과 양립 가능한가?','석탄 발전소 지역 노동자는 누가 책임져야 하는가?','개인의 탄소 감축과 시스템 변화, 어느 것이 더 중요한가?']
+  },
+  sim_fut_3:{cat:'시뮬레이션',time:'3일+',diff:'⭐⭐⭐⭐⭐ 전문',
+    title:'인구 절벽 사회 적응',
+    sub:'2045년, 코리아나 인구는 4,200만 명으로 줄었습니다. 줄어드는 사회에서 어떻게 지속될 수 있는가?',
+    people:'12-20명',dur:'3일',topic:'인구 감소 · 사회 구조 · 지속 가능성',
+    situation:'2045년, 총인구 4,200만 명, 출산율 0.65, 65세 이상 46%, 국민연금 2043년 고갈, 지방 소멸 지역 65%. 줄어드는 사회를 어떻게 설계할 것인가?',
+    options:[{t:'이민 대규모 수용',d:'연간 50만 명 이민으로 인구 유지'},{t:'고령 친화 사회 전환',d:'노인 중심 사회 구조 재설계'},{t:'기술로 대체',d:'AI·로봇으로 노동력 감소 보완'}],
+    roles:[{n:'국토부·행안부',d:'국토 재편',c:'#534AB7'},{n:'복지부·연금공단',d:'복지 재설계',c:'#0F6E56'},{n:'이민·다문화',d:'이민 정책',c:'#854F0B'},{n:'지방 소멸 지역',d:'지역 생존',c:'#993C1D'},{n:'청년·미래 세대',d:'세대 간 공정성',c:'#185FA5'}],
+    effects:[{e:'👴',t:'인구 구조',d:'고령화 사회의 도전과 기회를 이해합니다.'},{e:'🏘️',t:'지역 소멸',d:'지방 소멸의 원인과 대응을 탐구합니다.'},{e:'🤖',t:'기술 대체',d:'AI·로봇이 인구 감소를 보완할 수 있는지 탐구합니다.'}],
+    qs:['줄어드는 것에 적응하는 것도 전략이 될 수 있는가?','한국은 이민 국가가 될 수 있는가?','인구가 줄어도 잘 살 수 있는 사회는 어떤 모습인가?']
+  }
+};
+
+/* ── 탭 전환 ── */
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  ['sim','puzzle','board'].forEach(n => {
+    document.getElementById('sb-' + n).style.display = n === name ? 'block' : 'none';
+  });
+  window.scrollTo(0, 0);
+}
+
+/* ── 시뮬레이션 필터 ── */
+function simFilter(e, type) {
+  if (e) e.preventDefault();
+  const btns = document.querySelectorAll('#panel-sim .fb button');
+  btns.forEach(b => b.classList.remove('on'));
+  if (e && e.currentTarget) e.currentTarget.classList.add('on');
+  document.querySelectorAll('#panel-sim .card').forEach(c => {
+    if (type === 'all') c.style.display = '';
+    else c.style.display = c.dataset.dur === type ? '' : 'none';
+  });
+}
+
+/* ── 슬라이드 오버 ── */
+function openDrawer(key) {
+  const g = GAMES[key];
+  if (!g) return;
+  const bColor = g.time === '3일+' ? '#EEEDFE' : '#E1F5EE';
+  const bText  = g.time === '3일+' ? '#3C3489' : '#0F6E56';
+  document.getElementById('drawer-content').innerHTML = `
+    <div class="d-badges">
+      <span class="d-badge" style="background:${bColor};color:${bText}">${g.time}</span>
+      <span class="d-badge" style="background:#FAEEDA;color:#854F0B">${g.diff}</span>
+      <span class="d-badge" style="background:#f1eff8;color:#534AB7">${g.cat}</span>
+    </div>
+    <div class="d-title">${g.title}</div>
+    <div class="d-sub">${g.sub}</div>
+    <div class="d-meta">
+      <div class="d-mi"><span class="d-ml">참여 인원</span><span class="d-mv">${g.people}</span></div>
+      <div class="d-mi"><span class="d-ml">소요 시간</span><span class="d-mv">${g.dur}</span></div>
+      <div class="d-mi"><span class="d-ml">핵심 주제</span><span class="d-mv">${g.topic}</span></div>
+    </div>
+    <div class="d-sec">상황 설정</div>
+    <div class="d-box">${g.situation}</div>
+    <div class="d-sec">핵심 선택지</div>
+    ${g.options.map(o=>`<div class="d-option"><div class="d-option-t">${o.t}</div><div class="d-option-d">${o.d}</div></div>`).join('')}
+    <div class="d-sec">역할 배정</div>
+    <div class="d-roles">
+      ${g.roles.map(r=>`<div class="d-role"><div class="d-role-dot" style="background:${r.c}"></div><div class="d-role-name">${r.n}</div><div class="d-role-desc">${r.d}</div></div>`).join('')}
+    </div>
+    <div class="d-sec">교육적 효과</div>
+    ${g.effects.map(ef=>`
+      <div class="d-effect">
+        <div class="d-effect-icon" style="background:#f1eff8">${ef.e}</div>
+        <div><div class="d-effect-t">${ef.t}</div><div class="d-effect-d">${ef.d}</div></div>
+      </div>`).join('')}
+    <div class="d-sec">게임 후 토론 질문</div>
+    <div class="d-qs">
+      ${g.qs.map((q,i)=>`<div class="d-q"><span class="d-qn">${i+1}</span><span>${q}</span></div>`).join('')}
+    </div>
+    <div style="height:2rem"></div>
+  `;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+</script>
 function showTab(name) {
   // 탭 버튼
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
