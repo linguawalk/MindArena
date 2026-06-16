@@ -19,71 +19,124 @@
       --in:#3730A3;--in-l:#EEF2FF;
       --t:#1a1a1a;--t2:#5f5e5a;--t3:#888780;
       --bd:rgba(0,0,0,0.09);--bd2:rgba(0,0,0,0.18);
-      --bg:#fff;--bg2:#f8f7f4;--r:10px
+      --bg:#fff;--bg2:#f8f7f4;--r:10px;
+      /* 분야별 색상 */
+      --brain:#7C3AED;--brain-l:#F5F3FF;
+      --stem:#0369A1;--stem-l:#E0F2FE;
+      --hum:#B45309;--hum-l:#FEF9C3;
+      --lang:#065F46;--lang-l:#ECFDF5;
+      --sim:#9F1239;--sim-l:#FFF1F2;
     }
     html{scroll-behavior:smooth}
     body{font-family:'Noto Sans KR',sans-serif;color:var(--t);background:var(--bg);font-size:14px;line-height:1.6}
 
-    /* NAV */
+    /* ── NAV ── */
     nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-bottom:.5px solid var(--bd)}
-    .nav-top{display:flex;align-items:center;padding:0 2rem;height:52px}
+    .nav-top{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px}
     .logo{font-size:16px;font-weight:500;color:var(--pu);text-decoration:none;display:flex;align-items:center;gap:7px}
     .logo svg{width:20px;height:20px}
+    .nav-badge{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--pu-l);color:var(--pu);font-weight:400}
 
-    /* TAB BAR */
-    .tab-bar{display:flex;border-top:.5px solid var(--bd);padding:0 2rem;background:#fff}
-    .tab{padding:10px 22px;font-size:14px;font-weight:500;cursor:pointer;color:var(--t3);border:none;background:transparent;font-family:inherit;border-bottom:2.5px solid transparent;transition:color .15s,border-color .15s;display:flex;align-items:center;gap:7px}
+    /* ── TAB BAR ── */
+    .tab-bar{display:flex;border-top:.5px solid var(--bd);padding:0 1.5rem;background:#fff;overflow-x:auto}
+    .tab-bar::-webkit-scrollbar{height:0}
+    .tab{padding:10px 18px;font-size:13.5px;font-weight:500;cursor:pointer;color:var(--t3);
+         border:none;background:transparent;font-family:inherit;
+         border-bottom:2.5px solid transparent;transition:color .15s,border-color .15s;
+         display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0}
     .tab:hover{color:var(--t2)}
     .tab.active{color:var(--pu);border-bottom-color:var(--pu)}
-    .tc{font-size:11px;background:var(--bg2);padding:1px 7px;border-radius:20px;color:var(--t3);font-weight:400}
+    .tc{font-size:10px;padding:1px 6px;border-radius:20px;font-weight:400;background:var(--bg2);color:var(--t3)}
     .tab.active .tc{background:var(--pu-l);color:var(--pu)}
+    /* 분야별 탭 색상 */
+    .tab[data-tab="brain"].active{color:var(--brain);border-bottom-color:var(--brain)}
+    .tab[data-tab="brain"].active .tc{background:var(--brain-l);color:var(--brain)}
+    .tab[data-tab="stem"].active{color:var(--stem);border-bottom-color:var(--stem)}
+    .tab[data-tab="stem"].active .tc{background:var(--stem-l);color:var(--stem)}
+    .tab[data-tab="hum"].active{color:var(--hum);border-bottom-color:var(--hum)}
+    .tab[data-tab="hum"].active .tc{background:var(--hum-l);color:var(--hum)}
+    .tab[data-tab="lang"].active{color:var(--lang);border-bottom-color:var(--lang)}
+    .tab[data-tab="lang"].active .tc{background:var(--lang-l);color:var(--lang)}
+    .tab[data-tab="sim"].active{color:var(--sim);border-bottom-color:var(--sim)}
+    .tab[data-tab="sim"].active .tc{background:var(--sim-l);color:var(--sim)}
 
-    /* LAYOUT */
+    /* ── LAYOUT ── */
     .layout{display:flex;min-height:calc(100vh - 94px)}
 
-    /* SIDEBAR */
-    .sidebar{width:195px;flex-shrink:0;border-right:.5px solid var(--bd);padding:1.25rem 0;position:sticky;top:94px;height:calc(100vh - 94px);overflow-y:auto}
+    /* ── SIDEBAR ── */
+    .sidebar{width:195px;flex-shrink:0;border-right:.5px solid var(--bd);
+             padding:1.25rem 0;position:sticky;top:94px;
+             height:calc(100vh - 94px);overflow-y:auto}
     .sidebar::-webkit-scrollbar{width:3px}
     .sidebar::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
     .sg{margin-bottom:1.5rem}
-    .st{font-size:10px;font-weight:500;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;padding:0 1rem;margin-bottom:.35rem}
-    .si{display:flex;align-items:center;justify-content:space-between;padding:6px 1rem;font-size:13px;color:var(--t2);cursor:pointer;border-left:2px solid transparent;text-decoration:none;transition:background .1s,color .1s}
+    .st{font-size:10px;font-weight:500;color:var(--t3);letter-spacing:.07em;
+        text-transform:uppercase;padding:0 1rem;margin-bottom:.35rem}
+    .si{display:flex;align-items:center;justify-content:space-between;
+        padding:6px 1rem;font-size:13px;color:var(--t2);cursor:pointer;
+        border-left:2px solid transparent;text-decoration:none;
+        transition:background .1s,color .1s}
     .si:hover{color:var(--t);background:var(--bg2)}
-    .si.on{color:var(--pu);border-left-color:var(--pu);background:var(--pu-l);font-weight:500}
+    .si.on{font-weight:500}
     .sc{font-size:10px;background:var(--bg2);padding:1px 6px;border-radius:20px;color:var(--t3)}
-    .si.on .sc{background:rgba(83,74,183,.12)}
+    /* 분야별 사이드바 강조색 */
+    #sb-brain .si.on{color:var(--brain);border-left-color:var(--brain);background:var(--brain-l)}
+    #sb-stem  .si.on{color:var(--stem);border-left-color:var(--stem);background:var(--stem-l)}
+    #sb-hum   .si.on{color:var(--hum);border-left-color:var(--hum);background:var(--hum-l)}
+    #sb-lang  .si.on{color:var(--lang);border-left-color:var(--lang);background:var(--lang-l)}
+    #sb-sim   .si.on{color:var(--sim);border-left-color:var(--sim);background:var(--sim-l)}
 
-    /* MAIN */
+    /* ── COMING SOON ── */
+    .soon-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
+               min-height:420px;text-align:center;padding:3rem 2rem}
+    .soon-icon{font-size:48px;margin-bottom:1rem}
+    .soon-title{font-size:20px;font-weight:500;margin-bottom:.6rem}
+    .soon-sub{font-size:14px;color:var(--t2);line-height:1.7;max-width:480px;margin-bottom:1.5rem}
+    .soon-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .soon-tag{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:500}
+
+    /* ── MAIN ── */
     .main{flex:1;padding:1.75rem 2rem;min-width:0}
-
-    /* PANEL */
     .panel{display:none}
     .panel.active{display:block}
-
-    /* HEADER */
     .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem}
     .ph h1{font-size:18px;font-weight:500}
     .fb{display:flex;gap:6px}
-    .fb button{padding:5px 13px;border:.5px solid var(--bd);border-radius:20px;font-size:12px;cursor:pointer;background:transparent;color:var(--t2);font-family:inherit;transition:all .12s}
+    .fb button{padding:5px 13px;border:.5px solid var(--bd);border-radius:20px;
+               font-size:12px;cursor:pointer;background:transparent;color:var(--t2);
+               font-family:inherit;transition:all .12s}
     .fb button:hover{border-color:var(--bd2);color:var(--t)}
     .fb button.on{background:var(--pu);color:#fff;border-color:var(--pu)}
 
-    /* SECTION */
-    .sec{font-size:12.5px;font-weight:500;color:var(--t2);margin:2rem 0 .9rem;padding-bottom:.5rem;border-bottom:.5px solid var(--bd);display:flex;align-items:center;gap:6px}
+    /* ── SECTION ── */
+    .sec{font-size:12.5px;font-weight:500;color:var(--t2);
+         margin:2rem 0 .9rem;padding-bottom:.5rem;
+         border-bottom:.5px solid var(--bd);display:flex;align-items:center;gap:6px}
     .sec:first-of-type{margin-top:0}
+    .sec-badge{font-size:10px;padding:1px 8px;border-radius:20px;font-weight:500;margin-left:4px}
+    .sec-puzzle{background:var(--am-l);color:var(--am)}
+    .sec-board{background:var(--pu-l);color:var(--pu-d)}
 
-    /* GRID */
+    /* ── GRID ── */
     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:.5rem}
 
-    /* CARD */
-    .card{background:var(--bg);border:.5px solid var(--bd);border-radius:var(--r);padding:1.1rem;text-decoration:none;color:inherit;display:block;transition:border-color .15s,transform .15s}
+    /* ── CARD ── */
+    .card{background:var(--bg);border:.5px solid var(--bd);border-radius:var(--r);
+          padding:1.1rem;text-decoration:none;color:inherit;display:block;
+          transition:border-color .15s,transform .15s;position:relative}
     .card:hover{border-color:var(--bd2);transform:translateY(-1px)}
     .ct{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.6rem}
     .badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500}
+    /* 배지 색상 */
     .bs{background:var(--te-l);color:var(--te)}
     .bl{background:var(--pu-l);color:var(--pu-d)}
     .bp{background:var(--am-l);color:var(--am)}
     .bb{background:var(--co-l);color:var(--co)}
+    .b-brain{background:var(--brain-l);color:var(--brain)}
+    .b-stem{background:var(--stem-l);color:var(--stem)}
+    .b-hum{background:var(--hum-l);color:var(--hum)}
+    .b-lang{background:var(--lang-l);color:var(--lang)}
+    .b-sim{background:var(--sim-l);color:var(--sim)}
     .b-la{background:var(--bl-l);color:var(--bl)}
     .b-ma{background:var(--am-l);color:var(--am)}
     .b-sp{background:var(--in-l);color:var(--in)}
@@ -107,39 +160,53 @@
     .card p{font-size:11.5px;color:var(--t2);line-height:1.55}
     .cf{display:flex;gap:4px;margin-top:.65rem;flex-wrap:wrap}
     .mt{font-size:10px;color:var(--t3);background:var(--bg2);padding:2px 7px;border-radius:20px}
+    /* AI 배지 */
+    .ai-tag{position:absolute;top:.7rem;right:.7rem;font-size:9px;
+            background:#1a1a1a;color:#fff;padding:1px 6px;border-radius:20px;font-weight:500}
 
     @media(max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
     @media(max-width:800px){.sidebar{display:none}.grid{grid-template-columns:1fr 1fr}}
     @media(max-width:500px){.grid{grid-template-columns:1fr}}
+
     footer{text-align:center;padding:1.5rem;font-size:12px;color:var(--t3);border-top:.5px solid var(--bd)}
     footer a{color:inherit}
 
     /* ── SLIDE OVER ── */
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s}
     .overlay.open{opacity:1;pointer-events:all}
-    .drawer{position:fixed;top:0;right:0;width:560px;max-width:100vw;height:100vh;background:var(--bg);z-index:301;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
+    .drawer{position:fixed;top:0;right:0;width:560px;max-width:100vw;height:100vh;
+            background:var(--bg);z-index:301;transform:translateX(100%);
+            transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
     .drawer.open{transform:translateX(0)}
     .drawer::-webkit-scrollbar{width:4px}
     .drawer::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
-    .dh{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:.5px solid var(--bd);position:sticky;top:0;background:var(--bg);z-index:1}
-    .dh-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--t2);cursor:pointer;border:none;background:transparent;font-family:inherit;padding:4px 8px;border-radius:6px;transition:background .1s}
+    .dh{display:flex;align-items:center;justify-content:space-between;
+        padding:1rem 1.5rem;border-bottom:.5px solid var(--bd);
+        position:sticky;top:0;background:var(--bg);z-index:1}
+    .dh-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--t2);
+             cursor:pointer;border:none;background:transparent;font-family:inherit;
+             padding:4px 8px;border-radius:6px;transition:background .1s}
     .dh-back:hover{background:var(--bg2)}
     .dc{padding:1.5rem}
     .d-badges{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:.75rem}
     .d-badge{font-size:10px;padding:2px 9px;border-radius:20px;font-weight:500}
     .d-title{font-size:20px;font-weight:500;line-height:1.3;margin-bottom:.5rem}
     .d-sub{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:1rem}
-    .d-meta{display:flex;gap:20px;flex-wrap:wrap;padding:.9rem 1rem;background:var(--bg2);border-radius:8px;margin-bottom:1.25rem}
+    .d-meta{display:flex;gap:20px;flex-wrap:wrap;padding:.9rem 1rem;
+            background:var(--bg2);border-radius:8px;margin-bottom:1.25rem}
     .d-mi{display:flex;flex-direction:column;gap:2px}
     .d-ml{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.05em}
     .d-mv{font-size:13px;font-weight:500}
-    .d-sec{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin:1.25rem 0 .6rem}
-    .d-box{background:var(--bg2);border-radius:8px;padding:1rem;margin-bottom:.75rem;font-size:13px;color:var(--t2);line-height:1.6}
+    .d-sec{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;
+           letter-spacing:.06em;margin:1.25rem 0 .6rem}
+    .d-box{background:var(--bg2);border-radius:8px;padding:1rem;margin-bottom:.75rem;
+           font-size:13px;color:var(--t2);line-height:1.6}
     .d-option{border:.5px solid var(--bd);border-radius:8px;padding:.75rem 1rem;margin-bottom:.5rem}
     .d-option-t{font-size:13px;font-weight:500;margin-bottom:.25rem}
     .d-option-d{font-size:12px;color:var(--t2)}
     .d-roles{border:.5px solid var(--bd);border-radius:8px;overflow:hidden}
-    .d-role{display:flex;align-items:center;gap:10px;padding:.6rem 1rem;border-bottom:.5px solid var(--bd);font-size:13px}
+    .d-role{display:flex;align-items:center;gap:10px;padding:.6rem 1rem;
+            border-bottom:.5px solid var(--bd);font-size:13px}
     .d-role:last-child{border-bottom:none}
     .d-role-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
     .d-role-name{font-weight:500;flex:1}
@@ -162,30 +229,149 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a5 5 0 0 1 5 5c0 2-1 3.5-2.5 4.5L12 22l-2.5-10.5C8 10.5 7 9 7 7a5 5 0 0 1 5-5z"/><circle cx="12" cy="7" r="2"/></svg>
       MindArena
     </a>
+    <span class="nav-badge">Beta</span>
   </div>
   <div class="tab-bar">
-    <button id="tab-sim" class="tab active" onclick="showTab('sim')">
+    <!-- 두뇌개발 -->
+    <button class="tab active" data-tab="brain" onclick="showTab('brain',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2a6.5 6.5 0 0 1 5 10.6V20a2 2 0 0 1-4 0v-1H9a2 2 0 0 1-2-2v-4.4A6.5 6.5 0 0 1 9.5 2z"/><path d="M14.5 2a6.5 6.5 0 0 0-5 10.6"/></svg>
+      두뇌개발 <span class="tc">퍼즐 135</span>
+    </button>
+    <!-- STEM -->
+    <button class="tab" data-tab="stem" onclick="showTab('stem',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+      STEM <span class="tc">준비 중</span>
+    </button>
+    <!-- 인문사회 -->
+    <button class="tab" data-tab="hum" onclick="showTab('hum',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      인문사회 <span class="tc">준비 중</span>
+    </button>
+    <!-- 언어 -->
+    <button class="tab" data-tab="lang" onclick="showTab('lang',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+      언어 <span class="tc">준비 중</span>
+    </button>
+    <!-- 시뮬레이션 -->
+    <button class="tab" data-tab="sim" onclick="showTab('sim',this)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       시뮬레이션 <span class="tc">25</span>
-    </button>
-    <button id="tab-puzzle" class="tab" onclick="showTab('puzzle')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11V9a2 2 0 0 0-2-2h-2V5a2 2 0 0 0-4 0v2H9a2 2 0 0 0-2 2v2H5a2 2 0 0 0 0 4h2v2a2 2 0 0 0 2 2h2v2a2 2 0 0 0 4 0v-2h2a2 2 0 0 0 2-2v-2h2a2 2 0 0 0 0-4h-2z"/></svg>
-      퍼즐 <span class="tc">135</span>
-    </button>
-    <button id="tab-board" class="tab" onclick="showTab('board')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
-      보드게임 <span class="tc">120</span>
     </button>
   </div>
 </nav>
 
 <div class="layout">
 
-  <!-- 사이드바 시뮬레이션 -->
-  <aside id="sb-sim" class="sidebar">
+  <!-- ══ 두뇌개발 사이드바 ══ -->
+  <aside id="sb-brain" class="sidebar">
+    <div class="sg">
+      <div class="st">퍼즐 종류</div>
+      <a href="#" class="si on">전체<span class="sc">9종</span></a>
+      <a href="#" class="si">숫자 퍼즐<span class="sc">15</span></a>
+      <a href="#" class="si">논리 퍼즐<span class="sc">15</span></a>
+      <a href="#" class="si">언어 퍼즐<span class="sc">15</span></a>
+      <a href="#" class="si">확률 퍼즐<span class="sc">15</span></a>
+      <a href="#" class="si">공간 퍼즐<span class="sc">15</span></a>
+      <a href="#" class="si">패턴 퍼즐<span class="sc">15</span></a>
+      <a href="#" class="si">전략 퍼즐<span class="sc">15</span></a>
+      <a href="#" class="si">창의 퍼즐<span class="sc">15</span></a>
+      <a href="#" class="si">융합 퍼즐<span class="sc">15</span></a>
+    </div>
+    <div class="sg">
+      <div class="st">레벨</div>
+      <a href="#" class="si">L1 Seed</a>
+      <a href="#" class="si">L2 Sprout</a>
+      <a href="#" class="si">L3 Branch</a>
+      <a href="#" class="si">L4 Tree</a>
+      <a href="#" class="si">L5 Forest</a>
+    </div>
+  </aside>
+
+  <!-- ══ STEM 사이드바 ══ -->
+  <aside id="sb-stem" class="sidebar" style="display:none">
+    <div class="sg">
+      <div class="st">분야</div>
+      <a href="#" class="si on">전체</a>
+      <a href="#" class="si">수학</a>
+      <a href="#" class="si">과학</a>
+      <a href="#" class="si">프로그래밍</a>
+      <a href="#" class="si">기술·AI</a>
+      <a href="#" class="si">예체능</a>
+    </div>
+    <div class="sg">
+      <div class="st">형태</div>
+      <a href="#" class="si">퍼즐</a>
+      <a href="#" class="si">AI 보드게임</a>
+    </div>
+    <div class="sg">
+      <div class="st">레벨</div>
+      <a href="#" class="si">L1 Seed</a>
+      <a href="#" class="si">L2 Sprout</a>
+      <a href="#" class="si">L3 Branch</a>
+      <a href="#" class="si">L4 Tree</a>
+      <a href="#" class="si">L5 Forest</a>
+    </div>
+  </aside>
+
+  <!-- ══ 인문사회 사이드바 ══ -->
+  <aside id="sb-hum" class="sidebar" style="display:none">
+    <div class="sg">
+      <div class="st">분야</div>
+      <a href="#" class="si on">전체</a>
+      <a href="#" class="si">역사·문명</a>
+      <a href="#" class="si">철학·윤리</a>
+      <a href="#" class="si">경제·투자</a>
+      <a href="#" class="si">심리·감정</a>
+      <a href="#" class="si">사회·정치</a>
+      <a href="#" class="si">문화·다양성</a>
+      <a href="#" class="si">환경·생태</a>
+    </div>
+    <div class="sg">
+      <div class="st">형태</div>
+      <a href="#" class="si">퍼즐</a>
+      <a href="#" class="si">AI 보드게임</a>
+    </div>
+    <div class="sg">
+      <div class="st">레벨</div>
+      <a href="#" class="si">L1 Seed</a>
+      <a href="#" class="si">L2 Sprout</a>
+      <a href="#" class="si">L3 Branch</a>
+      <a href="#" class="si">L4 Tree</a>
+      <a href="#" class="si">L5 Forest</a>
+    </div>
+  </aside>
+
+  <!-- ══ 언어 사이드바 ══ -->
+  <aside id="sb-lang" class="sidebar" style="display:none">
+    <div class="sg">
+      <div class="st">언어</div>
+      <a href="#" class="si on">한국어 (모국어)</a>
+      <a href="#" class="si">영어</a>
+      <a href="#" class="si">중국어</a>
+      <a href="#" class="si">일본어</a>
+      <a href="#" class="si">기타 언어</a>
+    </div>
+    <div class="sg">
+      <div class="st">형태</div>
+      <a href="#" class="si">퍼즐</a>
+      <a href="#" class="si">AI 대화 게임</a>
+      <a href="#" class="si">외국어로 플레이</a>
+    </div>
+    <div class="sg">
+      <div class="st">레벨</div>
+      <a href="#" class="si">L1 Seed</a>
+      <a href="#" class="si">L2 Sprout</a>
+      <a href="#" class="si">L3 Branch</a>
+      <a href="#" class="si">L4 Tree</a>
+      <a href="#" class="si">L5 Forest</a>
+    </div>
+  </aside>
+
+  <!-- ══ 시뮬레이션 사이드바 ══ -->
+  <aside id="sb-sim" class="sidebar" style="display:none">
     <div class="sg">
       <div class="st">주제별</div>
-      <a href="#sim-biz" class="si">기업 경영<span class="sc">8</span></a>
+      <a href="#sim-biz" class="si on">기업 경영<span class="sc">8</span></a>
       <a href="#sim-pol" class="si">국가 정책<span class="sc">8</span></a>
       <a href="#sim-int" class="si">국제 관계<span class="sc">3</span></a>
       <a href="#sim-cri" class="si">위기 관리<span class="sc">3</span></a>
@@ -193,64 +379,189 @@
     </div>
     <div class="sg">
       <div class="st">소요 시간</div>
+      <a href="#" class="si" onclick="simFilter(event,'all')">전체</a>
       <a href="#" class="si" onclick="simFilter(event,'s')">1-2시간</a>
       <a href="#" class="si" onclick="simFilter(event,'l')">3일+</a>
-      <a href="#" class="si on" onclick="simFilter(event,'all')">전체</a>
-    </div>
-  </aside>
-
-  <!-- 사이드바 퍼즐 -->
-  <aside id="sb-puzzle" class="sidebar" style="display:none">
-    <div class="sg">
-      <div class="st">종류</div>
-      <a href="#pz1" class="si">숫자 퍼즐<span class="sc">15</span></a>
-      <a href="#pz2" class="si">논리 퍼즐<span class="sc">15</span></a>
-      <a href="#pz3" class="si">언어 퍼즐<span class="sc">15</span></a>
-      <a href="#pz4" class="si">확률 퍼즐<span class="sc">15</span></a>
-      <a href="#pz5" class="si">공간 퍼즐<span class="sc">15</span></a>
-      <a href="#pz6" class="si">패턴 퍼즐<span class="sc">15</span></a>
-      <a href="#pz7" class="si">전략 퍼즐<span class="sc">15</span></a>
-      <a href="#pz8" class="si">창의 퍼즐<span class="sc">15</span></a>
-      <a href="#pz9" class="si">융합 퍼즐<span class="sc">15</span></a>
-    </div>
-  </aside>
-
-  <!-- 사이드바 보드게임 -->
-  <aside id="sb-board" class="sidebar" style="display:none">
-    <div class="sg">
-      <div class="st">분야 (24종)</div>
-      <a href="#" class="si" onclick="return false">기본 6종 (추상·추리·퀴즈·협력·전략·협상)</a>
-      <a href="#" class="si" onclick="return false">언어·스토리텔링</a>
-      <a href="#" class="si" onclick="return false">수학·확률</a>
-      <a href="#" class="si" onclick="return false">공간·시각</a>
-      <a href="#" class="si" onclick="return false">기억·집중</a>
-      <a href="#" class="si" onclick="return false">역사·문명</a>
-      <a href="#" class="si" onclick="return false">경제·투자</a>
-      <a href="#" class="si" onclick="return false">과학·발명</a>
-      <a href="#" class="si" onclick="return false">윤리·철학</a>
-      <a href="#" class="si" onclick="return false">정보 비대칭</a>
-      <a href="#" class="si" onclick="return false">팀 전략</a>
-      <a href="#" class="si" onclick="return false">음악·리듬</a>
-      <a href="#" class="si" onclick="return false">미술·디자인</a>
-      <a href="#" class="si" onclick="return false">체육·스포츠</a>
-      <a href="#" class="si" onclick="return false">연극·표현</a>
-      <a href="#" class="si" onclick="return false">심리·감정</a>
-      <a href="#" class="si" onclick="return false">문화·다양성</a>
-      <a href="#" class="si" onclick="return false">환경·생태</a>
-      <a href="#" class="si" onclick="return false">미래·기술</a>
-    </div>
-    <div class="sg">
-      <div class="st">전체 목록</div>
-      <a href="https://github.com/linguawalk/MindArena/tree/main/content/boardgame" target="_blank" class="si" style="color:var(--pu)">분야별 5개 게임 전체 보기 →</a>
     </div>
   </aside>
 
   <main class="main">
 
-    <!-- ══ 시뮬레이션 패널 ══ -->
-    <div id="panel-sim" class="panel active">
+    <!-- ══════════════════════════════════
+         두뇌개발 패널
+    ══════════════════════════════════ -->
+    <div id="panel-brain" class="panel active">
       <div class="ph">
-        <h1>시뮬레이션 (25개)</h1>
+        <h1>두뇌개발</h1>
+        <div class="fb"><button class="on">퍼즐 135단계</button></div>
+      </div>
+      <div class="grid">
+        <a class="card" href="#" onclick="openDrawer('pz1');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>숫자 퍼즐</h3><p>수열·연산·암호 해독. 수학적 사고력 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" onclick="openDrawer('pz2');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>논리 퍼즐</h3><p>연역·귀납·역설. 논리적 추론 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" onclick="openDrawer('pz3');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>언어 퍼즐</h3><p>단어·문장·의미 추론 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" onclick="openDrawer('pz4');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>확률 퍼즐</h3><p>확률·통계·불확실성 사고 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" onclick="openDrawer('pz5');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>공간 퍼즐</h3><p>도형·공간 지각·시각화 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" onclick="openDrawer('pz6');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>패턴 퍼즐</h3><p>규칙 발견·패턴 인식 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" onclick="openDrawer('pz7');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>전략 퍼즐</h3><p>게임 이론·의사결정·최적 선택.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" onclick="openDrawer('pz8');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>창의 퍼즐</h3><p>틀을 깨는 사고. 창의적 문제 해결.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+        <a class="card" href="#" onclick="openDrawer('pz9');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>융합 퍼즐</h3><p>여러 영역을 넘나드는 복합 문제.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         STEM 패널 (준비 중)
+    ══════════════════════════════════ -->
+    <div id="panel-stem" class="panel">
+      <div class="soon-wrap">
+        <div class="soon-icon">🔬</div>
+        <div class="soon-title">STEM 분야 준비 중</div>
+        <div class="soon-sub">수학·과학·프로그래밍·기술·AI·예체능 분야의 퍼즐과 AI 보드게임을 제작하고 있습니다. 각 분야별로 퍼즐(개인 학습)과 AI와 함께하는 보드게임 두 가지 형태로 제공될 예정입니다.</div>
+        <div class="soon-tags">
+          <span class="soon-tag" style="background:var(--stem-l);color:var(--stem)">수학 퍼즐</span>
+          <span class="soon-tag" style="background:var(--stem-l);color:var(--stem)">과학 탐구</span>
+          <span class="soon-tag" style="background:var(--stem-l);color:var(--stem)">코딩 퍼즐</span>
+          <span class="soon-tag" style="background:var(--stem-l);color:var(--stem)">AI 보드게임</span>
+          <span class="soon-tag" style="background:var(--stem-l);color:var(--stem)">음악·미술</span>
+          <span class="soon-tag" style="background:var(--stem-l);color:var(--stem)">체육·스포츠</span>
+        </div>
+      </div>
+      <!-- 보드게임 재배치 예고 -->
+      <div class="sec">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+        STEM 관련 보드게임 (이전 버전에서 이동 예정)
+        <span class="sec-badge sec-board">AI 보드게임 전환 예정</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="#" onclick="openDrawer('bg_ma1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐</span></div><h3>소수 전쟁</h3><p>카드를 조합해 소수를 만들거나 합성수를 공격하라.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">20-30분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_sc1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>가설 배틀</h3><p>과학적 가설을 세우고 AI와 검증하라.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-40분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_mu1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐</span></div><h3>박자 배틀</h3><p>리듬을 만들고 AI와 음악 이론을 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">20-30분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_ar1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐</span></div><h3>색깔 감정</h3><p>색채 심리와 디자인 원리를 AI와 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">25-35분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_sp1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐</span></div><h3>도형 퍼즐 레이스</h3><p>공간 지각 능력을 AI와 경쟁하며 훈련한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">25-35분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_so1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐⭐</span></div><h3>전술 감독</h3><p>AI 감독과 전술을 겨루는 스포츠 전략 게임.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_fu1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-fu">기술</span><span class="cd">⭐⭐⭐⭐</span></div><h3>AI 판사</h3><p>AI가 판결을 내린다. 알고리즘 편향을 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">40-55분</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         인문사회 패널 (준비 중)
+    ══════════════════════════════════ -->
+    <div id="panel-hum" class="panel">
+      <div class="soon-wrap">
+        <div class="soon-icon">📚</div>
+        <div class="soon-title">인문사회 분야 준비 중</div>
+        <div class="soon-sub">역사·철학·경제·심리·사회 분야의 퍼즐과 AI 보드게임을 제작하고 있습니다. AI가 소크라테스·역사 인물·경제 주체 등 다양한 역할을 맡아 1:1 대화형 게임을 진행합니다.</div>
+        <div class="soon-tags">
+          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">역사 탐구</span>
+          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">철학 토론</span>
+          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">경제 협상</span>
+          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">심리 분석</span>
+          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">사회 설계</span>
+          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">AI 소크라테스</span>
+        </div>
+      </div>
+      <!-- 보드게임 재배치 예고 -->
+      <div class="sec">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+        인문사회 관련 보드게임 (이전 버전에서 이동 예정)
+        <span class="sec-badge sec-board">AI 보드게임 전환 예정</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="#" onclick="openDrawer('bg_et1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>트롤리 문제 변형</h3><p>AI가 반박하고 사용자가 설득하는 윤리 토론.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_hi1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐</span></div><h3>타임라인 배틀</h3><p>역사의 흐름을 AI와 함께 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">20-30분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_ec1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐</span></div><h3>가격 탐정</h3><p>AI 시장 참여자와 협상하며 경제 원리를 체험.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">25-35분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_ps1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐</span></div><h3>편향 사냥꾼</h3><p>AI가 편향적 상황을 제시하고 사용자가 분석.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-45분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_in1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐</span></div><h3>내부자 게임</h3><p>AI가 내부자 역할을 맡아 사용자가 찾아내야 한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_cu1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐</span></div><h3>세계 관습 퀴즈</h3><p>AI가 세계 각국 문화 퀴즈 진행자가 된다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">25-35분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_en1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐</span></div><h3>먹이 사슬 전략</h3><p>AI가 생태계 변수를 조절하며 시스템 사고를 훈련.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_te1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐</span></div><h3>침묵의 팀</h3><p>AI 팀원과 언어 없이 소통하는 협력 게임.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-40분</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         언어 패널 (준비 중)
+    ══════════════════════════════════ -->
+    <div id="panel-lang" class="panel">
+      <div class="soon-wrap">
+        <div class="soon-icon">🌐</div>
+        <div class="soon-title">언어 분야 준비 중</div>
+        <div class="soon-sub">모국어(한국어)와 외국어 학습을 위한 퍼즐과 AI 대화 게임을 제작하고 있습니다. 언어 자체를 배우는 게임과, 배운 외국어로 다른 분야 게임을 플레이하는 두 가지 방식을 제공합니다.</div>
+        <div class="soon-tags">
+          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">한국어 퍼즐</span>
+          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">영어 AI 대화</span>
+          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">중국어</span>
+          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">일본어</span>
+          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">외국어로 게임</span>
+          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">CLIL 방식</span>
+        </div>
+      </div>
+      <div class="sec">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+        언어 관련 보드게임 (이전 버전에서 이동 예정)
+        <span class="sec-badge sec-board">AI 보드게임 전환 예정</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="#" onclick="openDrawer('bg_la1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐</span></div><h3>단어 사슬</h3><p>AI와 무한히 이어가는 단어 연결 게임.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-45분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_dr1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-dr">표현</span><span class="cd">⭐⭐⭐</span></div><h3>즉흥극 배틀</h3><p>AI가 상대 배우가 되어 즉흥 연기를 펼친다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-45분</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         시뮬레이션 패널
+    ══════════════════════════════════ -->
+    <div id="panel-sim" class="panel">
+      <div class="ph">
+        <h1>시뮬레이션 <span style="font-size:13px;font-weight:400;color:var(--t3)">(다인 플레이)</span></h1>
         <div class="fb">
           <button class="on" onclick="simFilter(event,'all')">전체</button>
           <button onclick="simFilter(event,'s')">1-2시간</button>
@@ -281,10 +592,10 @@
         <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_1');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>인구 감소 대응 정책</h3><p>출산율 0.7. 돈으로 아이를 낳게 할 수 있는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
         <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_2');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>에너지 전환 정책</h3><p>석탄·원전·재생에너지. 탄소중립 에너지 믹스.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">90-120분</span></div></a>
         <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_3');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐</span></div><h3>플랫폼 규제 딜레마</h3><p>배달앱 수수료 27%. 규제할 것인가?</p><div class="cf"><span class="mt">4-6명</span><span class="mt">90-120분</span></div></a>
-        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_4');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>부동산 정책의 선택</h3><p>집값 잡기 vs 공급 확대. 모두를 만족시킬 수 없다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
+        <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_4');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>부동산 정책의 선택</h3><p>집값 잡기 vs 공급 확대.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
         <a class="card" data-dur="s" href="#" onclick="openDrawer('sim_pol_5');return false"><div class="ct"><span class="badge bs">1-2시간</span><span class="cd">⭐⭐⭐⭐</span></div><h3>인공지능 규제 설계</h3><p>혁신 vs 안전. 한국은 어떤 선택을 해야 하는가?</p><div class="cf"><span class="mt">4-8명</span><span class="mt">120분+</span></div></a>
         <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_pol_6');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>국가 재정 위기 대응</h3><p>국가 부채 GDP 100% 초과. 세금 vs 복지 삭감.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_pol_7');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>헌법 개정 협상</h3><p>권력 구조·기본권·지방분권. 2/3 합의가 필요하다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_pol_7');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>헌법 개정 협상</h3><p>권력 구조·기본권·지방분권. 2/3 합의.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
         <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_pol_8');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>선거 제도 개혁</h3><p>소선거구제 vs 비례대표제.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">3일</span></div></a>
       </div>
 
@@ -293,78 +604,23 @@
         국제 관계
       </div>
       <div class="grid">
-        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_int_1');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>한반도 평화 협상</h3><p>6자 협상. 비핵화·평화체제·경제협력이 충돌한다.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
-        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_int_2');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>동아시아 경제 블록</h3><p>미국 블록 vs 중국 블록. 동아시아는 어느 편에?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_int_1');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>한반도 평화 협상</h3><p>6자 협상. 비핵화·평화체제·경제협력.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3-4일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_int_2');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>동아시아 경제 블록</h3><p>미국 블록 vs 중국 블록.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
         <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_int_3');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>기후 협약 재협상</h3><p>파리협정 붕괴 직전. 선진국 vs 개발도상국.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
       </div>
 
       <div id="sim-cri" class="sec">위기 관리</div>
       <div class="grid">
-        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_cri_1');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>팬데믹 대응</h3><p>경제 vs 생명. 72시간 안에 국가 대응 방향 결정.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_cri_2');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>금융 위기 대응</h3><p>은행 뱅크런. 48시간 내 결정. 구제 vs 파산.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_cri_3');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>사이버 전쟁 대응</h3><p>전력망·금융·교통 동시 공격. 반격할 것인가?</p><div class="cf"><span class="mt">10-20명</span><span class="mt">2-3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_cri_1');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>팬데믹 대응</h3><p>경제 vs 생명. 72시간 안에 결정.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_cri_2');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>금융 위기 대응</h3><p>은행 뱅크런. 48시간 내 결정.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_cri_3');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>사이버 전쟁 대응</h3><p>전력망·금융·교통 동시 공격.</p><div class="cf"><span class="mt">10-20명</span><span class="mt">2-3일</span></div></a>
       </div>
 
       <div id="sim-fut" class="sec">미래 시나리오</div>
       <div class="grid">
-        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_fut_1');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>AI 전환 사회 설계</h3><p>2040년, 일자리 45% 소멸. 어떤 사회를 만들 것인가?</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_fut_1');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>AI 전환 사회 설계</h3><p>2040년, 일자리 45% 소멸.</p><div class="cf"><span class="mt">15-25명</span><span class="mt">3일</span></div></a>
         <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_fut_2');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>탄소중립 2050 이행</h3><p>산업 전환의 비용은 누가 부담하는가?</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_fut_3');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>인구 절벽 사회 적응</h3><p>2045년 인구 4,200만. 줄어드는 사회에서 지속되는 법.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
-      </div>
-    </div>
-
-    <!-- ══ 퍼즐 패널 ══ -->
-    <div id="panel-puzzle" class="panel">
-      <div class="ph">
-        <h1>퍼즐 (9종 135단계)</h1>
-        <div class="fb">
-          <button class="on">개인 학습</button>
-        </div>
-      </div>
-      <div class="grid">
-        <a class="card" href="#" id="pz1" onclick="openDrawer('pz1');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>숫자 퍼즐</h3><p>수열·연산·암호 해독. 수학적 사고력 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-        <a class="card" href="#" id="pz2" onclick="openDrawer('pz2');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>논리 퍼즐</h3><p>연역·귀납·역설. 논리적 추론 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-        <a class="card" href="#" id="pz3" onclick="openDrawer('pz3');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>언어 퍼즐</h3><p>단어·문장·의미 추론 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-        <a class="card" href="#" id="pz4" onclick="openDrawer('pz4');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>확률 퍼즐</h3><p>확률·통계·불확실성 사고 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-        <a class="card" href="#" id="pz5" onclick="openDrawer('pz5');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>공간 퍼즐</h3><p>도형·공간 지각·시각화 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-        <a class="card" href="#" id="pz6" onclick="openDrawer('pz6');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>패턴 퍼즐</h3><p>규칙 발견·패턴 인식 훈련.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-        <a class="card" href="#" id="pz7" onclick="openDrawer('pz7');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>전략 퍼즐</h3><p>게임 이론·의사결정·최적 선택.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-        <a class="card" href="#" id="pz8" onclick="openDrawer('pz8');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>창의 퍼즐</h3><p>틀을 깨는 사고. 창의적 문제 해결.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-        <a class="card" href="#" id="pz9" onclick="openDrawer('pz9');return false"><div class="ct"><span class="badge bp">퍼즐</span><span class="cd">Lv.1-15</span></div><h3>융합 퍼즐</h3><p>여러 영역을 넘나드는 복합 문제.</p><div class="cf"><span class="mt">15단계</span><span class="mt">개인</span></div></a>
-      </div>
-    </div>
-
-    <!-- ══ 보드게임 패널 ══ -->
-    <div id="panel-board" class="panel">
-      <div class="ph">
-        <h1>보드게임 (24분야 120개)</h1>
-        <div class="fb"><button class="on">전체</button></div>
-      </div>
-      <div class="grid">
-        <a class="card" href="#" onclick="openDrawer('bg_abs');return false"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">2-4명</span></div><h3>추상 전략</h3><p>운 없이 순수한 실력으로만 승부. 상대의 수를 몇 수 앞서 읽어라.</p><div class="cf"><span class="mt">5개 게임</span><span class="mt">30-60분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_ded');return false"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">3-6명</span></div><h3>추리·연역</h3><p>단서를 모아 범인을 좁혀가는 탐정 게임. 논리로 승부한다.</p><div class="cf"><span class="mt">5개 게임</span><span class="mt">45-90분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_quiz');return false"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">2-8명</span></div><h3>지식·퀴즈</h3><p>역사·과학·예술·스포츠. 다양한 분야의 지식이 게임이 된다.</p><div class="cf"><span class="mt">5개 게임</span><span class="mt">30-60분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_coop');return false"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">2-6명</span></div><h3>협력</h3><p>모두 함께 이기거나, 모두 함께 진다. 팀으로 위기를 극복하라.</p><div class="cf"><span class="mt">5개 게임</span><span class="mt">45-90분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_str');return false"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">2-5명</span></div><h3>전략·경영</h3><p>자원을 관리하고 제국을 건설하라. 장기 계획이 승패를 결정한다.</p><div class="cf"><span class="mt">5개 게임</span><span class="mt">60-120분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_neg');return false"><div class="ct"><span class="badge bb">보드게임</span><span class="cd">4-8명</span></div><h3>협상·외교</h3><p>설득하고, 거래하고, 배신하라. 말이 전략이 되는 게임.</p><div class="cf"><span class="mt">5개 게임</span><span class="mt">60-90분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_la1');return false"><div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐</span></div><h3>단어 사슬</h3><p>끊어지면 지는 게임. 마지막 글자로 새 단어를 연결하라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">30-45분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_ma1');return false"><div class="ct"><span class="badge b-ma">수학</span><span class="cd">⭐⭐⭐</span></div><h3>소수 전쟁</h3><p>카드를 조합해 소수를 만들거나 상대의 합성수를 공격하라.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">20-30분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_sp1');return false"><div class="ct"><span class="badge b-sp">공간</span><span class="cd">⭐⭐</span></div><h3>도형 퍼즐 레이스</h3><p>조각을 빠르게 맞추는 자가 이긴다. 속도보다 정확성이 먼저.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">25-35분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_me1');return false"><div class="ct"><span class="badge b-me">기억</span><span class="cd">⭐⭐</span></div><h3>순서 기억</h3><p>보여주는 순서를 기억하세요. 길어질수록 누구나 무너진다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_hi1');return false"><div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐</span></div><h3>타임라인 배틀</h3><p>사건을 시간 순서에 맞게 배치하세요. 역사의 흐름을 몸으로 익힌다.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_ec1');return false"><div class="ct"><span class="badge b-ec">경제</span><span class="cd">⭐⭐⭐</span></div><h3>가격 탐정</h3><p>이 물건의 적정 가격은 얼마인가? 원가·수요·브랜드로 추정하라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">25-35분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_sc1');return false"><div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>가설 배틀</h3><p>왜 이런 현상이 일어나는가? 과학적 가설을 세우고 검증하라.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-40분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_et1');return false"><div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>트롤리 문제 변형</h3><p>레버를 당기면 1명이 죽는다. 이 단순한 질문이 왜 이렇게 어려운가?</p><div class="cf"><span class="mt">3-6명</span><span class="mt">35-50분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_in1');return false"><div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐</span></div><h3>내부자 게임</h3><p>그룹 안에 내부자가 있다. 답을 알지만 들키지 않아야 한다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">35-50분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_te1');return false"><div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐</span></div><h3>침묵의 팀</h3><p>말 없이 협력할 수 있는가? 언어 없이 공동 목표를 달성하라.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-40분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_mu1');return false"><div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐</span></div><h3>박자 배틀</h3><p>손뼉·발구르기·목소리로 리듬을 만들고 따라하라.</p><div class="cf"><span class="mt">2-6명</span><span class="mt">20-30분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_ar1');return false"><div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐</span></div><h3>색깔 감정</h3><p>빨강은 정말 열정인가? 색과 감정의 관계를 탐구한다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">25-35분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_so1');return false"><div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐⭐</span></div><h3>전술 감독</h3><p>감독은 11명을 어떻게 배치할 것인가? 포메이션 전략의 세계.</p><div class="cf"><span class="mt">2-4명</span><span class="mt">35-50분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_dr1');return false"><div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐⭐</span></div><h3>즉흥극 배틀</h3><p>대본 없이 무대에 서세요. 실수가 허용되는 안전한 공간.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">30-45분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_ps1');return false"><div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐</span></div><h3>편향 사냥꾼</h3><p>우리는 모두 편향되어 있다. 편향을 알면 더 나은 판단을 할 수 있다.</p><div class="cf"><span class="mt">3-6명</span><span class="mt">30-45분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_cu1');return false"><div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐</span></div><h3>세계 관습 퀴즈</h3><p>어떤 나라에서는 당연한 것이 다른 나라에서는 금기이다.</p><div class="cf"><span class="mt">2-8명</span><span class="mt">25-35분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_en1');return false"><div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐</span></div><h3>먹이 사슬 전략</h3><p>먹이 사슬의 균형이 무너지면 생태계 전체가 흔들린다.</p><div class="cf"><span class="mt">2-5명</span><span class="mt">35-50분</span></div></a>
-        <a class="card" href="#" onclick="openDrawer('bg_fu1');return false"><div class="ct"><span class="badge b-fu">미래</span><span class="cd">⭐⭐⭐⭐</span></div><h3>AI 판사</h3><p>AI가 판결을 내린다. 공정한가? AI 의사결정의 윤리를 탐구한다.</p><div class="cf"><span class="mt">4-8명</span><span class="mt">40-55분</span></div></a>
+        <a class="card" data-dur="l" href="#" onclick="openDrawer('sim_fut_3');return false"><div class="ct"><span class="badge bl">3일+</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>인구 절벽 사회 적응</h3><p>2045년 인구 4,200만.</p><div class="cf"><span class="mt">12-20명</span><span class="mt">3일</span></div></a>
       </div>
     </div>
 
@@ -389,7 +645,6 @@
 </div>
 
 <script>
-/* ── 게임 데이터 ── */
 const GAMES = {
   /* 시뮬레이션 */
   sim_biz_1:{cat:'시뮬레이션',time:'1-2시간',diff:'⭐⭐ 기초',
@@ -838,14 +1093,19 @@ const GAMES = {
   }
 };
 
+
 /* ── 탭 전환 ── */
-function showTab(name) {
+function showTab(name, el) {
+  // 탭 버튼
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
+  el.classList.add('active');
+  // 패널
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
-  ['sim','puzzle','board'].forEach(n => {
-    document.getElementById('sb-' + n).style.display = n === name ? 'block' : 'none';
+  // 사이드바
+  ['brain','stem','hum','lang','sim'].forEach(n => {
+    const sb = document.getElementById('sb-' + n);
+    if (sb) sb.style.display = n === name ? 'block' : 'none';
   });
   window.scrollTo(0, 0);
 }
@@ -913,31 +1173,7 @@ function closeDrawer() {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
-</script>
-function showTab(name) {
-  // 탭 버튼
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  // 패널
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  // 사이드바
-  ['sim','puzzle','board'].forEach(n => {
-    document.getElementById('sb-' + n).style.display = n === name ? 'block' : 'none';
-  });
-  window.scrollTo(0, 0);
-}
 
-function simFilter(e, type) {
-  if (e) e.preventDefault();
-  const btns = document.querySelectorAll('#panel-sim .fb button');
-  btns.forEach(b => b.classList.remove('on'));
-  if (e && e.currentTarget) e.currentTarget.classList.add('on');
-  document.querySelectorAll('#panel-sim .card').forEach(c => {
-    if (type === 'all') c.style.display = '';
-    else c.style.display = c.dataset.dur === type ? '' : 'none';
-  });
-}
 </script>
 </body>
 </html>
