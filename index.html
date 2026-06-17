@@ -1529,7 +1529,7 @@ ${isFinal ? '이번이 마지막 라운드입니다. 대화를 따뜻하게 마�
 한국어로 답변해주세요.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch('/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:sys,messages:gMessages})
@@ -1567,7 +1567,7 @@ async function gConclusion() {
   gLoading = true;
   gShowLoading();
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch('/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,
