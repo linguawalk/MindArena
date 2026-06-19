@@ -351,6 +351,67 @@
     .d-q{display:flex;gap:8px;margin-bottom:.6rem;font-size:13px;color:var(--t2);line-height:1.5}
     .d-q:last-child{margin-bottom:0}
     .d-qn{font-weight:500;color:var(--t3);min-width:16px}
+  
+    /* ── 구독·잠금 UI ── */
+    .lock-overlay{position:absolute;inset:0;background:rgba(15,15,18,0.85);
+                  backdrop-filter:blur(4px);border-radius:inherit;
+                  display:flex;flex-direction:column;align-items:center;
+                  justify-content:center;gap:10px;z-index:10;
+                  padding:1.5rem;text-align:center}
+    .lock-icon{font-size:28px;margin-bottom:.25rem}
+    .lock-title{font-size:13px;font-weight:600;color:#f0eee8}
+    .lock-sub{font-size:11.5px;color:#a09e98;line-height:1.5}
+    .lock-price{font-size:12px;color:#c8a96e;font-weight:600}
+    .lock-btn{padding:7px 18px;border-radius:8px;border:none;
+              background:#c8a96e;color:#1a1400;font-family:inherit;
+              font-size:12px;font-weight:700;cursor:pointer;
+              transition:all .15s;margin-top:4px}
+    .lock-btn:hover{background:#e8d4a8}
+    .lock-btn-free{padding:5px 14px;border-radius:8px;
+                   border:1px solid rgba(255,255,255,0.15);
+                   background:transparent;color:#a09e98;
+                   font-family:inherit;font-size:11.5px;
+                   cursor:pointer;transition:all .15s}
+    .lock-btn-free:hover{border-color:rgba(255,255,255,0.3);color:#f0eee8}
+    .card{position:relative;overflow:hidden}
+
+    /* ── 구독 모달 ── */
+    .sub-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);
+               z-index:600;display:none;align-items:center;justify-content:center}
+    .sub-modal.open{display:flex}
+    .sub-box{background:#1a1a20;border:1px solid rgba(255,255,255,0.1);
+             border-radius:16px;padding:2rem;max-width:480px;width:90%;
+             position:relative}
+    .sub-close{position:absolute;top:1rem;right:1rem;background:transparent;
+               border:none;color:#6a6860;cursor:pointer;font-size:18px}
+    .sub-title{font-size:20px;font-weight:700;color:#f0eee8;margin-bottom:.5rem}
+    .sub-track{font-size:13px;color:#c8a96e;margin-bottom:1.5rem}
+    .sub-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem}
+    .sub-plan{padding:1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.1);
+              background:#24242c;cursor:pointer;transition:all .2s;text-align:center}
+    .sub-plan:hover{border-color:#c8a96e}
+    .sub-plan.selected{border-color:#c8a96e;background:rgba(200,169,110,0.1)}
+    .sub-plan-name{font-size:12px;color:#a09e98;margin-bottom:.3rem}
+    .sub-plan-price{font-size:20px;font-weight:700;color:#f0eee8}
+    .sub-plan-unit{font-size:11px;color:#6a6860}
+    .sub-plan-save{font-size:11px;color:#c8a96e;margin-top:.25rem;font-weight:600}
+    .sub-divider{border:none;border-top:1px solid rgba(255,255,255,0.08);margin:1rem 0}
+    .sub-methods{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}
+    .sub-method{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);
+                background:#24242c;color:#a09e98;font-size:12px;cursor:pointer;
+                transition:all .15s}
+    .sub-method:hover{border-color:#c8a96e;color:#c8a96e}
+    .sub-pay-btn{width:100%;padding:.85rem;border-radius:10px;border:none;
+                 background:#c8a96e;color:#1a1400;font-family:inherit;
+                 font-size:15px;font-weight:700;cursor:pointer;transition:all .15s}
+    .sub-pay-btn:hover{background:#e8d4a8}
+    .sub-note{font-size:11px;color:#6a6860;text-align:center;margin-top:.75rem}
+
+    /* ── 베타 배지 ── */
+    .beta-banner{background:rgba(200,169,110,0.12);border:1px solid rgba(200,169,110,0.25);
+                 border-radius:8px;padding:.6rem 1rem;margin-bottom:1rem;
+                 font-size:12px;color:#c8a96e;text-align:center}
+
   </style>
 </head>
 <body>
@@ -543,6 +604,9 @@
          STEM 패널 (준비 중)
     ══════════════════════════════════ -->
     <div id="panel-stem" class="panel">
+      <div class="beta-banner">
+        🎉 베타 기간 중 모든 콘텐츠 무료 이용 가능 · 정식 오픈 시 트랙별 구독제 전환
+      </div>
       <div class="soon-wrap">
         <div class="soon-icon">🔬</div>
         <div class="soon-title">수학과학컴퓨터 분야 준비 중</div>
@@ -598,6 +662,9 @@
          예체능 패널 (준비 중)
     ══════════════════════════════════ -->
     <div id="panel-arts" class="panel">
+      <div class="beta-banner">
+        🎉 베타 기간 중 모든 콘텐츠 무료 이용 가능 · 정식 오픈 시 트랙별 구독제 전환
+      </div>
       <div class="soon-wrap">
         <div class="soon-icon">🎨</div>
         <div class="soon-title">예체능 분야 준비 중</div>
@@ -639,6 +706,9 @@
          인문사회·언어 패널 (준비 중)
     ══════════════════════════════════ -->
     <div id="panel-hum2" class="panel">
+      <div class="beta-banner">
+        🎉 베타 기간 중 모든 콘텐츠 무료 이용 가능 · 정식 오픈 시 트랙별 구독제 전환
+      </div>
       <div class="soon-wrap">
         <div class="soon-icon">📚</div>
         <div class="soon-title">인문사회·언어 분야 준비 중</div>
@@ -1611,5 +1681,157 @@ document.addEventListener('keydown', e => {
 
 
 </script>
+
+<!-- ══ 구독 모달 ══ -->
+<div class="sub-modal" id="sub-modal">
+  <div class="sub-box">
+    <button class="sub-close" onclick="closeSubModal()">✕</button>
+    <div class="sub-title">트랙 구독</div>
+    <div class="sub-track" id="sub-track-name">수학 트랙</div>
+
+    <div class="sub-plans">
+      <div class="sub-plan selected" onclick="selectPlan('monthly', this)">
+        <div class="sub-plan-name">월간 구독</div>
+        <div class="sub-plan-price" id="price-monthly">9,900원</div>
+        <div class="sub-plan-unit">/월</div>
+      </div>
+      <div class="sub-plan" onclick="selectPlan('yearly', this)">
+        <div class="sub-plan-name">연간 구독</div>
+        <div class="sub-plan-price" id="price-yearly">99,000원</div>
+        <div class="sub-plan-unit">/년</div>
+        <div class="sub-plan-save">2개월 무료 🎁</div>
+      </div>
+    </div>
+
+    <hr class="sub-divider">
+
+    <div style="font-size:12px;color:#a09e98;margin-bottom:.6rem">결제 수단 선택</div>
+    <div class="sub-methods">
+      <button class="sub-method" onclick="selectMethod('toss')">토스페이</button>
+      <button class="sub-method" onclick="selectMethod('kakao')">카카오페이</button>
+      <button class="sub-method" onclick="selectMethod('card')">신용카드</button>
+      <button class="sub-method" onclick="selectMethod('stripe')">해외카드</button>
+    </div>
+
+    <button class="sub-pay-btn" onclick="proceedPayment()">구독 시작하기</button>
+    <div class="sub-note">언제든 해지 가능 · 첫 결제 후 즉시 이용</div>
+  </div>
+</div>
+
+<script>
+/* ── 구독·잠금 시스템 ── */
+
+// 현재 사용자 구독 상태 (Firebase Auth 연동 전 임시)
+const USER = {
+  isLoggedIn: false,
+  subscriptions: {}, // { math: true, science: false, ... }
+  freeTrialUsed: {}  // { math: true, ... }
+};
+
+// 트랙 정보
+const TRACKS = {
+  math:        { name: '수학', price: 9900, yearPrice: 99000 },
+  science:     { name: '과학', price: 9900, yearPrice: 99000 },
+  programming: { name: '프로그래밍', price: 9900, yearPrice: 99000 },
+  tech_ai:     { name: '기술·AI', price: 9900, yearPrice: 99000 },
+  music:       { name: '음악', price: 9900, yearPrice: 99000 },
+  visual:      { name: '미술', price: 7900, yearPrice: 79000 },
+  pe:          { name: '체육', price: 7900, yearPrice: 79000 },
+  liberal_arts:{ name: '인문', price: 9900, yearPrice: 99000 },
+  social:      { name: '사회', price: 9900, yearPrice: 99000 },
+  korean:      { name: '한국어', price: 9900, yearPrice: 99000 },
+  simulation:  { name: '시뮬레이션', price: 12900, yearPrice: 129000 }
+};
+
+let currentTrack = null;
+let selectedPlan = 'monthly';
+let selectedMethod = null;
+
+// 잠금 카드 클릭 시
+function openSubModal(trackId) {
+  currentTrack = trackId;
+  const track = TRACKS[trackId] || { name: '이 트랙', price: 9900, yearPrice: 99000 };
+  document.getElementById('sub-track-name').textContent = track.name + ' 트랙';
+  document.getElementById('price-monthly').textContent = track.price.toLocaleString() + '원';
+  document.getElementById('price-yearly').textContent = track.yearPrice.toLocaleString() + '원';
+  document.getElementById('sub-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSubModal() {
+  document.getElementById('sub-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function selectPlan(plan, el) {
+  selectedPlan = plan;
+  document.querySelectorAll('.sub-plan').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectMethod(method) {
+  selectedMethod = method;
+  document.querySelectorAll('.sub-method').forEach(m => {
+    m.style.borderColor = '';
+    m.style.color = '';
+  });
+  event.target.style.borderColor = '#c8a96e';
+  event.target.style.color = '#c8a96e';
+}
+
+function proceedPayment() {
+  if (!selectedMethod) {
+    alert('결제 수단을 선택해 주세요.');
+    return;
+  }
+  // 실제 결제 연동 전 안내
+  alert('베타 기간 중에는 모든 콘텐츠를 무료로 이용할 수 있습니다.\n정식 서비스 오픈 시 결제 시스템이 연결됩니다.');
+  closeSubModal();
+}
+
+// 접근 권한 확인
+function canAccess(trackId, unitNumber) {
+  if (unitNumber <= 1) return true; // 단원 1은 무료
+  if (USER.subscriptions[trackId]) return true; // 구독자
+  return false;
+}
+
+// 잠금 오버레이 생성
+function createLockOverlay(trackId, unitNumber) {
+  const track = TRACKS[trackId] || { name: '이 트랙', price: 9900 };
+  return `
+    <div class="lock-overlay">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">${track.name} 구독이 필요합니다</div>
+      <div class="lock-sub">단원 ${unitNumber}부터는 구독 후 이용할 수 있습니다</div>
+      <div class="lock-price">월 ${track.price.toLocaleString()}원</div>
+      <button class="lock-btn" onclick="openSubModal('${trackId}')">구독하기</button>
+      <button class="lock-btn-free" onclick="goToFreeTrial('${trackId}')">무료 체험으로 돌아가기</button>
+    </div>`;
+}
+
+function goToFreeTrial(trackId) {
+  alert('단원 1을 무료로 체험해 보세요!');
+}
+
+// ESC로 모달 닫기 (기존 ESC 처리와 통합)
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('sub-modal').classList.contains('open')) {
+      closeSubModal();
+    } else if (document.getElementById('game-overlay').classList.contains('open')) {
+      closeGame();
+    } else {
+      closeDrawer();
+    }
+  }
+});
+
+// 모달 배경 클릭 시 닫기
+document.getElementById('sub-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeSubModal();
+});
+</script>
+
 </body>
 </html>
