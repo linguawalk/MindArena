@@ -1,7 +1,10 @@
 {
-  "rewrites": [
-    { "source": "/about.html", "destination": "/about.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/about.html", "dest": "/about.html" },
+    { "src": "/about", "dest": "/about.html" },
+    { "src": "/(.*\\.(html|js|css|png|jpg|ico|svg))", "dest": "/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ],
   "headers": [
     {
