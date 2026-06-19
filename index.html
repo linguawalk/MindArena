@@ -26,6 +26,8 @@
       --hum:#B45309;--hum-l:#FEF9C3;
       --lang:#065F46;--lang-l:#ECFDF5;
       --sim:#9F1239;--sim-l:#FFF1F2;
+      --arts:#0F766E;--arts-l:#F0FDFA;
+      --hum2:#92400E;--hum2-l:#FFFBEB;
     }
     html{scroll-behavior:smooth}
     body{font-family:'Noto Sans KR',sans-serif;color:var(--t);background:var(--bg);font-size:14px;line-height:1.6}
@@ -59,6 +61,10 @@
     .tab[data-tab="lang"].active .tc{background:var(--lang-l);color:var(--lang)}
     .tab[data-tab="sim"].active{color:var(--sim);border-bottom-color:var(--sim)}
     .tab[data-tab="sim"].active .tc{background:var(--sim-l);color:var(--sim)}
+    .tab[data-tab="arts"].active{color:var(--arts);border-bottom-color:var(--arts)}
+    .tab[data-tab="arts"].active .tc{background:var(--arts-l);color:var(--arts)}
+    .tab[data-tab="hum2"].active{color:var(--hum2);border-bottom-color:var(--hum2)}
+    .tab[data-tab="hum2"].active .tc{background:var(--hum2-l);color:var(--hum2)}
 
     /* ── LAYOUT ── */
     .layout{display:flex;min-height:calc(100vh - 94px)}
@@ -358,25 +364,25 @@
     <span class="nav-badge">Beta</span>
   </div>
   <div class="tab-bar">
-    <!-- 두뇌개발 -->
+    <!-- 두뇌개발 (무료) -->
     <button class="tab active" data-tab="brain" onclick="showTab('brain',this)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2a6.5 6.5 0 0 1 5 10.6V20a2 2 0 0 1-4 0v-1H9a2 2 0 0 1-2-2v-4.4A6.5 6.5 0 0 1 9.5 2z"/><path d="M14.5 2a6.5 6.5 0 0 0-5 10.6"/></svg>
-      두뇌개발 <span class="tc">퍼즐 135</span>
+      두뇌개발 <span class="tc" style="background:#dcfce7;color:#166534">무료</span>
     </button>
     <!-- STEM -->
     <button class="tab" data-tab="stem" onclick="showTab('stem',this)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
-      STEM <span class="tc">준비 중</span>
+      수학과학컴퓨터 <span class="tc">준비 중</span>
     </button>
-    <!-- 인문사회 -->
-    <button class="tab" data-tab="hum" onclick="showTab('hum',this)">
+    <!-- 예체능 -->
+    <button class="tab" data-tab="arts" onclick="showTab('arts',this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      예체능 <span class="tc">준비 중</span>
+    </button>
+    <!-- 인문사회·언어 -->
+    <button class="tab" data-tab="hum2" onclick="showTab('hum2',this)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      인문사회 <span class="tc">준비 중</span>
-    </button>
-    <!-- 언어 -->
-    <button class="tab" data-tab="lang" onclick="showTab('lang',this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
-      언어 <span class="tc">준비 중</span>
+      인문사회·언어 <span class="tc">준비 중</span>
     </button>
     <!-- 시뮬레이션 -->
     <button class="tab" data-tab="sim" onclick="showTab('sim',this)">
@@ -440,17 +446,40 @@
   </aside>
 
   <!-- ══ 인문사회 사이드바 ══ -->
-  <aside id="sb-hum" class="sidebar" style="display:none">
+
+
+  <!-- ══ 언어 사이드바 ══ -->
+  <aside id="sb-arts" class="sidebar" style="display:none">
     <div class="sg">
       <div class="st">분야</div>
       <a href="#" class="si on">전체</a>
-      <a href="#" class="si">역사·문명</a>
-      <a href="#" class="si">철학·윤리</a>
-      <a href="#" class="si">경제·투자</a>
-      <a href="#" class="si">심리·감정</a>
-      <a href="#" class="si">사회·정치</a>
-      <a href="#" class="si">문화·다양성</a>
-      <a href="#" class="si">환경·생태</a>
+      <a href="#" class="si">음악</a>
+      <a href="#" class="si">미술</a>
+      <a href="#" class="si">체육</a>
+    </div>
+    <div class="sg">
+      <div class="st">형태</div>
+      <a href="#" class="si">퍼즐</a>
+      <a href="#" class="si">AI 보드게임</a>
+      <a href="#" class="si">캐주얼 게임</a>
+    </div>
+    <div class="sg">
+      <div class="st">레벨</div>
+      <a href="#" class="si">L1 Seed</a>
+      <a href="#" class="si">L2 Sprout</a>
+      <a href="#" class="si">L3 Branch</a>
+      <a href="#" class="si">L4 Tree</a>
+      <a href="#" class="si">L5 Forest</a>
+    </div>
+  </aside>
+
+  <aside id="sb-hum2" class="sidebar" style="display:none">
+    <div class="sg">
+      <div class="st">분야</div>
+      <a href="#" class="si on">전체</a>
+      <a href="#" class="si">인문 (역사·철학·문화)</a>
+      <a href="#" class="si">사회 (경제·심리·정치)</a>
+      <a href="#" class="si">한국어</a>
     </div>
     <div class="sg">
       <div class="st">형태</div>
@@ -467,31 +496,7 @@
     </div>
   </aside>
 
-  <!-- ══ 언어 사이드바 ══ -->
-  <aside id="sb-lang" class="sidebar" style="display:none">
-    <div class="sg">
-      <div class="st">언어</div>
-      <a href="#" class="si on">한국어 (모국어)</a>
-      <a href="#" class="si">영어</a>
-      <a href="#" class="si">중국어</a>
-      <a href="#" class="si">일본어</a>
-      <a href="#" class="si">기타 언어</a>
-    </div>
-    <div class="sg">
-      <div class="st">형태</div>
-      <a href="#" class="si">퍼즐</a>
-      <a href="#" class="si">AI 대화 게임</a>
-      <a href="#" class="si">외국어로 플레이</a>
-    </div>
-    <div class="sg">
-      <div class="st">레벨</div>
-      <a href="#" class="si">L1 Seed</a>
-      <a href="#" class="si">L2 Sprout</a>
-      <a href="#" class="si">L3 Branch</a>
-      <a href="#" class="si">L4 Tree</a>
-      <a href="#" class="si">L5 Forest</a>
-    </div>
-  </aside>
+
 
   <!-- ══ 시뮬레이션 사이드바 ══ -->
   <aside id="sb-sim" class="sidebar" style="display:none">
@@ -540,8 +545,8 @@
     <div id="panel-stem" class="panel">
       <div class="soon-wrap">
         <div class="soon-icon">🔬</div>
-        <div class="soon-title">STEM 분야 준비 중</div>
-        <div class="soon-sub">수학·과학·프로그래밍·기술·AI·예체능 분야의 퍼즐과 AI 보드게임을 제작하고 있습니다. 각 분야별로 퍼즐(개인 학습)과 AI와 함께하는 보드게임 두 가지 형태로 제공될 예정입니다.</div>
+        <div class="soon-title">수학과학컴퓨터 분야 준비 중</div>
+        <div class="soon-sub">수학·과학·프로그래밍·기술·AI 분야의 퍼즐과 AI 보드게임을 제작하고 있습니다. 각 분야별로 퍼즐(개인 학습)과 AI와 함께하는 보드게임 두 가지 형태로 제공될 예정입니다.</div>
         <div class="soon-tags">
           <span class="soon-tag" style="background:var(--stem-l);color:var(--stem)">수학 퍼즐</span>
           <span class="soon-tag" style="background:var(--stem-l);color:var(--stem)">과학 탐구</span>
@@ -554,7 +559,7 @@
       <!-- 보드게임 재배치 예고 -->
       <div class="sec">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
-        STEM 관련 보드게임 (이전 버전에서 이동 예정)
+        수학과학컴퓨터 관련 보드게임 (이전 버전에서 이동 예정)
         <span class="sec-badge sec-board">AI 보드게임 전환 예정</span>
       </div>
       <div class="grid">
@@ -590,32 +595,72 @@
     </div>
 
     <!-- ══════════════════════════════════
-         인문사회 패널 (준비 중)
+         예체능 패널 (준비 중)
     ══════════════════════════════════ -->
-    <div id="panel-hum" class="panel">
+    <div id="panel-arts" class="panel">
       <div class="soon-wrap">
-        <div class="soon-icon">📚</div>
-        <div class="soon-title">인문사회 분야 준비 중</div>
-        <div class="soon-sub">역사·철학·경제·심리·사회 분야의 퍼즐과 AI 보드게임을 제작하고 있습니다. AI가 소크라테스·역사 인물·경제 주체 등 다양한 역할을 맡아 1:1 대화형 게임을 진행합니다.</div>
+        <div class="soon-icon">🎨</div>
+        <div class="soon-title">예체능 분야 준비 중</div>
+        <div class="soon-sub">음악·미술·체육 분야의 퍼즐과 AI 보드게임을 제작하고 있습니다.<br>음악은 기초 악전부터 실용음악 이론까지, 미술은 캐주얼 게임 방식으로, 체육은 전술·스포츠 과학·윤리 토론 중심으로 제공됩니다.</div>
         <div class="soon-tags">
-          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">역사 탐구</span>
-          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">철학 토론</span>
-          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">경제 협상</span>
-          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">심리 분석</span>
-          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">사회 설계</span>
-          <span class="soon-tag" style="background:var(--hum-l);color:var(--hum)">AI 소크라테스</span>
+          <span class="soon-tag" style="background:var(--arts-l);color:var(--arts)">🎵 음악 이론</span>
+          <span class="soon-tag" style="background:var(--arts-l);color:var(--arts)">🎨 미술 캐주얼 게임</span>
+          <span class="soon-tag" style="background:var(--arts-l);color:var(--arts)">⚽ 스포츠 전술</span>
+          <span class="soon-tag" style="background:var(--arts-l);color:var(--arts)">🥁 실용음악</span>
+          <span class="soon-tag" style="background:var(--arts-l);color:var(--arts)">🏆 스포츠 윤리</span>
         </div>
       </div>
-      <!-- 보드게임 재배치 예고 -->
       <div class="sec">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
-        인문사회 관련 보드게임 (이전 버전에서 이동 예정)
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/></svg>
+        예체능 관련 보드게임 (AI 전환 예정)
+        <span class="sec-badge sec-board">AI 보드게임 전환 예정</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="#" onclick="openDrawer('bg_mu1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐</span></div><h3>박자 배틀</h3><p>리듬을 만들고 AI와 음악 이론을 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">20-30분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_ar1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐</span></div><h3>색깔 감정</h3><p>색채 심리와 디자인 원리를 AI와 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">25-35분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_so1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-so">스포츠</span><span class="cd">⭐⭐⭐⭐</span></div><h3>전술 감독</h3><p>AI 감독과 전술을 겨루는 스포츠 전략 게임.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openDrawer('bg_dr1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-dr">연극</span><span class="cd">⭐⭐⭐</span></div><h3>즉흥극 배틀</h3><p>AI가 상대 배우가 되어 즉흥 연기를 펼친다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-45분</span></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         인문사회·언어 패널 (준비 중)
+    ══════════════════════════════════ -->
+    <div id="panel-hum2" class="panel">
+      <div class="soon-wrap">
+        <div class="soon-icon">📚</div>
+        <div class="soon-title">인문사회·언어 분야 준비 중</div>
+        <div class="soon-sub">인문(역사·철학·문화)·사회(경제·심리·정치)·한국어 분야의 퍼즐과 AI 보드게임을 제작하고 있습니다.<br>AI가 소크라테스·역사 인물·이해관계자 역할을 맡아 1:1 토론과 역할극을 진행합니다.</div>
+        <div class="soon-tags">
+          <span class="soon-tag" style="background:var(--hum2-l);color:var(--hum2)">🏛️ 역사 탐구</span>
+          <span class="soon-tag" style="background:var(--hum2-l);color:var(--hum2)">🤔 철학 토론</span>
+          <span class="soon-tag" style="background:var(--hum2-l);color:var(--hum2)">💰 경제 협상</span>
+          <span class="soon-tag" style="background:var(--hum2-l);color:var(--hum2)">🧠 심리 분석</span>
+          <span class="soon-tag" style="background:var(--hum2-l);color:var(--hum2)">📝 한국어</span>
+          <span class="soon-tag" style="background:var(--hum2-l);color:var(--hum2)">🗳️ 사회·정치</span>
+        </div>
+      </div>
+      <div class="sec">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/></svg>
+        인문사회 관련 보드게임 (AI 전환 예정)
         <span class="sec-badge sec-board">AI 보드게임 전환 예정</span>
       </div>
       <div class="grid">
         <a class="card" href="#" onclick="openTrolleyGame();return false">
-          <span class="ai-tag">AI 전환 예정</span>
-          <div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>트롤리 문제 변형</h3><p>AI가 반박하고 사용자가 설득하는 윤리 토론.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
+          <span class="ai-tag">AI 작동 중</span>
+          <div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>트롤리 문제 변형</h3><p>AI 철학자와 1:1 윤리 토론. 정답은 없습니다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
         </a>
         <a class="card" href="#" onclick="openDrawer('bg_hi1');return false">
           <span class="ai-tag">AI 전환 예정</span>
@@ -629,55 +674,21 @@
           <span class="ai-tag">AI 전환 예정</span>
           <div class="ct"><span class="badge b-ps">심리</span><span class="cd">⭐⭐⭐</span></div><h3>편향 사냥꾼</h3><p>AI가 편향적 상황을 제시하고 사용자가 분석.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-45분</span></div>
         </a>
-        <a class="card" href="#" onclick="openDrawer('bg_in1');return false">
+        <a class="card" href="#" onclick="openDrawer('bg_la1');return false">
           <span class="ai-tag">AI 전환 예정</span>
-          <div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐</span></div><h3>내부자 게임</h3><p>AI가 내부자 역할을 맡아 사용자가 찾아내야 한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
+          <div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐</span></div><h3>단어 사슬</h3><p>AI와 무한히 이어가는 한국어 단어 연결 게임.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-45분</span></div>
         </a>
         <a class="card" href="#" onclick="openDrawer('bg_cu1');return false">
           <span class="ai-tag">AI 전환 예정</span>
           <div class="ct"><span class="badge b-cu">문화</span><span class="cd">⭐⭐</span></div><h3>세계 관습 퀴즈</h3><p>AI가 세계 각국 문화 퀴즈 진행자가 된다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">25-35분</span></div>
         </a>
+        <a class="card" href="#" onclick="openDrawer('bg_in1');return false">
+          <span class="ai-tag">AI 전환 예정</span>
+          <div class="ct"><span class="badge b-in">정보</span><span class="cd">⭐⭐⭐</span></div><h3>내부자 게임</h3><p>AI가 내부자 역할을 맡아 사용자가 찾아내야 한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
+        </a>
         <a class="card" href="#" onclick="openDrawer('bg_en1');return false">
           <span class="ai-tag">AI 전환 예정</span>
           <div class="ct"><span class="badge b-en">환경</span><span class="cd">⭐⭐⭐</span></div><h3>먹이 사슬 전략</h3><p>AI가 생태계 변수를 조절하며 시스템 사고를 훈련.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
-        </a>
-        <a class="card" href="#" onclick="openDrawer('bg_te1');return false">
-          <span class="ai-tag">AI 전환 예정</span>
-          <div class="ct"><span class="badge b-te">팀</span><span class="cd">⭐⭐⭐</span></div><h3>침묵의 팀</h3><p>AI 팀원과 언어 없이 소통하는 협력 게임.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-40분</span></div>
-        </a>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════
-         언어 패널 (준비 중)
-    ══════════════════════════════════ -->
-    <div id="panel-lang" class="panel">
-      <div class="soon-wrap">
-        <div class="soon-icon">🌐</div>
-        <div class="soon-title">언어 분야 준비 중</div>
-        <div class="soon-sub">모국어(한국어)와 외국어 학습을 위한 퍼즐과 AI 대화 게임을 제작하고 있습니다. 언어 자체를 배우는 게임과, 배운 외국어로 다른 분야 게임을 플레이하는 두 가지 방식을 제공합니다.</div>
-        <div class="soon-tags">
-          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">한국어 퍼즐</span>
-          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">영어 AI 대화</span>
-          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">중국어</span>
-          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">일본어</span>
-          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">외국어로 게임</span>
-          <span class="soon-tag" style="background:var(--lang-l);color:var(--lang)">CLIL 방식</span>
-        </div>
-      </div>
-      <div class="sec">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
-        언어 관련 보드게임 (이전 버전에서 이동 예정)
-        <span class="sec-badge sec-board">AI 보드게임 전환 예정</span>
-      </div>
-      <div class="grid">
-        <a class="card" href="#" onclick="openDrawer('bg_la1');return false">
-          <span class="ai-tag">AI 전환 예정</span>
-          <div class="ct"><span class="badge b-la">언어</span><span class="cd">⭐⭐</span></div><h3>단어 사슬</h3><p>AI와 무한히 이어가는 단어 연결 게임.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-45분</span></div>
-        </a>
-        <a class="card" href="#" onclick="openDrawer('bg_dr1');return false">
-          <span class="ai-tag">AI 전환 예정</span>
-          <div class="ct"><span class="badge b-dr">표현</span><span class="cd">⭐⭐⭐</span></div><h3>즉흥극 배틀</h3><p>AI가 상대 배우가 되어 즉흥 연기를 펼친다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-45분</span></div>
         </a>
       </div>
     </div>
@@ -1308,7 +1319,7 @@ function showTab(name, el) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
   // 사이드바
-  ['brain','stem','hum','lang','sim'].forEach(n => {
+  ['brain','stem','arts','hum2','sim'].forEach(n => {
     const sb = document.getElementById('sb-' + n);
     if (sb) sb.style.display = n === name ? 'block' : 'none';
   });
