@@ -583,6 +583,20 @@
       .ab-stats-inner{grid-template-columns:repeat(2,1fr)}
       .ab-phil-grid,.ab-steps{grid-template-columns:1fr}
     }
+  
+    /* ── iframe 게임 오버레이 ── */
+    .iframe-overlay{position:fixed;inset:0;background:#0f0f12;z-index:500;
+                    display:none;flex-direction:column}
+    .iframe-overlay.open{display:flex}
+    .iframe-nav{height:48px;padding:0 1.25rem;border-bottom:1px solid rgba(255,255,255,0.08);
+                display:flex;align-items:center;justify-content:space-between;
+                flex-shrink:0;background:#0f0f12}
+    .iframe-title{font-size:14px;font-weight:600;color:#f0eee8}
+    .iframe-close{background:transparent;border:1px solid rgba(255,255,255,0.15);
+                  border-radius:7px;padding:5px 12px;color:#a09e98;
+                  cursor:pointer;font-family:inherit;font-size:12px;transition:all .15s}
+    .iframe-close:hover{border-color:rgba(255,255,255,0.3);color:#f0eee8}
+    .iframe-content{flex:1;border:none;width:100%;height:100%}
   </style>
 </head>
 <body>
@@ -810,13 +824,19 @@
           <span class="ai-tag">AI 전환 예정</span>
           <div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>가설 배틀</h3><p>과학적 가설을 세우고 AI와 검증하라.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-40분</span></div>
         </a>
-        <a class="card" href="#" onclick="openDrawer('bg_mu1');return false">
-          <span class="ai-tag">AI 전환 예정</span>
-          <div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐</span></div><h3>박자 배틀</h3><p>리듬을 만들고 AI와 음악 이론을 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">20-30분</span></div>
+        <a class="card" href="#" onclick="openIframeGame('/music_game.html','🎵 음악 청각 게임');return false">
+          <span class="ai-tag" style="background:#7c3aed">🎵 작동 중</span>
+          <div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div>
+          <h3>음악 청각 게임</h3>
+          <p>음이름 듣기·리듬 받아치기·음정 구별·코드 듣기·장단조 감지. Web Audio API 청각 훈련.</p>
+          <div class="cf"><span class="mt">1인</span><span class="mt">게임 5종</span></div>
         </a>
-        <a class="card" href="#" onclick="openDrawer('bg_ar1');return false">
-          <span class="ai-tag">AI 전환 예정</span>
-          <div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐</span></div><h3>색깔 감정</h3><p>색채 심리와 디자인 원리를 AI와 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">25-35분</span></div>
+        <a class="card" href="#" onclick="openIframeGame('/art_game.html','🎨 미술 시각 게임');return false">
+          <span class="ai-tag" style="background:#0f766e">🎨 작동 중</span>
+          <div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div>
+          <h3>미술 시각 게임</h3>
+          <p>색 혼합 실험·명도채도 체험·자유 드로잉·구도 배치·픽셀 아트. Canvas API 시각 훈련.</p>
+          <div class="cf"><span class="mt">1인</span><span class="mt">게임 5종</span></div>
         </a>
         <a class="card" href="#" onclick="openDrawer('bg_sp1');return false">
           <span class="ai-tag">AI 전환 예정</span>
@@ -858,13 +878,19 @@
         <span class="sec-badge sec-board">AI 보드게임 전환 예정</span>
       </div>
       <div class="grid">
-        <a class="card" href="#" onclick="openDrawer('bg_mu1');return false">
-          <span class="ai-tag">AI 전환 예정</span>
-          <div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐</span></div><h3>박자 배틀</h3><p>리듬을 만들고 AI와 음악 이론을 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">20-30분</span></div>
+        <a class="card" href="#" onclick="openIframeGame('/music_game.html','🎵 음악 청각 게임');return false">
+          <span class="ai-tag" style="background:#7c3aed">🎵 작동 중</span>
+          <div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div>
+          <h3>음악 청각 게임</h3>
+          <p>음이름 듣기·리듬 받아치기·음정 구별·코드 듣기·장단조 감지. Web Audio API 청각 훈련.</p>
+          <div class="cf"><span class="mt">1인</span><span class="mt">게임 5종</span></div>
         </a>
-        <a class="card" href="#" onclick="openDrawer('bg_ar1');return false">
-          <span class="ai-tag">AI 전환 예정</span>
-          <div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐</span></div><h3>색깔 감정</h3><p>색채 심리와 디자인 원리를 AI와 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">25-35분</span></div>
+        <a class="card" href="#" onclick="openIframeGame('/art_game.html','🎨 미술 시각 게임');return false">
+          <span class="ai-tag" style="background:#0f766e">🎨 작동 중</span>
+          <div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div>
+          <h3>미술 시각 게임</h3>
+          <p>색 혼합 실험·명도채도 체험·자유 드로잉·구도 배치·픽셀 아트. Canvas API 시각 훈련.</p>
+          <div class="cf"><span class="mt">1인</span><span class="mt">게임 5종</span></div>
         </a>
         <a class="card" href="#" onclick="openDrawer('bg_so1');return false">
           <span class="ai-tag">AI 전환 예정</span>
@@ -1202,6 +1228,16 @@
     <div id="casino-result" style="display:none;padding:1rem;border-radius:10px;font-size:14px;line-height:1.7;margin-bottom:.75rem"></div>
     <button id="casino-next" onclick="casinoNext()" style="display:none;width:100%;padding:.8rem;border-radius:9px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px">다음 게임 →</button>
   </div>
+</div>
+
+
+<!-- ══ iframe 게임 오버레이 ══ -->
+<div class="iframe-overlay" id="iframe-overlay">
+  <div class="iframe-nav">
+    <span class="iframe-title" id="iframe-title">게임 로딩 중...</span>
+    <button class="iframe-close" onclick="closeIframeGame()">✕ 닫기</button>
+  </div>
+  <iframe class="iframe-content" id="iframe-content" src="" allowfullscreen></iframe>
 </div>
 
 <!-- ══ 소개 페이지 오버레이 ══ -->
@@ -2378,6 +2414,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (document.getElementById('sub-modal').classList.contains('open')) closeSubModal();
     else if (document.getElementById('about-overlay').classList.contains('open')) closeAbout();
+    else if (document.getElementById('iframe-overlay').classList.contains('open')) closeIframeGame();
     else if (document.getElementById('socrates-overlay').classList.contains('open')) closeSocrates();
     else if (document.getElementById('history-overlay').classList.contains('open')) closeHistory();
     else if (document.getElementById('casino-overlay').classList.contains('open')) closeCasino();
@@ -2969,6 +3006,20 @@ function endCasino() {
     기댓값 = (당첨 확률 × 당첨금) - (낙첨 확률 × 베팅금)`;
   document.getElementById('casino-next').style.display = 'none';
   document.getElementById('casino-bet-btn').style.display = 'none';
+}
+
+
+/* ── iframe 게임 오버레이 ── */
+function openIframeGame(url, title) {
+  document.getElementById('iframe-title').textContent = title;
+  document.getElementById('iframe-content').src = url;
+  document.getElementById('iframe-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeIframeGame() {
+  document.getElementById('iframe-overlay').classList.remove('open');
+  document.getElementById('iframe-content').src = '';
+  document.body.style.overflow = '';
 }
 
 </body>
