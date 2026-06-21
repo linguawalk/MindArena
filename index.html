@@ -824,14 +824,14 @@
           <span class="ai-tag">AI 전환 예정</span>
           <div class="ct"><span class="badge b-sc">과학</span><span class="cd">⭐⭐⭐</span></div><h3>가설 배틀</h3><p>과학적 가설을 세우고 AI와 검증하라.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-40분</span></div>
         </a>
-        <a class="card" href="#" onclick="openIframeGame('/music_game.html','🎵 음악 청각 게임');return false">
+        <a class="card" href="#" onclick="openMusicGame();return false">
           <span class="ai-tag" style="background:#7c3aed">🎵 작동 중</span>
           <div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div>
           <h3>음악 청각 게임</h3>
           <p>음이름 듣기·리듬 받아치기·음정 구별·코드 듣기·장단조 감지. Web Audio API 청각 훈련.</p>
           <div class="cf"><span class="mt">1인</span><span class="mt">게임 5종</span></div>
         </a>
-        <a class="card" href="#" onclick="openIframeGame('/art_game.html','🎨 미술 시각 게임');return false">
+        <a class="card" href="#" onclick="openArtGame();return false">
           <span class="ai-tag" style="background:#0f766e">🎨 작동 중</span>
           <div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div>
           <h3>미술 시각 게임</h3>
@@ -878,14 +878,14 @@
         <span class="sec-badge sec-board">AI 보드게임 전환 예정</span>
       </div>
       <div class="grid">
-        <a class="card" href="#" onclick="openIframeGame('/music_game.html','🎵 음악 청각 게임');return false">
+        <a class="card" href="#" onclick="openMusicGame();return false">
           <span class="ai-tag" style="background:#7c3aed">🎵 작동 중</span>
           <div class="ct"><span class="badge b-mu">음악</span><span class="cd">⭐⭐⭐</span></div>
           <h3>음악 청각 게임</h3>
           <p>음이름 듣기·리듬 받아치기·음정 구별·코드 듣기·장단조 감지. Web Audio API 청각 훈련.</p>
           <div class="cf"><span class="mt">1인</span><span class="mt">게임 5종</span></div>
         </a>
-        <a class="card" href="#" onclick="openIframeGame('/art_game.html','🎨 미술 시각 게임');return false">
+        <a class="card" href="#" onclick="openArtGame();return false">
           <span class="ai-tag" style="background:#0f766e">🎨 작동 중</span>
           <div class="ct"><span class="badge b-ar">미술</span><span class="cd">⭐⭐⭐</span></div>
           <h3>미술 시각 게임</h3>
@@ -1238,6 +1238,300 @@
     <button class="iframe-close" onclick="closeIframeGame()">✕ 닫기</button>
   </div>
   <iframe class="iframe-content" id="iframe-content" src="" allowfullscreen></iframe>
+</div>
+
+
+<!-- ══ 음악 게임 오버레이 ══ -->
+<div class="game-overlay" id="music-overlay" style="overflow-y:auto;display:none;flex-direction:column">
+  <div style="position:sticky;top:0;z-index:10;background:#0f0f14;padding:.75rem 1.25rem;
+              border-bottom:1px solid rgba(255,255,255,0.08);display:flex;
+              align-items:center;justify-content:space-between;flex-shrink:0">
+    <span style="font-size:15px;font-weight:600;color:#f0eee8">🎵 음악 청각 게임</span>
+    <button onclick="closeMusicGame()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);
+      border-radius:7px;padding:5px 12px;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">✕ 닫기</button>
+  </div>
+  <div style="padding:.75rem 1rem;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.06)">
+    <button class="mg-tab active" onclick="showMusicTab('pitch',this)" style="padding:6px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:rgba(124,58,237,0.8);color:white;cursor:pointer;font-family:inherit;font-size:12px">🎹 음이름</button>
+    <button class="mg-tab" onclick="showMusicTab('rhythm',this)" style="padding:6px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🥁 리듬</button>
+    <button class="mg-tab" onclick="showMusicTab('interval',this)" style="padding:6px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🎼 음정</button>
+    <button class="mg-tab" onclick="showMusicTab('chord',this)" style="padding:6px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🎸 코드</button>
+    <button class="mg-tab" onclick="showMusicTab('mode',this)" style="padding:6px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🌙 장단조</button>
+  </div>
+  <div style="flex:1;padding:1.25rem;max-width:700px;margin:0 auto;width:100%">
+
+    <!-- 음이름 -->
+    <div id="mg-pitch" class="mg-section" style="display:block">
+      <div style="font-size:16px;font-weight:700;margin-bottom:.4rem">🎹 음이름 듣고 맞히기</div>
+      <div style="font-size:13px;color:#a09e98;margin-bottom:1rem">재생 버튼을 누르면 음이 들립니다. 피아노 건반에서 해당 음을 찾아 클릭하세요.</div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mg-pitch-score">0</span></div>
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">정답: <span id="mg-pitch-correct">0</span>/<span id="mg-pitch-total">0</span></div>
+      </div>
+      <div style="background:#1a1a22;border-radius:12px;padding:1.25rem;margin-bottom:1rem;text-align:center;min-height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.4rem;border:1px solid rgba(255,255,255,0.06)">
+        <div style="font-size:20px;font-weight:700;color:#c8a96e" id="mg-pitch-question">▶ 재생을 눌러 시작하세요</div>
+        <div style="font-size:12px;color:#6a6860" id="mg-pitch-hint"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+        <button onclick="mgPlayPitch()" style="padding:8px 18px;border-radius:8px;border:none;background:#c8a96e;color:#1a1400;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">▶ 음 재생</button>
+        <button onclick="mgNewPitch()" style="padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:13px">새 문제</button>
+      </div>
+      <div style="background:#1a1a22;border-radius:10px;padding:1rem;border:1px solid rgba(255,255,255,0.06)">
+        <div id="mg-piano" style="display:flex;gap:2px;position:relative;height:130px;overflow:hidden"></div>
+      </div>
+      <div id="mg-pitch-fb" style="display:none;margin-top:.75rem;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500"></div>
+    </div>
+
+    <!-- 리듬 -->
+    <div id="mg-rhythm" class="mg-section" style="display:none">
+      <div style="font-size:16px;font-weight:700;margin-bottom:.4rem">🥁 리듬 받아치기</div>
+      <div style="font-size:13px;color:#a09e98;margin-bottom:1rem">AI가 연주하는 리듬을 듣고 같은 패턴을 격자에서 클릭하세요.</div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap">
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mg-rhythm-score">0</span></div>
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">정확도: <span id="mg-rhythm-acc">-</span></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+        <button onclick="mgPlayRhythm()" style="padding:8px 18px;border-radius:8px;border:none;background:#c8a96e;color:#1a1400;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">▶ 리듬 재생</button>
+        <button onclick="mgCheckRhythm()" style="padding:8px 18px;border-radius:8px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600">✓ 확인</button>
+        <button onclick="mgNewRhythm()" style="padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:13px">새 리듬</button>
+      </div>
+      <div id="mg-rhythm-grid" style="display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-bottom:.75rem"></div>
+      <div id="mg-rhythm-fb" style="display:none;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500"></div>
+    </div>
+
+    <!-- 코드 -->
+    <div id="mg-chord" class="mg-section" style="display:none">
+      <div style="font-size:16px;font-weight:700;margin-bottom:.4rem">🎸 코드 유형 듣고 맞히기</div>
+      <div style="font-size:13px;color:#a09e98;margin-bottom:1rem">재생되는 화음의 종류를 맞혀보세요. 장·단·감·증 화음의 색채 차이를 귀로 느껴보세요.</div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem">
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mg-chord-score">0</span></div>
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">연속: <span id="mg-chord-streak">0</span></div>
+      </div>
+      <div style="background:#1a1a22;border-radius:12px;padding:1.25rem;margin-bottom:1rem;text-align:center;border:1px solid rgba(255,255,255,0.06)">
+        <div style="font-size:18px;font-weight:700;color:#c8a96e" id="mg-chord-q">▶ 재생을 눌러 화음을 들으세요</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+        <button onclick="mgPlayChord()" style="padding:8px 18px;border-radius:8px;border:none;background:#c8a96e;color:#1a1400;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">▶ 화음 재생</button>
+        <button onclick="mgNewChord()" style="padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:13px">새 문제</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+        <button onclick="mgSelectChord('major')" style="height:65px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#1a1a22;color:#f0eee8;cursor:pointer;font-family:inherit;font-size:14px">😊 장화음 (Major)<br><span style="font-size:11px;color:#a09e98">밝고 안정적</span></button>
+        <button onclick="mgSelectChord('minor')" style="height:65px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#1a1a22;color:#f0eee8;cursor:pointer;font-family:inherit;font-size:14px">😢 단화음 (minor)<br><span style="font-size:11px;color:#a09e98">어둡고 슬픈</span></button>
+        <button onclick="mgSelectChord('diminished')" style="height:65px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#1a1a22;color:#f0eee8;cursor:pointer;font-family:inherit;font-size:14px">😰 감화음 (dim)<br><span style="font-size:11px;color:#a09e98">긴장·불안</span></button>
+        <button onclick="mgSelectChord('augmented')" style="height:65px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#1a1a22;color:#f0eee8;cursor:pointer;font-family:inherit;font-size:14px">🌀 증화음 (aug)<br><span style="font-size:11px;color:#a09e98">몽환·불안정</span></button>
+      </div>
+      <div style="font-size:12px;color:#6a6860;margin-bottom:.5rem">직접 비교 청취</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button onclick="mgPlayChordDirect([0,4,7])" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">C Major</button>
+        <button onclick="mgPlayChordDirect([0,3,7])" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">C minor</button>
+        <button onclick="mgPlayChordDirect([0,3,6])" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">C dim</button>
+        <button onclick="mgPlayChordDirect([0,4,8])" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">C aug</button>
+      </div>
+      <div id="mg-chord-fb" style="display:none;margin-top:.75rem;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500"></div>
+    </div>
+
+    <!-- 장단조 -->
+    <div id="mg-mode" class="mg-section" style="display:none">
+      <div style="font-size:16px;font-weight:700;margin-bottom:.4rem">🌙 장조 vs 단조 듣기</div>
+      <div style="font-size:13px;color:#a09e98;margin-bottom:1rem">같은 음계를 장조와 단조로 들어보고 차이를 느껴보세요.</div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem">
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mg-mode-score">0</span></div>
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">연속: <span id="mg-mode-streak">0</span></div>
+      </div>
+      <div style="background:#1a1a22;border-radius:12px;padding:1.25rem;margin-bottom:1rem;text-align:center;border:1px solid rgba(255,255,255,0.06)">
+        <div style="font-size:16px;font-weight:700;color:#c8a96e" id="mg-mode-q">아래 버튼으로 먼저 비교해보세요</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+        <button onclick="mgPlayScale('major')" style="height:55px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#1a1a22;color:#f0eee8;cursor:pointer;font-family:inherit;font-size:13px">☀️ 장조로 듣기<br><span style="font-size:11px;color:#a09e98">밝고 활기참</span></button>
+        <button onclick="mgPlayScale('minor')" style="height:55px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:#1a1a22;color:#f0eee8;cursor:pointer;font-family:inherit;font-size:13px">🌙 단조로 듣기<br><span style="font-size:11px;color:#a09e98">어둡고 슬픔</span></button>
+      </div>
+      <button onclick="mgNewMode()" style="width:100%;padding:.8rem;border-radius:9px;border:none;background:#c8a96e;color:#1a1400;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;margin-bottom:.75rem">▶ 문제 시작</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+        <button onclick="mgAnswerMode('major')" style="padding:.8rem;border-radius:9px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600">☀️ 장조입니다</button>
+        <button onclick="mgAnswerMode('minor')" style="padding:.8rem;border-radius:9px;border:none;background:#4c1d95;color:white;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600">🌙 단조입니다</button>
+      </div>
+      <div id="mg-mode-fb" style="display:none;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500"></div>
+    </div>
+
+    <!-- 음정 -->
+    <div id="mg-interval" class="mg-section" style="display:none">
+      <div style="font-size:16px;font-weight:700;margin-bottom:.4rem">🎼 음정 구별하기</div>
+      <div style="font-size:13px;color:#a09e98;margin-bottom:1rem">두 음을 듣고 음정의 종류를 맞혀보세요.</div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem">
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mg-int-score">0</span></div>
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">연속: <span id="mg-int-streak">0</span></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap">
+        <button onclick="mgPlayInterval('m')" style="padding:8px 18px;border-radius:8px;border:none;background:#c8a96e;color:#1a1400;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">▶ 순서대로</button>
+        <button onclick="mgPlayInterval('h')" style="padding:8px 18px;border-radius:8px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600">▶ 동시에</button>
+        <button onclick="mgNewInterval()" style="padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:13px">새 문제</button>
+      </div>
+      <div id="mg-int-cards" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:1rem"></div>
+      <div id="mg-int-fb" style="display:none;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500"></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ 미술 게임 오버레이 ══ -->
+<div class="game-overlay" id="art-overlay" style="overflow-y:auto;display:none;flex-direction:column">
+  <div style="position:sticky;top:0;z-index:10;background:#0f0f14;padding:.75rem 1.25rem;
+              border-bottom:1px solid rgba(255,255,255,0.08);display:flex;
+              align-items:center;justify-content:space-between;flex-shrink:0">
+    <span style="font-size:15px;font-weight:600;color:#f0eee8">🎨 미술 시각 게임</span>
+    <button onclick="closeArtGame()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);
+      border-radius:7px;padding:5px 12px;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">✕ 닫기</button>
+  </div>
+  <div style="padding:.75rem 1rem;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.06)">
+    <button class="ag-tab active" onclick="showArtTab('mix',this)" style="padding:6px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:rgba(15,118,110,0.8);color:white;cursor:pointer;font-family:inherit;font-size:12px">🧪 색 혼합</button>
+    <button class="ag-tab" onclick="showArtTab('hsl',this)" style="padding:6px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🎚️ 명도채도</button>
+    <button class="ag-tab" onclick="showArtTab('draw',this)" style="padding:6px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">✏️ 드로잉</button>
+    <button class="ag-tab" onclick="showArtTab('pixel',this)" style="padding:6px 14px;border-radius:18px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🟦 픽셀아트</button>
+  </div>
+  <div style="flex:1;padding:1.25rem;max-width:700px;margin:0 auto;width:100%">
+
+    <!-- 색 혼합 -->
+    <div id="ag-mix" class="ag-section" style="display:block">
+      <div style="font-size:16px;font-weight:700;margin-bottom:.4rem">🧪 색 혼합 실험실</div>
+      <div style="font-size:13px;color:#a09e98;margin-bottom:1rem">RGB 슬라이더로 원하는 색을 만들어보세요. 목표 색과 가장 가깝게 맞히면 점수를 얻습니다!</div>
+      <div style="display:flex;gap:10px;margin-bottom:1rem">
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">점수: <span style="color:#c8a96e;font-weight:600" id="ag-mix-score">0</span></div>
+        <div style="padding:5px 12px;border-radius:16px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08)">일치도: <span id="ag-mix-match">0</span>%</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem">
+        <div>
+          <div style="font-size:12px;color:#a09e98;margin-bottom:.4rem">🎯 목표 색</div>
+          <div id="ag-target" style="height:90px;border-radius:10px;border:1px solid rgba(255,255,255,0.08)"></div>
+          <div style="font-size:12px;color:#6a6860;text-align:center;margin-top:.3rem" id="ag-target-name"></div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:#a09e98;margin-bottom:.4rem">🎨 내 색</div>
+          <div id="ag-mycolor" style="height:90px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:#000"></div>
+          <div style="font-size:12px;color:#c8a96e;text-align:center;margin-top:.3rem" id="ag-myhex">#000000</div>
+        </div>
+      </div>
+      <div style="height:10px;border-radius:5px;background:#24242f;margin-bottom:1rem;overflow:hidden">
+        <div id="ag-match-bar" style="height:100%;background:#7c3aed;transition:width .3s;border-radius:5px;width:0%"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:12px;color:#f87171;width:16px">R</span>
+          <input type="range" id="ag-r" min="0" max="255" value="0" oninput="agUpdateColor()"
+            style="flex:1;height:6px;border-radius:3px;appearance:none;cursor:pointer;background:linear-gradient(to right,#000,#f00)">
+          <span style="font-size:12px;width:28px;text-align:right" id="ag-rv">0</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:12px;color:#4ade80;width:16px">G</span>
+          <input type="range" id="ag-g" min="0" max="255" value="0" oninput="agUpdateColor()"
+            style="flex:1;height:6px;border-radius:3px;appearance:none;cursor:pointer;background:linear-gradient(to right,#000,#0f0)">
+          <span style="font-size:12px;width:28px;text-align:right" id="ag-gv">0</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:12px;color:#60a5fa;width:16px">B</span>
+          <input type="range" id="ag-b" min="0" max="255" value="0" oninput="agUpdateColor()"
+            style="flex:1;height:6px;border-radius:3px;appearance:none;cursor:pointer;background:linear-gradient(to right,#000,#00f)">
+          <span style="font-size:12px;width:28px;text-align:right" id="ag-bv">0</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:.75rem;flex-wrap:wrap">
+        <button onclick="agCheckMix()" style="padding:8px 18px;border-radius:8px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600">✓ 점수 확인</button>
+        <button onclick="agNewTarget()" style="padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:13px">새 목표색</button>
+        <button onclick="agResetMix()" style="padding:8px 18px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:13px">초기화</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px" id="ag-presets"></div>
+      <div id="ag-mix-fb" style="display:none;margin-top:.75rem;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500"></div>
+    </div>
+
+    <!-- HSL -->
+    <div id="ag-hsl" class="ag-section" style="display:none">
+      <div style="font-size:16px;font-weight:700;margin-bottom:.4rem">🎚️ 명도·채도 직접 체험</div>
+      <div style="font-size:13px;color:#a09e98;margin-bottom:1rem">H(색상)·S(채도)·L(밝기) 슬라이더를 조절하며 색의 3속성을 느껴보세요.</div>
+      <div id="ag-hsl-display" style="width:100%;height:120px;border-radius:12px;margin-bottom:1rem;background:hsl(0,100%,50%);transition:background .2s"></div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:1rem">
+        <div style="display:grid;grid-template-columns:60px 1fr 50px;gap:8px;align-items:center">
+          <span style="font-size:12px;color:#a09e98">H 색상</span>
+          <input type="range" id="ag-h" min="0" max="360" value="0" oninput="agUpdateHSL()"
+            style="height:8px;border-radius:4px;appearance:none;cursor:pointer;background:linear-gradient(to right,hsl(0,100%,50%),hsl(60,100%,50%),hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))">
+          <span style="font-size:12px;color:#c8a96e;text-align:right" id="ag-hv">0°</span>
+        </div>
+        <div style="display:grid;grid-template-columns:60px 1fr 50px;gap:8px;align-items:center">
+          <span style="font-size:12px;color:#a09e98">S 채도</span>
+          <input type="range" id="ag-s" min="0" max="100" value="100" oninput="agUpdateHSL()"
+            style="height:8px;border-radius:4px;appearance:none;cursor:pointer;background:linear-gradient(to right,#888,#f00)">
+          <span style="font-size:12px;color:#c8a96e;text-align:right" id="ag-sv">100%</span>
+        </div>
+        <div style="display:grid;grid-template-columns:60px 1fr 50px;gap:8px;align-items:center">
+          <span style="font-size:12px;color:#a09e98">L 밝기</span>
+          <input type="range" id="ag-l" min="0" max="100" value="50" oninput="agUpdateHSL()"
+            style="height:8px;border-radius:4px;appearance:none;cursor:pointer;background:linear-gradient(to right,#000,#888,#fff)">
+          <span style="font-size:12px;color:#c8a96e;text-align:right" id="ag-lv">50%</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem">
+        <div style="padding:.75rem;background:#1a1a22;border-radius:8px;border:1px solid rgba(255,255,255,0.06);text-align:center">
+          <div style="font-size:11px;color:#a09e98">HSL 값</div>
+          <div style="font-size:12px;font-weight:600;color:#c8a96e" id="ag-hsl-val">hsl(0,100%,50%)</div>
+        </div>
+        <div style="padding:.75rem;background:#1a1a22;border-radius:8px;border:1px solid rgba(255,255,255,0.06);text-align:center">
+          <div style="font-size:11px;color:#a09e98">색감</div>
+          <div style="font-size:12px;font-weight:600;color:#f0eee8" id="ag-hsl-feel">선명한 빨강</div>
+        </div>
+        <div style="padding:.75rem;background:#1a1a22;border-radius:8px;border:1px solid rgba(255,255,255,0.06);text-align:center">
+          <div style="font-size:11px;color:#a09e98">HEX</div>
+          <div style="font-size:12px;font-weight:600;color:#f0eee8" id="ag-hex">#ff0000</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#6a6860;margin-bottom:.5rem">같은 빨강(H=0)의 채도·명도 변화</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px">
+        <div style="height:32px;border-radius:6px;background:hsl(0,100%,20%)" title="어두운"></div>
+        <div style="height:32px;border-radius:6px;background:hsl(0,100%,40%)" title="진한"></div>
+        <div style="height:32px;border-radius:6px;background:hsl(0,100%,60%)" title="밝은"></div>
+        <div style="height:32px;border-radius:6px;background:hsl(0,50%,60%)" title="파스텔"></div>
+        <div style="height:32px;border-radius:6px;background:hsl(0,10%,60%)" title="회색"></div>
+      </div>
+    </div>
+
+    <!-- 드로잉 -->
+    <div id="ag-draw" class="ag-section" style="display:none">
+      <div style="font-size:16px;font-weight:700;margin-bottom:.4rem">✏️ 자유 드로잉</div>
+      <div style="font-size:13px;color:#a09e98;margin-bottom:.75rem">캔버스에 자유롭게 그려보세요.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.6rem" id="ag-draw-palette"></div>
+      <div style="display:flex;gap:6px;margin-bottom:.6rem;flex-wrap:wrap;align-items:center">
+        <button id="ag-tool-pen" onclick="agSetTool('pen')" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(124,58,237,.8);background:rgba(124,58,237,.2);color:#f0eee8;cursor:pointer;font-family:inherit;font-size:12px">✏️ 펜</button>
+        <button id="ag-tool-brush" onclick="agSetTool('brush')" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🖌️ 브러시</button>
+        <button id="ag-tool-eraser" onclick="agSetTool('eraser')" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🧹 지우개</button>
+        <span style="font-size:12px;color:#6a6860">크기:</span>
+        <input type="range" id="ag-brush-sz" min="2" max="40" value="6" oninput="agBrushSize()" style="width:70px">
+        <span style="font-size:12px;color:#a09e98" id="ag-brush-val">6</span>px
+      </div>
+      <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);margin-bottom:.75rem">
+        <canvas id="ag-canvas" style="display:block;background:#fff;cursor:crosshair;touch-action:none;width:100%;max-height:300px"></canvas>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="agClearCanvas()" style="padding:7px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🗑️ 지우기</button>
+        <button onclick="agSaveCanvas()" style="padding:7px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">💾 저장</button>
+        <button onclick="agSetBg('#fff')" style="padding:7px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">흰 배경</button>
+        <button onclick="agSetBg('#1a1a22')" style="padding:7px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">어두운 배경</button>
+      </div>
+    </div>
+
+    <!-- 픽셀 아트 -->
+    <div id="ag-pixel" class="ag-section" style="display:none">
+      <div style="font-size:16px;font-weight:700;margin-bottom:.4rem">🟦 픽셀 아트 창작</div>
+      <div style="font-size:13px;color:#a09e98;margin-bottom:.75rem">16×16 그리드에 나만의 픽셀 아트를 만들어보세요!</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.75rem" id="ag-pixel-palette"></div>
+      <div style="display:flex;gap:6px;margin-bottom:.75rem;flex-wrap:wrap">
+        <button onclick="agFillAll()" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">전체 채우기</button>
+        <button onclick="agClearPixels()" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">🗑️ 지우기</button>
+        <button onclick="agLoadHeart()" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">❤️ 하트</button>
+        <button onclick="agSavePixel()" style="padding:5px 12px;border-radius:7px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;font-size:12px">💾 저장</button>
+      </div>
+      <div style="overflow:auto;background:#1a1a22;border-radius:10px;padding:8px;border:1px solid rgba(255,255,255,0.08)">
+        <div id="ag-pixel-grid" style="display:grid;gap:1px;margin:0 auto"></div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- ══ 소개 페이지 오버레이 ══ -->
@@ -2414,6 +2708,8 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (document.getElementById('sub-modal').classList.contains('open')) closeSubModal();
     else if (document.getElementById('about-overlay').classList.contains('open')) closeAbout();
+    else if (document.getElementById('music-overlay').classList.contains('open')) closeMusicGame();
+    else if (document.getElementById('art-overlay').classList.contains('open')) closeArtGame();
     else if (document.getElementById('iframe-overlay').classList.contains('open')) closeIframeGame();
     else if (document.getElementById('socrates-overlay').classList.contains('open')) closeSocrates();
     else if (document.getElementById('history-overlay').classList.contains('open')) closeHistory();
@@ -3020,6 +3316,496 @@ function closeIframeGame() {
   document.getElementById('iframe-overlay').classList.remove('open');
   document.getElementById('iframe-content').src = '';
   document.body.style.overflow = '';
+}
+
+
+/* ══ 음악 게임 ══ */
+let mgAudioCtx = null;
+function mgGetCtx(){ if(!mgAudioCtx) mgAudioCtx=new(window.AudioContext||window.webkitAudioContext)(); return mgAudioCtx; }
+function mgPlayNote(midi,dur=0.8,vol=0.45,t=null){
+  const ctx=mgGetCtx(); const ts=t||ctx.currentTime;
+  const osc=ctx.createOscillator(); const gain=ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.frequency.value=440*Math.pow(2,(midi-69)/12); osc.type='triangle';
+  gain.gain.setValueAtTime(0,ts); gain.gain.linearRampToValueAtTime(vol,ts+0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001,ts+dur); osc.start(ts); osc.stop(ts+dur+0.1);
+}
+function mgPlayChordNotes(midis,dur=1.5){ midis.forEach(m=>mgPlayNote(m,dur,0.3)); }
+function mgPlayMelody(midis,tempo=0.35){
+  const ctx=mgGetCtx(); midis.forEach((m,i)=>mgPlayNote(m,tempo*0.9,0.4,ctx.currentTime+i*tempo));
+}
+
+// 탭 전환
+function showMusicTab(id,el){
+  document.querySelectorAll('.mg-section').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.mg-tab').forEach(b=>{b.style.background='transparent';b.style.color='#a09e98'});
+  document.getElementById('mg-'+id).style.display='block';
+  el.style.background='rgba(124,58,237,0.8)'; el.style.color='white';
+}
+function openMusicGame(){
+  closeDrawer();
+  const ov=document.getElementById('music-overlay');
+  ov.classList.add('open'); document.body.style.overflow='hidden';
+  mgInitPiano(); mgInitRhythm(); mgNewChord(); mgNewMode(); mgNewInterval();
+}
+function closeMusicGame(){ document.getElementById('music-overlay').classList.remove('open'); document.body.style.overflow=''; }
+
+// 피아노 건반
+let mgPitchMidi=null, mgPitchWait=false, mgPScore=0, mgPCorrect=0, mgPTotal=0;
+const MG_WHITE=[60,62,64,65,67,69,71,72,74,76];
+const MG_NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const MG_KR={C:'도','C#':'도#',D:'레','D#':'레#',E:'미',F:'파','F#':'파#',G:'솔','G#':'솔#',A:'라','A#':'라#',B:'시'};
+
+function mgInitPiano(){
+  const piano=document.getElementById('mg-piano');
+  if(!piano||piano.children.length>0) return;
+  const whites=[60,62,64,65,67,69,71,72,74,76];
+  const whiteEls=[];
+  whites.forEach(midi=>{
+    const k=document.createElement('div');
+    k.style.cssText='flex:1;background:#f5f0e8;border-radius:0 0 5px 5px;cursor:pointer;border:1px solid #ccc;position:relative;min-width:28px;transition:background .08s';
+    k.dataset.midi=midi;
+    const lbl=document.createElement('span');
+    lbl.style.cssText='position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:8px;color:#888';
+    lbl.textContent=MG_NOTES[midi%12]+Math.floor(midi/12-1);
+    k.appendChild(lbl);
+    k.addEventListener('click',()=>{ mgPlayNote(midi); mgOnPianoClick(midi,k); });
+    piano.appendChild(k); whiteEls.push(k);
+  });
+  // 검은 건반
+  const blackPos=[[1,'C#',0],[3,'D#',1],[6,'F#',3],[8,'G#',4],[10,'A#',5]];
+  setTimeout(()=>{
+    const pW=piano.offsetWidth; const kW=pW/10;
+    blackPos.forEach(([semi,name,wi])=>{
+      const bk=document.createElement('div');
+      bk.style.cssText=`position:absolute;width:${kW*0.6}px;height:75px;background:#1a1a1a;border-radius:0 0 4px 4px;cursor:pointer;z-index:2;top:0;left:${whiteEls[wi].offsetLeft+kW*0.65}px;transition:background .08s`;
+      bk.dataset.midi=(Math.floor(60/12))*12+semi+60-60;
+      // 정확한 midi 계산
+      const octave=Math.floor(60/12);
+      const actualMidi=60+semi-([0,2,4,5,7,9,11][0]); // 간단화
+      // C4=60 기준 반음 위치
+      const midiMap={1:61,3:63,6:66,8:68,10:70};
+      const bMidi=midiMap[semi];
+      bk.dataset.midi=bMidi;
+      bk.addEventListener('click',e=>{e.stopPropagation();mgPlayNote(bMidi);mgOnPianoClick(bMidi,bk);});
+      piano.appendChild(bk);
+    });
+  },100);
+}
+
+function mgOnPianoClick(midi,el){
+  if(!mgPitchWait||!mgPitchMidi) return;
+  mgPitchWait=false; mgPTotal++;
+  document.getElementById('mg-pitch-total').textContent=mgPTotal;
+  const fb=document.getElementById('mg-pitch-fb'); fb.style.display='block';
+  if(midi===mgPitchMidi){
+    mgPCorrect++; mgPScore+=10;
+    el.style.background='#4ade80';
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,.3);color:#4ade80;margin-top:.75rem';
+    fb.textContent=`✅ 정답! ${MG_NOTES[midi%12]} (${MG_KR[MG_NOTES[midi%12]]}) +10점`;
+    document.getElementById('mg-pitch-score').textContent=mgPScore;
+    document.getElementById('mg-pitch-correct').textContent=mgPCorrect;
+    setTimeout(()=>{el.style.background='';mgNewPitch();mgPlayPitch();},1200);
+  } else {
+    el.style.background='#f87171';
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,.3);color:#f87171;margin-top:.75rem';
+    const cn=MG_NOTES[mgPitchMidi%12];
+    fb.textContent=`❌ 틀렸습니다. 정답은 ${cn}(${MG_KR[cn]}) 입니다.`;
+    mgPlayNote(mgPitchMidi);
+    setTimeout(()=>{el.style.background='';mgNewPitch();},2000);
+  }
+}
+function mgNewPitch(){
+  mgPitchMidi=MG_WHITE[Math.floor(Math.random()*MG_WHITE.length)];
+  mgPitchWait=false;
+  document.getElementById('mg-pitch-question').textContent='▶ 재생 버튼을 누르세요';
+  document.getElementById('mg-pitch-hint').textContent='';
+  document.getElementById('mg-pitch-fb').style.display='none';
+}
+function mgPlayPitch(){
+  if(!mgPitchMidi) mgNewPitch();
+  mgPlayNote(mgPitchMidi,1.0);
+  document.getElementById('mg-pitch-question').textContent='🎵 이 음의 이름은?';
+  document.getElementById('mg-pitch-hint').textContent='피아노 건반에서 해당 음을 찾아 클릭하세요';
+  mgPitchWait=true; mgPTotal++;
+  document.getElementById('mg-pitch-total').textContent=mgPTotal;
+}
+
+// 리듬 게임
+let mgRhythmPat=[],mgRhythmUser=[],mgRhythmScore=0;
+function mgInitRhythm(){
+  const grid=document.getElementById('mg-rhythm-grid');
+  if(grid&&grid.children.length===0){
+    for(let i=0;i<8;i++){
+      const c=document.createElement('div');
+      c.style.cssText='height:55px;border-radius:8px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:#6a6860;transition:all .15s';
+      c.textContent=i+1; c.dataset.idx=i;
+      c.addEventListener('click',()=>{
+        mgRhythmUser[i]=mgRhythmUser[i]?0:1;
+        c.style.background=mgRhythmUser[i]?'rgba(124,58,237,0.8)':'#1a1a22';
+        c.style.borderColor=mgRhythmUser[i]?'rgba(124,58,237,1)':'rgba(255,255,255,0.08)';
+      });
+      grid.appendChild(c);
+    }
+  }
+  mgNewRhythm();
+}
+function mgNewRhythm(){
+  mgRhythmUser=new Array(8).fill(0);
+  mgRhythmPat=new Array(8).fill(0);
+  let beats=0;
+  while(beats<4){ const p=Math.floor(Math.random()*8); if(!mgRhythmPat[p]){mgRhythmPat[p]=1;beats++;} }
+  document.querySelectorAll('#mg-rhythm-grid div').forEach(c=>{
+    c.style.background='#1a1a22';c.style.borderColor='rgba(255,255,255,0.08)';
+  });
+  document.getElementById('mg-rhythm-fb').style.display='none';
+}
+function mgPlayRhythm(){
+  const cells=document.querySelectorAll('#mg-rhythm-grid div');
+  mgRhythmPat.forEach((beat,i)=>{
+    setTimeout(()=>{
+      cells[i].style.background='rgba(200,169,110,0.5)';
+      setTimeout(()=>cells[i].style.background=mgRhythmUser[i]?'rgba(124,58,237,0.8)':'#1a1a22',180);
+      if(beat) mgPlayNote(60,0.15,0.6);
+    },i*280);
+  });
+}
+function mgCheckRhythm(){
+  const cells=document.querySelectorAll('#mg-rhythm-grid div');
+  let correct=0;
+  mgRhythmPat.forEach((beat,i)=>{
+    const ok=beat===mgRhythmUser[i]; if(ok) correct++;
+    cells[i].style.background=ok?(beat?'rgba(34,197,94,0.4)':'#1a1a22'):'rgba(239,68,68,0.4)';
+  });
+  const acc=Math.round(correct/8*100);
+  document.getElementById('mg-rhythm-acc').textContent=acc+'%';
+  const fb=document.getElementById('mg-rhythm-fb'); fb.style.display='block';
+  if(acc>=75){
+    mgRhythmScore+=Math.round(acc/10);
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,.3);color:#4ade80';
+    fb.textContent=`✅ 정확도 ${acc}%! +${Math.round(acc/10)}점`;
+    document.getElementById('mg-rhythm-score').textContent=mgRhythmScore;
+    setTimeout(mgNewRhythm,1500);
+  } else {
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,.3);color:#f87171';
+    fb.textContent=`❌ 정확도 ${acc}%. 다시 들어보세요!`;
+  }
+}
+
+// 코드 게임
+let mgChordType=null,mgChordScore=0,mgChordStreak=0;
+const MG_CHORDS={major:{name:'장화음',intervals:[0,4,7]},minor:{name:'단화음',intervals:[0,3,7]},diminished:{name:'감화음',intervals:[0,3,6]},augmented:{name:'증화음',intervals:[0,4,8]}};
+function mgNewChord(){
+  const types=Object.keys(MG_CHORDS);
+  mgChordType=types[Math.floor(Math.random()*types.length)];
+  document.getElementById('mg-chord-q').textContent='▶ 재생을 눌러 화음을 들으세요';
+  document.getElementById('mg-chord-fb').style.display='none';
+}
+function mgPlayChord(){
+  if(!mgChordType) return;
+  const root=60+Math.floor(Math.random()*5);
+  mgPlayChordNotes(MG_CHORDS[mgChordType].intervals.map(i=>root+i));
+}
+function mgPlayChordDirect(intervals){ mgPlayChordNotes(intervals.map(i=>60+i)); }
+function mgSelectChord(type){
+  const fb=document.getElementById('mg-chord-fb'); fb.style.display='block';
+  if(type===mgChordType){
+    mgChordScore+=10; mgChordStreak++;
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,.3);color:#4ade80';
+    fb.textContent=`✅ 정답! ${MG_CHORDS[type].name} +10점`;
+    document.getElementById('mg-chord-score').textContent=mgChordScore;
+    document.getElementById('mg-chord-streak').textContent=mgChordStreak;
+    setTimeout(mgNewChord,1500);
+  } else {
+    mgChordStreak=0;
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,.3);color:#f87171';
+    fb.textContent=`❌ 정답은 ${MG_CHORDS[mgChordType].name}입니다.`;
+    document.getElementById('mg-chord-streak').textContent=0;
+    mgPlayChord(); setTimeout(mgNewChord,2500);
+  }
+}
+
+// 장단조
+let mgModeType=null,mgModeScore=0,mgModeStreak=0;
+function mgNewMode(){
+  mgModeType=Math.random()>0.5?'major':'minor';
+  const name=mgModeType==='major'?'장조':'단조';
+  document.getElementById('mg-mode-q').textContent=`▶ 문제 재생을 눌러 ${name==='장조'?'?':'?'} 들어보세요`;
+  document.getElementById('mg-mode-fb').style.display='none';
+  mgPlayScaleForMode();
+}
+function mgPlayScale(type){
+  const major=[60,62,64,65,67,69,71,72]; const minor=[60,62,63,65,67,68,70,72];
+  mgPlayMelody(type==='major'?major:minor,0.28);
+}
+function mgPlayScaleForMode(){
+  if(!mgModeType) return;
+  document.getElementById('mg-mode-q').textContent=`🎵 이 음계는 장조인가요 단조인가요?`;
+  mgPlayScale(mgModeType);
+}
+function mgAnswerMode(type){
+  const fb=document.getElementById('mg-mode-fb'); fb.style.display='block';
+  if(type===mgModeType){
+    mgModeScore+=10; mgModeStreak++;
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,.3);color:#4ade80';
+    fb.textContent=type==='major'?'✅ 정답! 장조 — 밝고 활기찬 느낌 +10점':'✅ 정답! 단조 — 어둡고 슬픈 느낌 +10점';
+    document.getElementById('mg-mode-score').textContent=mgModeScore;
+    document.getElementById('mg-mode-streak').textContent=mgModeStreak;
+    setTimeout(mgNewMode,1500);
+  } else {
+    mgModeStreak=0;
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,.3);color:#f87171';
+    fb.textContent=`❌ 틀렸습니다. 이 음계는 ${mgModeType==='major'?'☀️ 장조':'🌙 단조'}였습니다.`;
+    document.getElementById('mg-mode-streak').textContent=0;
+    mgPlayScaleForMode(); setTimeout(mgNewMode,2000);
+  }
+}
+
+// 음정
+let mgIntMidi1=0,mgIntMidi2=0,mgIntAnswer=null,mgIntScore=0,mgIntStreak=0;
+const MG_INTERVALS=[
+  {name:'단2도',semi:1,desc:'좁고 날카로운 긴장감'},{name:'장2도',semi:2,desc:'활발하고 경쾌'},
+  {name:'단3도',semi:3,desc:'슬프고 어두운'},{name:'장3도',semi:4,desc:'밝고 따뜻한'},
+  {name:'완전4도',semi:5,desc:'안정적이고 균형'},{name:'완전5도',semi:7,desc:'가장 안정적'},
+  {name:'장6도',semi:9,desc:'밝고 개방적'},{name:'완전8도',semi:12,desc:'완벽한 협화'},
+];
+function mgNewInterval(){
+  const pool=MG_INTERVALS.slice(0,Math.min(4+Math.floor(mgIntScore/30),MG_INTERVALS.length));
+  mgIntAnswer=pool[Math.floor(Math.random()*pool.length)];
+  mgIntMidi1=60+Math.floor(Math.random()*7);
+  mgIntMidi2=mgIntMidi1+mgIntAnswer.semi;
+  const shuffle=[mgIntAnswer,...pool.filter(i=>i!==mgIntAnswer).sort(()=>Math.random()-.5).slice(0,3)].sort(()=>Math.random()-.5);
+  const cards=document.getElementById('mg-int-cards'); cards.innerHTML='';
+  shuffle.forEach(intv=>{
+    const card=document.createElement('div');
+    card.style.cssText='padding:.9rem;border-radius:10px;background:#1a1a22;border:1px solid rgba(255,255,255,0.08);cursor:pointer;text-align:center;transition:all .15s';
+    card.innerHTML=`<div style="font-size:14px;font-weight:600;margin-bottom:.2rem">${intv.name}</div><div style="font-size:11px;color:#6a6860">${intv.desc}</div>`;
+    card.addEventListener('click',()=>mgCheckInterval(intv,card));
+    cards.appendChild(card);
+  });
+  document.getElementById('mg-int-fb').style.display='none';
+}
+function mgPlayInterval(type){
+  if(type==='m'){mgPlayNote(mgIntMidi1,0.6);setTimeout(()=>mgPlayNote(mgIntMidi2,0.6),700);}
+  else mgPlayChordNotes([mgIntMidi1,mgIntMidi2],1.5);
+}
+function mgCheckInterval(chosen,card){
+  const fb=document.getElementById('mg-int-fb'); fb.style.display='block';
+  document.querySelectorAll('#mg-int-cards div').forEach(c=>c.style.pointerEvents='none');
+  if(chosen.name===mgIntAnswer.name){
+    mgIntScore+=10; mgIntStreak++;
+    card.style.background='rgba(34,197,94,0.2)'; card.style.borderColor='rgba(34,197,94,.5)';
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,.3);color:#4ade80';
+    fb.textContent=`✅ 정답! ${chosen.name} — ${chosen.desc} +10점`;
+    document.getElementById('mg-int-score').textContent=mgIntScore;
+    document.getElementById('mg-int-streak').textContent=mgIntStreak;
+    setTimeout(mgNewInterval,1500);
+  } else {
+    mgIntStreak=0;
+    card.style.background='rgba(239,68,68,0.2)'; card.style.borderColor='rgba(239,68,68,.5)';
+    document.querySelectorAll('#mg-int-cards div').forEach(c=>{
+      if(c.querySelector('div').textContent===mgIntAnswer.name){c.style.background='rgba(34,197,94,0.2)';c.style.borderColor='rgba(34,197,94,.5)';}
+    });
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,.3);color:#f87171';
+    fb.textContent=`❌ 정답은 ${mgIntAnswer.name}입니다.`;
+    document.getElementById('mg-int-streak').textContent=0;
+    mgPlayInterval('m'); setTimeout(mgNewInterval,2500);
+  }
+}
+
+/* ══ 미술 게임 ══ */
+// 탭 전환
+function showArtTab(id,el){
+  document.querySelectorAll('.ag-section').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.ag-tab').forEach(b=>{b.style.background='transparent';b.style.color='#a09e98'});
+  document.getElementById('ag-'+id).style.display='block';
+  el.style.background='rgba(15,118,110,0.8)'; el.style.color='white';
+}
+function openArtGame(){
+  closeDrawer();
+  const ov=document.getElementById('art-overlay');
+  ov.classList.add('open'); document.body.style.overflow='hidden';
+  agInitMix(); agUpdateHSL(); agInitDraw(); agInitPixel();
+}
+function closeArtGame(){ document.getElementById('art-overlay').classList.remove('open'); document.body.style.overflow=''; }
+
+// 색 혼합
+const AG_PRESETS=[
+  {r:255,g:0,b:0,n:'빨강'},{r:0,g:255,b:0,n:'초록'},{r:0,g:0,b:255,n:'파랑'},
+  {r:255,g:255,b:0,n:'노랑'},{r:0,g:255,b:255,n:'시안'},{r:255,g:0,b:255,n:'마젠타'},
+  {r:255,g:128,b:0,n:'주황'},{r:128,g:0,b:255,n:'보라'},{r:255,g:192,b:203,n:'핑크'},
+  {r:128,g:64,b:0,n:'갈색'},{r:0,g:128,b:0,n:'진초록'},{r:64,g:64,b:64,n:'회색'},
+];
+let agTarget={r:0,g:0,b:0},agMixScore=0;
+function agInitMix(){
+  const p=document.getElementById('ag-presets');
+  if(p&&p.children.length===0){
+    AG_PRESETS.forEach(c=>{
+      const d=document.createElement('div');
+      d.style.cssText=`height:36px;border-radius:6px;cursor:pointer;background:rgb(${c.r},${c.g},${c.b});border:2px solid transparent;transition:all .1s`;
+      d.title=c.n; d.addEventListener('click',()=>agSetSliders(c.r,c.g,c.b));
+      p.appendChild(d);
+    });
+  }
+  agNewTarget();
+}
+function agSetSliders(r,g,b){
+  document.getElementById('ag-r').value=r; document.getElementById('ag-g').value=g; document.getElementById('ag-b').value=b;
+  agUpdateColor();
+}
+function agUpdateColor(){
+  const r=+document.getElementById('ag-r').value,g=+document.getElementById('ag-g').value,b=+document.getElementById('ag-b').value;
+  document.getElementById('ag-rv').textContent=r; document.getElementById('ag-gv').textContent=g; document.getElementById('ag-bv').textContent=b;
+  const hex='#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+  document.getElementById('ag-mycolor').style.background=`rgb(${r},${g},${b})`;
+  document.getElementById('ag-myhex').textContent=hex;
+  const d=Math.sqrt((r-agTarget.r)**2+(g-agTarget.g)**2+(b-agTarget.b)**2);
+  const m=Math.max(0,Math.round(100-d/4.41));
+  document.getElementById('ag-mix-match').textContent=m;
+  document.getElementById('ag-match-bar').style.width=m+'%';
+}
+function agNewTarget(){
+  const c=AG_PRESETS[Math.floor(Math.random()*AG_PRESETS.length)];
+  agTarget={r:c.r,g:c.g,b:c.b};
+  document.getElementById('ag-target').style.background=`rgb(${c.r},${c.g},${c.b})`;
+  document.getElementById('ag-target-name').textContent=c.n;
+  document.getElementById('ag-mix-fb').style.display='none';
+}
+function agCheckMix(){
+  const r=+document.getElementById('ag-r').value,g=+document.getElementById('ag-g').value,b=+document.getElementById('ag-b').value;
+  const d=Math.sqrt((r-agTarget.r)**2+(g-agTarget.g)**2+(b-agTarget.b)**2);
+  const m=Math.max(0,Math.round(100-d/4.41));
+  const fb=document.getElementById('ag-mix-fb'); fb.style.display='block';
+  if(m>=90){
+    agMixScore+=20;
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,.3);color:#4ade80';
+    fb.textContent=`✅ 완벽! ${m}% 일치 +20점!`;
+    document.getElementById('ag-mix-score').textContent=agMixScore;
+    setTimeout(agNewTarget,1500);
+  } else if(m>=70){
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,.3);color:#a78bfa';
+    fb.textContent=`🎯 ${m}% 일치! 조금 더 조정해보세요.`;
+  } else {
+    fb.style.cssText='display:block;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,.3);color:#f87171';
+    fb.textContent=`❌ ${m}% 일치. 더 조정해보세요.`;
+  }
+}
+function agResetMix(){ agSetSliders(0,0,0); }
+
+// HSL
+function agUpdateHSL(){
+  const h=+document.getElementById('ag-h').value,s=+document.getElementById('ag-s').value,l=+document.getElementById('ag-l').value;
+  const hsl=`hsl(${h},${s}%,${l}%)`;
+  document.getElementById('ag-hsl-display').style.background=hsl;
+  document.getElementById('ag-hsl-val').textContent=hsl;
+  document.getElementById('ag-hv').textContent=h+'°';
+  document.getElementById('ag-sv').textContent=s+'%';
+  document.getElementById('ag-lv').textContent=l+'%';
+  const feels=['빨강','주황','노랑','황록','초록','청록','파랑','남보라','보라','분홍','빨강'];
+  document.getElementById('ag-hsl-feel').textContent=(s<20?'회색':'선명한')+' '+feels[Math.floor(h/36)];
+  // HEX 변환
+  const sv=s/100,lv=l/100,a=sv*Math.min(lv,1-lv);
+  const f=n=>{const k=(n+h/30)%12;const c=lv-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*c).toString(16).padStart(2,'0')};
+  document.getElementById('ag-hex').textContent=`#${f(0)}${f(8)}${f(4)}`;
+}
+
+// 드로잉
+let agTool='pen',agColor='#000000',agSize=6,agDrawing=false,agLx=0,agLy=0;
+const AG_COLORS=['#000000','#ffffff','#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899','#6b7280','#92400e','#c8a96e'];
+function agInitDraw(){
+  const canvas=document.getElementById('ag-canvas');
+  if(!canvas) return;
+  const p=document.getElementById('ag-draw-palette');
+  if(p&&p.children.length===0){
+    AG_COLORS.forEach((c,i)=>{
+      const sw=document.createElement('div');
+      sw.style.cssText=`width:28px;height:28px;border-radius:5px;cursor:pointer;background:${c};border:${i===0?'2px solid white':'2px solid transparent'};transition:all .1s`;
+      if(c==='#ffffff') sw.style.border='2px solid #666';
+      sw.addEventListener('click',()=>{ document.querySelectorAll('#ag-draw-palette div').forEach(s=>s.style.borderColor='transparent'); sw.style.borderColor='white'; agColor=c; });
+      p.appendChild(sw);
+    });
+  }
+  if(canvas.dataset.init) return;
+  canvas.dataset.init='1';
+  const w=canvas.parentElement.clientWidth||400;
+  canvas.width=w; canvas.height=Math.min(w*0.6,280);
+  const ctx=canvas.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  const getPos=(e,c)=>{const r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*(c.width/r.width),y:(e.clientY-r.top)*(c.height/r.height)};};
+  const doDraw=(e)=>{
+    if(!agDrawing) return;
+    const ctx=canvas.getContext('2d'); const pos=getPos(e,canvas);
+    ctx.beginPath(); ctx.moveTo(agLx,agLy); ctx.lineTo(pos.x,pos.y);
+    ctx.strokeStyle=agTool==='eraser'?'#fff':agColor;
+    ctx.lineWidth=agTool==='brush'?agSize*2:agSize;
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.globalAlpha=agTool==='brush'?0.5:1; ctx.stroke(); ctx.globalAlpha=1;
+    agLx=pos.x; agLy=pos.y;
+  };
+  canvas.addEventListener('mousedown',e=>{agDrawing=true;const p=getPos(e,canvas);agLx=p.x;agLy=p.y;});
+  canvas.addEventListener('mousemove',doDraw);
+  canvas.addEventListener('mouseup',()=>agDrawing=false);
+  canvas.addEventListener('mouseleave',()=>agDrawing=false);
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();agDrawing=true;const p=getPos(e.touches[0],canvas);agLx=p.x;agLy=p.y;},{passive:false});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();doDraw(e.touches[0]);},{passive:false});
+  canvas.addEventListener('touchend',()=>agDrawing=false);
+}
+function agSetTool(t){ agTool=t; ['pen','brush','eraser'].forEach(n=>{ const b=document.getElementById('ag-tool-'+n); if(b){ b.style.background=n===t?'rgba(124,58,237,.2)':'transparent'; b.style.borderColor=n===t?'rgba(124,58,237,.8)':'rgba(255,255,255,0.1)'; b.style.color=n===t?'#f0eee8':'#a09e98'; } }); }
+function agBrushSize(){ agSize=+document.getElementById('ag-brush-sz').value; document.getElementById('ag-brush-val').textContent=agSize; }
+function agClearCanvas(){ const c=document.getElementById('ag-canvas'); if(!c) return; const ctx=c.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height); }
+function agSaveCanvas(){ const c=document.getElementById('ag-canvas'); if(!c) return; const a=document.createElement('a'); a.download='art.png'; a.href=c.toDataURL(); a.click(); }
+function agSetBg(color){ const c=document.getElementById('ag-canvas'); if(!c) return; const ctx=c.getContext('2d'); const img=ctx.getImageData(0,0,c.width,c.height); ctx.fillStyle=color; ctx.fillRect(0,0,c.width,c.height); ctx.putImageData(img,0,0); }
+
+// 픽셀 아트
+const AG_PX_SIZE=16; let agPxColor='#000000',agPxData=new Array(AG_PX_SIZE*AG_PX_SIZE).fill('#ffffff'),agPxPainting=false;
+const AG_PX_PALETTE=['#000000','#ffffff','#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899','#6b7280','#92400e','#f5f5dc','#fbbf24','#10b981'];
+function agInitPixel(){
+  const p=document.getElementById('ag-pixel-palette');
+  if(p&&p.children.length===0){
+    AG_PX_PALETTE.forEach((c,i)=>{
+      const sw=document.createElement('div');
+      sw.style.cssText=`width:24px;height:24px;border-radius:4px;cursor:pointer;background:${c};border:${i===0?'2px solid white':'2px solid transparent'}`;
+      if(c==='#ffffff') sw.style.border='2px solid #666';
+      sw.addEventListener('click',()=>{ document.querySelectorAll('#ag-pixel-palette div').forEach(s=>s.style.borderColor='transparent'); sw.style.borderColor='white'; agPxColor=c; });
+      p.appendChild(sw);
+    });
+  }
+  const grid=document.getElementById('ag-pixel-grid');
+  if(grid&&grid.children.length===0){
+    const cSz=Math.floor(Math.min(window.innerWidth-80,360)/AG_PX_SIZE);
+    grid.style.gridTemplateColumns=`repeat(${AG_PX_SIZE},${cSz}px)`;
+    for(let i=0;i<AG_PX_SIZE*AG_PX_SIZE;i++){
+      const cell=document.createElement('div');
+      cell.style.cssText=`width:${cSz}px;height:${cSz}px;background:#ffffff;cursor:pointer;border-radius:1px`;
+      cell.dataset.idx=i;
+      cell.addEventListener('mousedown',()=>{agPxPainting=true;agPaintCell(i,cell);});
+      cell.addEventListener('mouseenter',()=>{if(agPxPainting) agPaintCell(i,cell);});
+      cell.addEventListener('touchstart',e=>{e.preventDefault();agPxPainting=true;agPaintCell(i,cell);},{passive:false});
+      cell.addEventListener('touchmove',e=>{
+        e.preventDefault();
+        const t=e.touches[0];
+        const el=document.elementFromPoint(t.clientX,t.clientY);
+        if(el&&el.dataset.idx) agPaintCell(+el.dataset.idx,el);
+      },{passive:false});
+      grid.appendChild(cell);
+    }
+    document.addEventListener('mouseup',()=>agPxPainting=false);
+    document.addEventListener('touchend',()=>agPxPainting=false);
+  }
+}
+function agPaintCell(idx,cell){ agPxData[idx]=agPxColor; cell.style.background=agPxColor; }
+function agClearPixels(){ agPxData.fill('#ffffff'); document.querySelectorAll('#ag-pixel-grid div').forEach(c=>c.style.background='#ffffff'); }
+function agFillAll(){ agPxData.fill(agPxColor); document.querySelectorAll('#ag-pixel-grid div').forEach(c=>c.style.background=agPxColor); }
+function agLoadHeart(){
+  agClearPixels();
+  const cells=document.querySelectorAll('#ag-pixel-grid div');
+  const heart=[[3,4,11,12],[2,3,4,5,10,11,12,13],[1,2,3,4,5,6,7,8,9,10,11,12,13,14],[2,3,4,5,6,7,8,9,10,11,12,13],[3,4,5,6,7,8,9,10,11,12],[4,5,6,7,8,9,10,11],[5,6,7,8,9,10],[6,7,8,9],[7,8]];
+  heart.forEach((row,ri)=>row.forEach(ci=>{const idx=(ri+3)*16+ci;if(idx<256){agPxData[idx]='#ef4444';cells[idx].style.background='#ef4444';}}));
+}
+function agSavePixel(){
+  const c=document.createElement('canvas'); c.width=c.height=AG_PX_SIZE*10;
+  const ctx=c.getContext('2d');
+  agPxData.forEach((color,i)=>{ctx.fillStyle=color;ctx.fillRect((i%AG_PX_SIZE)*10,Math.floor(i/AG_PX_SIZE)*10,10,10);});
+  const a=document.createElement('a'); a.download='pixel-art.png'; a.href=c.toDataURL(); a.click();
 }
 
 </body>
