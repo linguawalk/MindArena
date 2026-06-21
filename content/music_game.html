@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindArena 음악 — 청각 게임 모음</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f14;--bg2:#1a1a22;--bg3:#24242f;
+  --t:#f0eee8;--t2:#a09e98;--t3:#6a6860;
+  --pu:#7c3aed;--pu-l:#4c1d95;
+  --accent:#c8a96e;--bd:rgba(255,255,255,0.08);
+}
+body{font-family:'Noto Sans KR',system-ui,sans-serif;
+     background:var(--bg);color:var(--t);min-height:100vh}
+
+/* 네비 */
+.nav{padding:0 1.5rem;height:48px;border-bottom:1px solid var(--bd);
+     display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:15px;font-weight:600;color:var(--pu)}
+.nav-back{font-size:13px;color:var(--t2);background:none;border:none;
+          cursor:pointer;color:var(--t2)}
+
+/* 탭 */
+.tabs{display:flex;gap:4px;padding:1rem 1.5rem .5rem;overflow-x:auto}
+.tab-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--bd);
+         background:transparent;color:var(--t2);font-size:13px;
+         cursor:pointer;transition:all .15s;white-space:nowrap;
+         font-family:inherit}
+.tab-btn.active{background:var(--pu);color:white;border-color:var(--pu)}
+
+/* 게임 컨테이너 */
+.game-wrap{padding:1rem 1.5rem;max-width:800px;margin:0 auto}
+.game-section{display:none}
+.game-section.active{display:block}
+.game-title{font-size:18px;font-weight:700;margin-bottom:.4rem}
+.game-desc{font-size:13px;color:var(--t2);margin-bottom:1.5rem;line-height:1.6}
+
+/* 피아노 건반 */
+.piano-wrap{position:relative;height:180px;margin-bottom:1.5rem;
+            background:var(--bg2);border-radius:12px;padding:1rem;
+            border:1px solid var(--bd)}
+.piano{display:flex;position:relative;height:140px;gap:2px}
+.key-white{flex:1;background:#f5f0e8;border-radius:0 0 6px 6px;
+           cursor:pointer;border:1px solid #ccc;position:relative;
+           transition:background .08s;min-width:36px;max-width:52px}
+.key-white:hover,.key-white.active{background:#e0d8c8}
+.key-white.highlight{background:#c8a96e}
+.key-white.correct{background:#4ade80}
+.key-white.wrong{background:#f87171}
+.black-keys{position:absolute;top:0;left:0;right:0;height:90px;
+            pointer-events:none;display:flex;gap:0}
+.key-black{width:28px;height:90px;background:#1a1a1a;border-radius:0 0 4px 4px;
+           cursor:pointer;pointer-events:all;position:absolute;
+           border:1px solid #000;transition:background .08s;z-index:2}
+.key-black:hover,.key-black.active{background:#333}
+.key-black.highlight{background:#a07840}
+.key-black.correct{background:#16a34a}
+.key-black.wrong{background:#dc2626}
+.key-label{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
+           font-size:9px;color:#888;pointer-events:none}
+
+/* 상태 표시 */
+.status-bar{display:flex;gap:12px;margin-bottom:1rem;flex-wrap:wrap}
+.status-item{padding:6px 14px;border-radius:20px;font-size:13px;
+             background:var(--bg2);border:1px solid var(--bd)}
+.score{color:var(--accent);font-weight:600}
+
+/* 문제 표시 */
+.question-box{background:var(--bg2);border-radius:12px;padding:1.25rem;
+              margin-bottom:1rem;border:1px solid var(--bd);
+              text-align:center;min-height:80px;
+              display:flex;align-items:center;justify-content:center;
+              flex-direction:column;gap:.5rem}
+.q-main{font-size:22px;font-weight:700;color:var(--accent)}
+.q-sub{font-size:13px;color:var(--t2)}
+
+/* 버튼 */
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:9px 20px;border-radius:9px;border:none;cursor:pointer;
+     font-family:inherit;font-size:14px;font-weight:500;transition:all .15s}
+.btn-primary{background:var(--pu);color:white}
+.btn-primary:hover{background:#6d28d9}
+.btn-secondary{background:var(--bg3);color:var(--t);border:1px solid var(--bd)}
+.btn-secondary:hover{border-color:var(--pu);color:var(--pu)}
+.btn-play{background:var(--accent);color:#1a1400;font-weight:700}
+.btn-play:hover{background:#e8d4a8}
+
+/* 리듬 게임 */
+.rhythm-grid{display:grid;grid-template-columns:repeat(8,1fr);
+             gap:6px;margin-bottom:1rem}
+.beat-cell{height:60px;border-radius:8px;background:var(--bg2);
+           border:1px solid var(--bd);cursor:pointer;
+           display:flex;align-items:center;justify-content:center;
+           font-size:20px;transition:all .15s}
+.beat-cell.active{background:var(--pu);border-color:var(--pu)}
+.beat-cell.playing{background:var(--accent);transform:scale(1.05)}
+.beat-cell.correct{background:#22c55e}
+.beat-cell.wrong{background:#ef4444}
+.beat-num{font-size:10px;color:var(--t3)}
+
+/* 음정 비교 */
+.interval-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1rem}
+.interval-card{padding:1rem;border-radius:10px;background:var(--bg2);
+               border:1px solid var(--bd);cursor:pointer;
+               text-align:center;transition:all .15s}
+.interval-card:hover{border-color:var(--pu)}
+.interval-card.selected{border-color:var(--pu);background:var(--pu-l)}
+.interval-card.correct{border-color:#22c55e;background:rgba(34,197,94,0.1)}
+.interval-card.wrong{border-color:#ef4444;background:rgba(239,68,68,0.1)}
+.ic-name{font-size:15px;font-weight:600;margin-bottom:.3rem}
+.ic-desc{font-size:12px;color:var(--t2)}
+
+/* 피드백 */
+.feedback{padding:1rem;border-radius:10px;margin-top:.75rem;
+          text-align:center;font-size:14px;font-weight:500}
+.feedback.correct{background:rgba(34,197,94,0.15);color:#4ade80;
+                  border:1px solid rgba(34,197,94,0.3)}
+.feedback.wrong{background:rgba(239,68,68,0.15);color:#f87171;
+                border:1px solid rgba(239,68,68,0.3)}
+.feedback.info{background:rgba(124,58,237,0.15);color:#a78bfa;
+               border:1px solid rgba(124,58,237,0.3)}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="nav-logo">🎵 MindArena 음악</span>
+  <button class="nav-back" onclick="history.back()">← 돌아가기</button>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showGame('pitch')">🎹 음이름 맞히기</button>
+  <button class="tab-btn" onclick="showGame('rhythm')">🥁 리듬 받아치기</button>
+  <button class="tab-btn" onclick="showGame('interval')">🎼 음정 구별하기</button>
+  <button class="tab-btn" onclick="showGame('chord')">🎸 코드 듣기</button>
+  <button class="tab-btn" onclick="showGame('mode')">🌙 장조 vs 단조</button>
+</div>
+
+<div class="game-wrap">
+
+  <!-- 게임 1: 음이름 맞히기 -->
+  <div class="game-section active" id="game-pitch">
+    <div class="game-title">🎹 음이름 듣고 맞히기</div>
+    <div class="game-desc">재생 버튼을 누르면 음이 들립니다. 피아노 건반에서 해당 음을 찾아 클릭하세요.</div>
+    
+    <div class="status-bar">
+      <div class="status-item">점수: <span class="score" id="pitch-score">0</span></div>
+      <div class="status-item">정답: <span id="pitch-correct">0</span>/<span id="pitch-total">0</span></div>
+      <div class="status-item" id="pitch-level">단계: 흰 건반</div>
+    </div>
+
+    <div class="question-box">
+      <div class="q-main" id="pitch-question">▶ 재생을 눌러 시작하세요</div>
+      <div class="q-sub" id="pitch-hint"></div>
+    </div>
+
+    <div class="btn-row" style="margin-bottom:1rem">
+      <button class="btn btn-play" onclick="playPitchQuestion()">▶ 음 재생</button>
+      <button class="btn btn-secondary" onclick="playPitchQuestion()">🔄 다시 듣기</button>
+      <button class="btn btn-secondary" onclick="nextPitchLevel()">다음 단계 →</button>
+    </div>
+
+    <div class="piano-wrap">
+      <div class="piano" id="piano-pitch"></div>
+    </div>
+
+    <div id="pitch-feedback" class="feedback" style="display:none"></div>
+  </div>
+
+  <!-- 게임 2: 리듬 받아치기 -->
+  <div class="game-section" id="game-rhythm">
+    <div class="game-title">🥁 리듬 받아치기</div>
+    <div class="game-desc">AI가 연주하는 리듬 패턴을 듣고, 같은 패턴을 격자에서 탭하거나 클릭하여 입력하세요.</div>
+
+    <div class="status-bar">
+      <div class="status-item">점수: <span class="score" id="rhythm-score">0</span></div>
+      <div class="status-item">레벨: <span id="rhythm-level">1</span></div>
+      <div class="status-item">정확도: <span id="rhythm-accuracy">-</span></div>
+    </div>
+
+    <div class="question-box">
+      <div class="q-main" id="rhythm-question">▶ 재생을 눌러 리듬을 들으세요</div>
+      <div class="q-sub">들은 후 아래 격자에서 같은 패턴을 클릭하세요</div>
+    </div>
+
+    <div class="btn-row" style="margin-bottom:1rem">
+      <button class="btn btn-play" onclick="playRhythm()">▶ 리듬 재생</button>
+      <button class="btn btn-secondary" onclick="playRhythm()">🔄 다시 듣기</button>
+      <button class="btn btn-primary" onclick="checkRhythm()">✓ 정답 확인</button>
+      <button class="btn btn-secondary" onclick="newRhythm()">새 리듬</button>
+    </div>
+
+    <div class="rhythm-grid" id="rhythm-grid"></div>
+    <div id="rhythm-feedback" class="feedback" style="display:none"></div>
+  </div>
+
+  <!-- 게임 3: 음정 구별하기 -->
+  <div class="game-section" id="game-interval">
+    <div class="game-title">🎼 음정 듣고 구별하기</div>
+    <div class="game-desc">두 음을 듣고 음정의 종류를 맞혀보세요. 협화음정과 불협화음정의 차이를 귀로 느껴보세요.</div>
+
+    <div class="status-bar">
+      <div class="status-item">점수: <span class="score" id="interval-score">0</span></div>
+      <div class="status-item">연속: <span id="interval-streak">0</span>회</div>
+    </div>
+
+    <div class="question-box">
+      <div class="q-main" id="interval-question">▶ 재생을 눌러 두 음을 들으세요</div>
+      <div class="q-sub" id="interval-hint">두 음의 간격이 몇 도인지 맞혀보세요</div>
+    </div>
+
+    <div class="btn-row" style="margin-bottom:1rem">
+      <button class="btn btn-play" onclick="playInterval('melodic')">▶ 순서대로</button>
+      <button class="btn btn-play" onclick="playInterval('harmonic')">▶ 동시에</button>
+      <button class="btn btn-secondary" onclick="newInterval()">새 문제</button>
+    </div>
+
+    <div class="interval-cards" id="interval-cards"></div>
+    <div id="interval-feedback" class="feedback" style="display:none"></div>
+
+    <div class="piano-wrap" style="margin-top:1rem">
+      <div class="piano" id="piano-interval"></div>
+    </div>
+  </div>
+
+  <!-- 게임 4: 코드 듣기 -->
+  <div class="game-section" id="game-chord">
+    <div class="game-title">🎸 코드 유형 듣고 맞히기</div>
+    <div class="game-desc">재생되는 화음의 종류를 맞혀보세요. 장·단·감·증 화음의 색채 차이를 귀로 느껴보세요.</div>
+
+    <div class="status-bar">
+      <div class="status-item">점수: <span class="score" id="chord-score">0</span></div>
+      <div class="status-item">연속: <span id="chord-streak">0</span>회</div>
+    </div>
+
+    <div class="question-box">
+      <div class="q-main" id="chord-question">▶ 재생을 눌러 화음을 들으세요</div>
+      <div class="q-sub" id="chord-hint">이 화음의 종류는 무엇인가요?</div>
+    </div>
+
+    <div class="btn-row" style="margin-bottom:1rem">
+      <button class="btn btn-play" onclick="playChordQuestion()">▶ 화음 재생</button>
+      <button class="btn btn-secondary" onclick="playChordQuestion()">🔄 다시 듣기</button>
+      <button class="btn btn-secondary" onclick="newChord()">새 문제</button>
+    </div>
+
+    <!-- 4가지 코드 유형 선택 -->
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1rem">
+      <button class="btn btn-secondary" style="height:70px;font-size:15px" onclick="selectChordType('major')">
+        😊 장화음 (Major)<br><span style="font-size:11px;color:var(--t2)">밝고 안정적</span>
+      </button>
+      <button class="btn btn-secondary" style="height:70px;font-size:15px" onclick="selectChordType('minor')">
+        😢 단화음 (minor)<br><span style="font-size:11px;color:var(--t2)">어둡고 슬픈</span>
+      </button>
+      <button class="btn btn-secondary" style="height:70px;font-size:15px" onclick="selectChordType('diminished')">
+        😰 감화음 (dim)<br><span style="font-size:11px;color:var(--t2)">긴장·불안</span>
+      </button>
+      <button class="btn btn-secondary" style="height:70px;font-size:15px" onclick="selectChordType('augmented')">
+        🌀 증화음 (aug)<br><span style="font-size:11px;color:var(--t2)">몽환·불안정</span>
+      </button>
+    </div>
+    <div id="chord-feedback" class="feedback" style="display:none"></div>
+
+    <!-- 비교 청취 버튼 -->
+    <div style="margin-top:1rem">
+      <div style="font-size:12px;color:var(--t2);margin-bottom:.5rem">직접 비교해보기 (C 기준)</div>
+      <div class="btn-row">
+        <button class="btn btn-secondary" style="font-size:12px" onclick="playChordDirect([0,4,7],'C Major')">C Major</button>
+        <button class="btn btn-secondary" style="font-size:12px" onclick="playChordDirect([0,3,7],'C minor')">C minor</button>
+        <button class="btn btn-secondary" style="font-size:12px" onclick="playChordDirect([0,3,6],'C dim')">C dim</button>
+        <button class="btn btn-secondary" style="font-size:12px" onclick="playChordDirect([0,4,8],'C aug')">C aug</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 게임 5: 장조 vs 단조 -->
+  <div class="game-section" id="game-mode">
+    <div class="game-title">🌙 장조 vs 단조 듣기</div>
+    <div class="game-desc">같은 멜로디를 장조와 단조로 들어보고 차이를 느껴보세요. 어느 쪽인지 맞혀보세요.</div>
+
+    <div class="status-bar">
+      <div class="status-item">점수: <span class="score" id="mode-score">0</span></div>
+      <div class="status-item">연속: <span id="mode-streak">0</span>회</div>
+    </div>
+
+    <div class="question-box">
+      <div class="q-main" id="mode-question">▶ 아래 버튼으로 멜로디를 들으세요</div>
+      <div class="q-sub">장조와 단조 버전을 모두 들어보세요</div>
+    </div>
+
+    <div class="btn-row" style="margin-bottom:1rem">
+      <button class="btn btn-play" onclick="playModeQuestion()">▶ 문제 재생</button>
+      <button class="btn btn-secondary" onclick="newMode()">새 문제</button>
+    </div>
+
+    <!-- 비교 청취 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+      <button class="btn btn-secondary" style="height:60px" onclick="playScale('major')">
+        ☀️ 장조로 듣기<br><span style="font-size:11px;color:var(--t2)">밝고 활기참</span>
+      </button>
+      <button class="btn btn-secondary" style="height:60px" onclick="playScale('minor')">
+        🌙 단조로 듣기<br><span style="font-size:11px;color:var(--t2)">어둡고 슬픔</span>
+      </button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+      <button class="btn btn-primary" onclick="answerMode('major')">☀️ 장조입니다</button>
+      <button class="btn btn-primary" onclick="answerMode('minor')">🌙 단조입니다</button>
+    </div>
+    <div id="mode-feedback" class="feedback" style="display:none"></div>
+  </div>
+
+</div>
+
+<script>
+// ══ Web Audio API 초기화 ══
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+// 음 주파수 계산 (A4 = 440Hz, MIDI 69)
+function midiToFreq(midi) {
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
+// 단음 재생
+function playNote(midi, duration=0.8, volume=0.5, time=null) {
+  const ctx = getAudioCtx();
+  const t = time || ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.frequency.value = midiToFreq(midi);
+  osc.type = 'triangle';
+  gain.gain.setValueAtTime(0, t);
+  gain.gain.linearRampToValueAtTime(volume, t + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+  osc.start(t);
+  osc.stop(t + duration + 0.1);
+}
+
+// 화음 재생
+function playChord(midis, duration=1.5) {
+  midis.forEach(m => playNote(m, duration, 0.35));
+}
+
+// 음계 재생 (순서대로)
+function playMelody(midis, tempo=0.4) {
+  const ctx = getAudioCtx();
+  midis.forEach((m, i) => playNote(m, tempo * 0.9, 0.4, ctx.currentTime + i * tempo));
+}
+
+// ══ 건반 생성 ══
+const WHITE_NOTES = ['C','D','E','F','G','A','B'];
+const NOTE_NAMES_KR = {
+  'C':'도', 'C#':'도#', 'D':'레', 'D#':'레#',
+  'E':'미', 'F':'파', 'F#':'파#', 'G':'솔',
+  'G#':'솔#', 'A':'라', 'A#':'라#', 'B':'시'
+};
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+function buildPiano(containerId, startOctave=4, octaves=2, onClickFn=null) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+
+  const whiteKeys = [];
+  const blackKeys = [];
+
+  for (let oct = startOctave; oct < startOctave + octaves; oct++) {
+    WHITE_NOTES.forEach((note, ni) => {
+      const midi = (oct + 1) * 12 + [0,2,4,5,7,9,11][ni];
+      const key = document.createElement('div');
+      key.className = 'key-white';
+      key.dataset.midi = midi;
+      key.dataset.note = note + oct;
+      const label = document.createElement('span');
+      label.className = 'key-label';
+      label.textContent = note + oct;
+      key.appendChild(label);
+      key.addEventListener('click', () => {
+        key.classList.add('active');
+        setTimeout(() => key.classList.remove('active'), 200);
+        playNote(midi);
+        if (onClickFn) onClickFn(midi, note + oct, key);
+      });
+      whiteKeys.push(key);
+      container.appendChild(key);
+    });
+  }
+
+  // 검은 건반 배치
+  const blackKeyPositions = [0,1, 3,4,5]; // C#,D#, F#,G#,A#
+  container.style.position = 'relative';
+  const blackWrap = document.createElement('div');
+  blackWrap.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:90px;pointer-events:none';
+
+  for (let oct = startOctave; oct < startOctave + octaves; oct++) {
+    const octOffset = (oct - startOctave) * 7;
+    [[1,'C#'],[3,'D#'],[6,'F#'],[8,'G#'],[10,'A#']].forEach(([semitone, noteName]) => {
+      const midi = (oct + 1) * 12 + semitone;
+      const noteInOct = {1:0,3:1,6:3,8:4,10:5}[semitone];
+      const whiteIndex = octOffset + noteInOct;
+      const whiteEl = whiteKeys[whiteIndex];
+      if (!whiteEl) return;
+      const key = document.createElement('div');
+      key.className = 'key-black';
+      key.dataset.midi = midi;
+      key.dataset.note = noteName + oct;
+      key.style.pointerEvents = 'all';
+      const wRect = whiteEl.offsetLeft;
+      const wWidth = whiteEl.offsetWidth || 44;
+      key.style.left = (wRect + wWidth * 0.6) + 'px';
+      key.addEventListener('click', e => {
+        e.stopPropagation();
+        key.classList.add('active');
+        setTimeout(() => key.classList.remove('active'), 200);
+        playNote(midi);
+        if (onClickFn) onClickFn(midi, noteName + oct, key);
+      });
+      blackWrap.appendChild(key);
+    });
+  }
+  container.appendChild(blackWrap);
+  setTimeout(() => {
+    const whites = container.querySelectorAll('.key-white');
+    container.querySelectorAll('.key-black').forEach(bk => {
+      const midi = parseInt(bk.dataset.midi);
+      const oct = Math.floor(midi/12)-1;
+      const semitone = midi % 12;
+      const noteInOct = {1:0,3:1,6:3,8:4,10:5}[semitone];
+      const octOffset = (oct - startOctave)*7;
+      const wEl = whites[octOffset + noteInOct];
+      if (wEl) {
+        bk.style.left = (wEl.offsetLeft + wEl.offsetWidth*0.6) + 'px';
+      }
+    });
+  }, 100);
+}
+
+// ══ 게임 1: 음이름 맞히기 ══
+let pitchState = {
+  currentMidi: null, score: 0, correct: 0, total: 0,
+  level: 0, // 0=흰건반, 1=검은건반포함, 2=랜덤
+  waitingAnswer: false
+};
+const WHITE_MIDIS = [60,62,64,65,67,69,71,72,74,76]; // C4~E5 흰건반
+const ALL_MIDIS = [60,61,62,63,64,65,66,67,68,69,70,71,72]; // C4~C5 전체
+
+function initPitchGame() {
+  buildPiano('piano-pitch', 4, 2, onPitchKeyClick);
+  newPitchQuestion();
+}
+
+function newPitchQuestion() {
+  const pool = pitchState.level === 0 ? WHITE_MIDIS : ALL_MIDIS;
+  pitchState.currentMidi = pool[Math.floor(Math.random() * pool.length)];
+  pitchState.waitingAnswer = false;
+  document.getElementById('pitch-question').textContent = '▶ 재생 버튼을 누르세요';
+  document.getElementById('pitch-hint').textContent = '';
+  document.getElementById('pitch-feedback').style.display = 'none';
+  // 모든 키 하이라이트 제거
+  document.querySelectorAll('#piano-pitch .key-white, #piano-pitch .key-black').forEach(k => {
+    k.classList.remove('highlight','correct','wrong');
+  });
+}
+
+function playPitchQuestion() {
+  if (!pitchState.currentMidi) return;
+  playNote(pitchState.currentMidi, 1.0);
+  document.getElementById('pitch-question').textContent = '🎵 이 음의 이름은?';
+  document.getElementById('pitch-hint').textContent = '피아노 건반에서 해당 음을 찾아 클릭하세요';
+  pitchState.waitingAnswer = true;
+  pitchState.total++;
+  document.getElementById('pitch-total').textContent = pitchState.total;
+}
+
+function onPitchKeyClick(midi, noteName, keyEl) {
+  if (!pitchState.waitingAnswer) return;
+  pitchState.waitingAnswer = false;
+  const fb = document.getElementById('pitch-feedback');
+  fb.style.display = 'block';
+
+  if (midi === pitchState.currentMidi) {
+    pitchState.correct++;
+    pitchState.score += 10;
+    keyEl.classList.add('correct');
+    fb.className = 'feedback correct';
+    fb.textContent = `✅ 정답! ${noteName} (${NOTE_NAMES_KR[noteName.replace(/\d/,'')] || noteName}) +10점`;
+    document.getElementById('pitch-score').textContent = pitchState.score;
+    document.getElementById('pitch-correct').textContent = pitchState.correct;
+    setTimeout(() => {
+      newPitchQuestion();
+      playPitchQuestion();
+    }, 1200);
+  } else {
+    keyEl.classList.add('wrong');
+    // 정답 건반 표시
+    document.querySelectorAll('#piano-pitch .key-white, #piano-pitch .key-black').forEach(k => {
+      if (parseInt(k.dataset.midi) === pitchState.currentMidi) k.classList.add('highlight');
+    });
+    const correctNote = NOTE_NAMES[pitchState.currentMidi % 12];
+    fb.className = 'feedback wrong';
+    fb.textContent = `❌ 틀렸습니다. 정답은 ${correctNote}(${NOTE_NAMES_KR[correctNote]}) 입니다. 노란 건반을 확인하세요.`;
+    playNote(pitchState.currentMidi, 1.0);
+    setTimeout(() => newPitchQuestion(), 2000);
+  }
+}
+
+function nextPitchLevel() {
+  pitchState.level = Math.min(pitchState.level + 1, 1);
+  const levels = ['흰 건반만', '반음 포함'];
+  document.getElementById('pitch-level').textContent = '단계: ' + levels[pitchState.level];
+  newPitchQuestion();
+}
+
+// ══ 게임 2: 리듬 받아치기 ══
+let rhythmState = {
+  pattern: [], userPattern: [], score: 0, level: 1
+};
+const BEAT_COUNT = 8;
+
+function initRhythm() {
+  buildGrid();
+  newRhythm();
+}
+
+function buildGrid() {
+  const grid = document.getElementById('rhythm-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < BEAT_COUNT; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'beat-cell';
+    cell.innerHTML = `<span class="beat-num">${i+1}</span>`;
+    cell.addEventListener('click', () => toggleBeat(i, cell));
+    grid.appendChild(cell);
+  }
+}
+
+function newRhythm() {
+  rhythmState.userPattern = new Array(BEAT_COUNT).fill(0);
+  const difficulty = Math.min(rhythmState.level + 2, 6);
+  rhythmState.pattern = new Array(BEAT_COUNT).fill(0);
+  let beats = 0;
+  while (beats < difficulty) {
+    const pos = Math.floor(Math.random() * BEAT_COUNT);
+    if (!rhythmState.pattern[pos]) {
+      rhythmState.pattern[pos] = 1;
+      beats++;
+    }
+  }
+  document.getElementById('rhythm-question').textContent = '▶ 재생을 눌러 리듬을 들으세요';
+  document.getElementById('rhythm-feedback').style.display = 'none';
+  document.querySelectorAll('#rhythm-grid .beat-cell').forEach((c,i) => {
+    c.classList.remove('active','correct','wrong','playing');
+    c.querySelector('.beat-num').textContent = i + 1;
+  });
+}
+
+function toggleBeat(idx, cell) {
+  rhythmState.userPattern[idx] = rhythmState.userPattern[idx] ? 0 : 1;
+  cell.classList.toggle('active', rhythmState.userPattern[idx] === 1);
+}
+
+function playRhythm() {
+  const ctx = getAudioCtx();
+  const cells = document.querySelectorAll('#rhythm-grid .beat-cell');
+  const tempo = 0.25;
+  rhythmState.pattern.forEach((beat, i) => {
+    setTimeout(() => {
+      cells[i].classList.add('playing');
+      setTimeout(() => cells[i].classList.remove('playing'), 180);
+      if (beat) playNote(60, 0.18, 0.6);
+      else playNote(48, 0.05, 0.1); // 약한 클릭음
+    }, i * tempo * 1000);
+  });
+  document.getElementById('rhythm-question').textContent = '🎵 들었으면 같은 리듬을 입력하세요';
+}
+
+function checkRhythm() {
+  const cells = document.querySelectorAll('#rhythm-grid .beat-cell');
+  let correct = 0;
+  rhythmState.pattern.forEach((beat, i) => {
+    const userBeat = rhythmState.userPattern[i];
+    if (beat === userBeat) {
+      correct++;
+      cells[i].classList.add(beat ? 'correct' : '');
+    } else {
+      cells[i].classList.add('wrong');
+    }
+  });
+  const accuracy = Math.round(correct / BEAT_COUNT * 100);
+  const fb = document.getElementById('rhythm-feedback');
+  fb.style.display = 'block';
+  document.getElementById('rhythm-accuracy').textContent = accuracy + '%';
+  if (accuracy >= 80) {
+    rhythmState.score += Math.round(accuracy / 10);
+    rhythmState.level = Math.min(rhythmState.level + 1, 5);
+    fb.className = 'feedback correct';
+    fb.textContent = `✅ 정확도 ${accuracy}%! +${Math.round(accuracy/10)}점. 레벨 ${rhythmState.level}로 상승!`;
+    document.getElementById('rhythm-score').textContent = rhythmState.score;
+    document.getElementById('rhythm-level').textContent = rhythmState.level;
+    setTimeout(newRhythm, 1500);
+  } else {
+    fb.className = 'feedback wrong';
+    fb.textContent = `❌ 정확도 ${accuracy}%. 다시 들어보세요!`;
+  }
+}
+
+// ══ 게임 3: 음정 구별하기 ══
+let intervalState = { midi1:0, midi2:0, score:0, streak:0, answer:null };
+const INTERVALS = [
+  { name:'단2도', semitones:1, desc:'매우 좁고 날카로운 긴장감', consonant:false },
+  { name:'장2도', semitones:2, desc:'활발하고 경쾌한 느낌', consonant:false },
+  { name:'단3도', semitones:3, desc:'슬프고 어두운 느낌', consonant:true },
+  { name:'장3도', semitones:4, desc:'밝고 따뜻한 느낌', consonant:true },
+  { name:'완전4도', semitones:5, desc:'안정적이고 균형 잡힌', consonant:true },
+  { name:'완전5도', semitones:7, desc:'가장 안정적이고 비어있는', consonant:true },
+  { name:'단6도', semitones:8, desc:'달콤하고 약간 슬픈', consonant:true },
+  { name:'장6도', semitones:9, desc:'밝고 개방적인', consonant:true },
+  { name:'단7도', semitones:10, desc:'재즈·블루스 느낌의 긴장', consonant:false },
+  { name:'장7도', semitones:11, desc:'강한 긴장·해결 욕구', consonant:false },
+  { name:'완전8도', semitones:12, desc:'완벽한 협화·동일음 반복', consonant:true },
+];
+
+function initInterval() {
+  buildPiano('piano-interval', 4, 2, null);
+  newInterval();
+}
+
+function newInterval() {
+  const pool = INTERVALS.slice(0, 6 + intervalState.score); // 난이도 점진 증가
+  const chosen = pool[Math.floor(Math.random() * Math.min(pool.length, INTERVALS.length))];
+  intervalState.midi1 = 60 + Math.floor(Math.random() * 7);
+  intervalState.midi2 = intervalState.midi1 + chosen.semitones;
+  intervalState.answer = chosen;
+  document.getElementById('interval-question').textContent = '▶ 재생을 눌러 두 음을 들으세요';
+  document.getElementById('interval-hint').textContent = '두 음의 간격이 몇 도인지 맞혀보세요';
+  document.getElementById('interval-feedback').style.display = 'none';
+
+  // 선택 카드 생성
+  const pool4 = shuffleArr([chosen, ...INTERVALS.filter(i=>i!==chosen).sort(()=>Math.random()-.5).slice(0,3)]);
+  const cards = document.getElementById('interval-cards');
+  cards.innerHTML = '';
+  pool4.forEach(interval => {
+    const card = document.createElement('div');
+    card.className = 'interval-card';
+    card.innerHTML = `<div class="ic-name">${interval.name}</div>
+      <div class="ic-desc">${interval.desc}</div>
+      <div style="font-size:11px;margin-top:.3rem;color:${interval.consonant?'#4ade80':'#f87171'}">
+        ${interval.consonant ? '협화음정' : '불협화음정'}
+      </div>`;
+    card.addEventListener('click', () => checkInterval(interval, card));
+    cards.appendChild(card);
+  });
+
+  // 피아노 하이라이트
+  document.querySelectorAll('#piano-interval .key-white, #piano-interval .key-black').forEach(k => {
+    k.classList.remove('highlight','correct','wrong');
+  });
+  document.querySelectorAll('#piano-interval .key-white, #piano-interval .key-black').forEach(k => {
+    const m = parseInt(k.dataset.midi);
+    if (m === intervalState.midi1 || m === intervalState.midi2) k.classList.add('highlight');
+  });
+}
+
+function playInterval(type) {
+  if (type === 'melodic') {
+    const ctx = getAudioCtx();
+    playNote(intervalState.midi1, 0.7);
+    setTimeout(() => playNote(intervalState.midi2, 0.7), 800);
+  } else {
+    playChord([intervalState.midi1, intervalState.midi2], 1.5);
+  }
+}
+
+function checkInterval(chosen, card) {
+  const fb = document.getElementById('interval-feedback');
+  fb.style.display = 'block';
+  document.querySelectorAll('#interval-cards .interval-card').forEach(c => c.style.pointerEvents='none');
+
+  if (chosen.name === intervalState.answer.name) {
+    intervalState.score += 10;
+    intervalState.streak++;
+    card.classList.add('correct');
+    fb.className = 'feedback correct';
+    fb.textContent = `✅ 정답! ${chosen.name} (${chosen.semitones}반음) — ${chosen.desc} +10점`;
+    document.getElementById('interval-score').textContent = intervalState.score;
+    document.getElementById('interval-streak').textContent = intervalState.streak;
+    setTimeout(newInterval, 1500);
+  } else {
+    intervalState.streak = 0;
+    card.classList.add('wrong');
+    document.querySelectorAll('#interval-cards .interval-card').forEach(c => {
+      if (c !== card) {
+        const t = c.querySelector('.ic-name').textContent;
+        if (t === intervalState.answer.name) c.classList.add('correct');
+      }
+    });
+    fb.className = 'feedback wrong';
+    fb.textContent = `❌ 정답은 ${intervalState.answer.name}입니다. 다시 들어보세요!`;
+    playInterval('melodic');
+    document.getElementById('interval-streak').textContent = 0;
+    setTimeout(newInterval, 2500);
+  }
+}
+
+// ══ 게임 4: 코드 듣기 ══
+let chordState = { type:null, score:0, streak:0, root:60 };
+const CHORD_TYPES = {
+  major:     { name:'장화음', intervals:[0,4,7],  emoji:'😊', desc:'밝고 안정적' },
+  minor:     { name:'단화음', intervals:[0,3,7],  emoji:'😢', desc:'어둡고 슬픈' },
+  diminished:{ name:'감화음', intervals:[0,3,6],  emoji:'😰', desc:'긴장·불안' },
+  augmented: { name:'증화음', intervals:[0,4,8],  emoji:'🌀', desc:'몽환·불안정' },
+};
+
+function newChord() {
+  const types = Object.keys(CHORD_TYPES);
+  chordState.type = types[Math.floor(Math.random() * types.length)];
+  chordState.root = 60 + Math.floor(Math.random() * 5);
+  document.getElementById('chord-question').textContent = '▶ 재생을 눌러 화음을 들으세요';
+  document.getElementById('chord-hint').textContent = '이 화음의 종류는 무엇인가요?';
+  document.getElementById('chord-feedback').style.display = 'none';
+  document.querySelectorAll('[onclick^="selectChordType"]').forEach(b => {
+    b.style.borderColor = '';
+    b.style.background = '';
+  });
+}
+
+function playChordQuestion() {
+  if (!chordState.type) return;
+  const intervals = CHORD_TYPES[chordState.type].intervals;
+  playChord(intervals.map(i => chordState.root + i));
+}
+
+function playChordDirect(intervals, name) {
+  playChord(intervals.map(i => 60 + i));
+  showFeedback('chord', 'info', `🎵 ${name} 재생 중`);
+}
+
+function selectChordType(type) {
+  const fb = document.getElementById('chord-feedback');
+  fb.style.display = 'block';
+  if (type === chordState.type) {
+    chordState.score += 10;
+    chordState.streak++;
+    fb.className = 'feedback correct';
+    fb.textContent = `✅ 정답! ${CHORD_TYPES[type].emoji} ${CHORD_TYPES[type].name} — ${CHORD_TYPES[type].desc} +10점`;
+    document.getElementById('chord-score').textContent = chordState.score;
+    document.getElementById('chord-streak').textContent = chordState.streak;
+    setTimeout(newChord, 1500);
+  } else {
+    chordState.streak = 0;
+    fb.className = 'feedback wrong';
+    const correct = CHORD_TYPES[chordState.type];
+    fb.textContent = `❌ 정답은 ${correct.emoji} ${correct.name}입니다. ${correct.desc}`;
+    playChordQuestion();
+    document.getElementById('chord-streak').textContent = 0;
+    setTimeout(newChord, 2500);
+  }
+}
+
+// ══ 게임 5: 장조 vs 단조 ══
+let modeState = { current:null, score:0, streak:0 };
+const MELODIES = [
+  { name:'Happy Birthday', notes:[60,60,62,60,65,64, 60,60,62,60,67,65] },
+  { name:'작은 별', notes:[60,60,67,67,69,69,67, 65,65,64,64,62,62,60] },
+  { name:'학교 종', notes:[67,67,69,67,65,67,67,67,69,67,65,67] },
+];
+
+function newMode() {
+  modeState.current = Math.random() > 0.5 ? 'major' : 'minor';
+  document.getElementById('mode-question').textContent = '▶ 아래 버튼으로 멜로디를 들으세요';
+  document.getElementById('mode-feedback').style.display = 'none';
+}
+
+function playScale(type) {
+  const major = [60,62,64,65,67,69,71,72];
+  const minor = [60,62,63,65,67,68,70,72];
+  playMelody(type === 'major' ? major : minor, 0.28);
+}
+
+function playModeQuestion() {
+  if (!modeState.current) { newMode(); return; }
+  const mel = MELODIES[Math.floor(Math.random() * MELODIES.length)];
+  let notes = mel.notes.slice();
+  if (modeState.current === 'minor') {
+    // 단조로 변환: 3도·6도·7도를 반음 낮춤
+    notes = notes.map(n => {
+      const rel = n - 60;
+      if ([4,9,11].includes(((rel%12)+12)%12)) return n - 1;
+      return n;
+    });
+  }
+  playMelody(notes, 0.32);
+  document.getElementById('mode-question').textContent = `🎵 ${mel.name} — 장조인가요? 단조인가요?`;
+}
+
+function answerMode(type) {
+  const fb = document.getElementById('mode-feedback');
+  fb.style.display = 'block';
+  if (type === modeState.current) {
+    modeState.score += 10;
+    modeState.streak++;
+    fb.className = 'feedback correct';
+    fb.textContent = type === 'major'
+      ? '✅ 정답! 장조 — 밝고 활기찬 느낌이 특징입니다. +10점'
+      : '✅ 정답! 단조 — 어둡고 슬픈 느낌이 특징입니다. +10점';
+    document.getElementById('mode-score').textContent = modeState.score;
+    document.getElementById('mode-streak').textContent = modeState.streak;
+    setTimeout(newMode, 1500);
+  } else {
+    modeState.streak = 0;
+    fb.className = 'feedback wrong';
+    fb.textContent = `❌ 틀렸습니다. 이 멜로디는 ${modeState.current === 'major' ? '☀️ 장조' : '🌙 단조'}였습니다.`;
+    playModeQuestion();
+    document.getElementById('mode-streak').textContent = 0;
+    setTimeout(newMode, 2000);
+  }
+}
+
+// ══ 유틸 ══
+function shuffleArr(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+function showFeedback(game, type, text) {
+  const fb = document.getElementById(game + '-feedback');
+  if (fb) {
+    fb.style.display = 'block';
+    fb.className = 'feedback ' + type;
+    fb.textContent = text;
+  }
+}
+
+function showGame(id) {
+  document.querySelectorAll('.game-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('game-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ══ 초기화 ══
+window.addEventListener('DOMContentLoaded', () => {
+  initPitchGame();
+  initRhythm();
+  initInterval();
+  newChord();
+  newMode();
+});
+</script>
+</body>
+</html>
