@@ -907,6 +907,14 @@
           <span class="ai-tag">AI 작동 중</span>
           <div class="ct"><span class="badge b-et">윤리</span><span class="cd">⭐⭐⭐⭐</span></div><h3>트롤리 문제 변형</h3><p>AI 철학자와 1:1 윤리 토론. 정답은 없습니다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">35-50분</span></div>
         </a>
+        <a class="card" href="#" onclick="openSocratesGame();return false">
+          <span class="ai-tag">AI 작동 중</span>
+          <div class="ct"><span class="badge b-et">철학</span><span class="cd">⭐⭐⭐⭐</span></div><h3>소크라테스 문답</h3><p>AI 소크라테스가 끝없이 "왜?"를 질문합니다. 사고의 한계까지 탐구하세요.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">20-30분</span></div>
+        </a>
+        <a class="card" href="#" onclick="openHistoryGame();return false">
+          <span class="ai-tag">AI 작동 중</span>
+          <div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐⭐⭐⭐</span></div><h3>역사의 분기점</h3><p>AI가 역사 인물로 등장합니다. 당신의 선택이 역사를 바꿉니다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">30-45분</span></div>
+        </a>
         <a class="card" href="#" onclick="openDrawer('bg_hi1');return false">
           <span class="ai-tag">AI 전환 예정</span>
           <div class="ct"><span class="badge b-hi">역사</span><span class="cd">⭐⭐</span></div><h3>타임라인 배틀</h3><p>역사의 흐름을 AI와 함께 탐구한다.</p><div class="cf"><span class="mt">1인+AI</span><span class="mt">20-30분</span></div>
@@ -1010,6 +1018,191 @@
 </div>
 
 
+
+
+<!-- ══ 소크라테스 문답 오버레이 ══ -->
+<div class="game-overlay" id="socrates-overlay" style="flex-direction:column">
+  <!-- 선택 화면 -->
+  <div id="s-stage-select" style="width:100%;max-width:600px;margin:auto;padding:2rem">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-size:32px;margin-bottom:.5rem">🏛️</div>
+      <h2 style="font-size:22px;font-weight:700;color:#f0eee8">소크라테스 문답</h2>
+      <p style="font-size:14px;color:#a09e98;margin-top:.4rem">AI 소크라테스가 끝없이 "왜?"를 질문합니다</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem">
+      <div class="s-topic-item g-sc-item active" onclick="sSelectTopic(0,this)" style="padding:1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;background:rgba(124,58,237,0.1)">
+        <div style="font-weight:600;margin-bottom:.25rem">지식이란 무엇인가?</div>
+        <div style="font-size:12px;color:#a09e98">우리는 무언가를 "안다"고 할 때 어떤 의미인가요?</div>
+      </div>
+      <div class="s-topic-item g-sc-item" onclick="sSelectTopic(1,this)" style="padding:1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.1);cursor:pointer">
+        <div style="font-weight:600;margin-bottom:.25rem">자유의지는 존재하는가?</div>
+        <div style="font-size:12px;color:#a09e98">우리의 선택은 진정 자유로운가요?</div>
+      </div>
+      <div class="s-topic-item g-sc-item" onclick="sSelectTopic(2,this)" style="padding:1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.1);cursor:pointer">
+        <div style="font-weight:600;margin-bottom:.25rem">행복이란 무엇인가?</div>
+        <div style="font-size:12px;color:#a09e98">진정한 행복은 어디서 오는 걸까요?</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="closeSocrates()" style="flex:1;padding:.8rem;border-radius:9px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit">← 돌아가기</button>
+      <button onclick="sStartGame()" style="flex:2;padding:.8rem;border-radius:9px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;font-weight:600;font-size:15px">대화 시작 →</button>
+    </div>
+  </div>
+
+  <!-- 게임 화면 -->
+  <div id="s-stage-game" style="display:none;width:100%;max-width:680px;margin:auto;
+       padding:1.5rem;height:100%;display:none;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <button onclick="closeSocrates()" style="background:transparent;border:none;color:#6a6860;cursor:pointer;font-size:13px">← 나가기</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:12px;color:#a09e98">라운드 <span id="s-round-display">1</span>/5</span>
+        <div id="s-dots" style="display:flex;gap:4px"></div>
+      </div>
+    </div>
+    <div style="margin-bottom:1rem;padding:.75rem 1rem;background:rgba(124,58,237,0.1);border-radius:10px">
+      <div id="s-topic-title" style="font-weight:600;color:#a78bfa"></div>
+      <div id="s-topic-desc" style="font-size:12px;color:#7c6fa0;margin-top:.2rem"></div>
+    </div>
+    <div id="s-chat" style="flex:1;overflow-y:auto;margin-bottom:1rem;min-height:200px;max-height:45vh"></div>
+    <div id="s-input-area">
+      <textarea id="s-user-input" placeholder="소크라테스의 질문에 답해보세요..."
+        style="width:100%;padding:.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);
+               background:#1a1a22;color:#f0eee8;font-family:inherit;font-size:14px;
+               resize:none;height:90px;outline:none;margin-bottom:.6rem"></textarea>
+      <button id="s-send-btn" onclick="sSendAnswer()"
+        style="width:100%;padding:.8rem;border-radius:9px;border:none;background:#7c3aed;
+               color:white;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px">
+        답변 전송 →
+      </button>
+    </div>
+    <div id="s-end-area" style="display:none;text-align:center;padding:1rem">
+      <div style="font-size:24px;margin-bottom:.5rem">🏛️</div>
+      <div style="font-weight:600;margin-bottom:.5rem">대화가 끝났습니다</div>
+      <button onclick="closeSocrates()" style="padding:.7rem 2rem;border-radius:9px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit">돌아가기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 역사의 분기점 오버레이 ══ -->
+<div class="game-overlay" id="history-overlay" style="flex-direction:column">
+  <div id="h-stage-select" style="width:100%;max-width:600px;margin:auto;padding:2rem">
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div style="font-size:32px;margin-bottom:.5rem">📜</div>
+      <h2 style="font-size:22px;font-weight:700;color:#f0eee8">역사의 분기점</h2>
+      <p style="font-size:14px;color:#a09e98;margin-top:.4rem">AI가 역사 인물로 등장합니다. 당신의 선택이 역사를 바꿉니다.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem">
+      <div class="h-sc-item g-sc-item active" onclick="hSelectScenario(0,this)" style="padding:1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;background:rgba(146,64,14,0.15)">
+        <div style="font-size:11px;color:#fbbf24;margin-bottom:.2rem">1592년 · 조선의 신하</div>
+        <div style="font-weight:600;margin-bottom:.2rem">임진왜란의 선택</div>
+        <div style="font-size:12px;color:#a09e98">일본군이 상륙했습니다. 어떻게 대응하시겠습니까?</div>
+      </div>
+      <div class="h-sc-item g-sc-item" onclick="hSelectScenario(1,this)" style="padding:1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.1);cursor:pointer">
+        <div style="font-size:11px;color:#fbbf24;margin-bottom:.2rem">1919년 · 독립운동가</div>
+        <div style="font-weight:600;margin-bottom:.2rem">독립운동의 선택</div>
+        <div style="font-size:12px;color:#a09e98">외교·실력양성·무장투쟁 중 어떤 길을 택하겠습니까?</div>
+      </div>
+      <div class="h-sc-item g-sc-item" onclick="hSelectScenario(2,this)" style="padding:1rem;border-radius:10px;border:1px solid rgba(255,255,255,0.1);cursor:pointer">
+        <div style="font-size:11px;color:#fbbf24;margin-bottom:.2rem">1997년 · 경제부 장관</div>
+        <div style="font-weight:600;margin-bottom:.2rem">IMF 위기의 선택</div>
+        <div style="font-size:12px;color:#a09e98">외환위기. IMF 구제금융 조건을 어떻게 협상하겠습니까?</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="closeHistory()" style="flex:1;padding:.8rem;border-radius:9px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit">← 돌아가기</button>
+      <button onclick="hStartGame()" style="flex:2;padding:.8rem;border-radius:9px;border:none;background:#92400e;color:#fef3c7;cursor:pointer;font-family:inherit;font-weight:600;font-size:15px">역사 속으로 →</button>
+    </div>
+  </div>
+
+  <div id="h-stage-game" style="display:none;width:100%;max-width:680px;margin:auto;padding:1.5rem;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <button onclick="closeHistory()" style="background:transparent;border:none;color:#6a6860;cursor:pointer;font-size:13px">← 나가기</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:12px;color:#a09e98">선택 <span id="h-round-display">1</span>/5</span>
+        <div id="h-dots" style="display:flex;gap:4px"></div>
+      </div>
+    </div>
+    <div style="margin-bottom:1rem;padding:.75rem 1rem;background:rgba(146,64,14,0.12);border-radius:10px">
+      <div id="h-scenario-title" style="font-weight:600;color:#fbbf24"></div>
+      <div id="h-scenario-year" style="font-size:11px;color:#a09e98;margin-top:.15rem"></div>
+      <div id="h-scenario-desc" style="font-size:13px;color:#fef3c7;margin-top:.4rem"></div>
+    </div>
+    <div id="h-chat" style="overflow-y:auto;margin-bottom:1rem;min-height:200px;max-height:45vh"></div>
+    <div id="h-input-area">
+      <textarea id="h-user-input" placeholder="어떤 선택을 하시겠습니까?"
+        style="width:100%;padding:.75rem;border-radius:10px;border:1px solid rgba(255,255,255,0.15);
+               background:#1a1a22;color:#f0eee8;font-family:inherit;font-size:14px;
+               resize:none;height:90px;outline:none;margin-bottom:.6rem"></textarea>
+      <button id="h-send-btn" onclick="hSendChoice()"
+        style="width:100%;padding:.8rem;border-radius:9px;border:none;background:#92400e;
+               color:#fef3c7;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px">
+        선택하기 →
+      </button>
+    </div>
+    <div id="h-end-area" style="display:none;text-align:center;padding:1rem">
+      <div style="font-size:24px;margin-bottom:.5rem">📜</div>
+      <div style="font-weight:600;margin-bottom:.5rem">역사의 흐름이 결정되었습니다</div>
+      <button onclick="closeHistory()" style="padding:.7rem 2rem;border-radius:9px;border:none;background:#92400e;color:#fef3c7;cursor:pointer;font-family:inherit">돌아가기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 확률 카지노 오버레이 ══ -->
+<div class="game-overlay" id="casino-overlay" style="flex-direction:column">
+  <div style="width:100%;max-width:560px;margin:auto;padding:1.5rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+      <div>
+        <div style="font-size:20px;font-weight:700;color:#f0eee8">🎰 확률 카지노</div>
+        <div style="font-size:12px;color:#a09e98">수학으로 카지노를 이겨보세요</div>
+      </div>
+      <button onclick="closeCasino()" style="background:transparent;border:none;color:#6a6860;cursor:pointer;font-size:13px">← 나가기</button>
+    </div>
+
+    <!-- 칩·라운드 상태 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+      <div style="padding:.75rem;background:rgba(200,169,110,0.1);border:1px solid rgba(200,169,110,0.2);border-radius:10px;text-align:center">
+        <div style="font-size:11px;color:#c8a96e">보유 칩</div>
+        <div style="font-size:22px;font-weight:700;color:#f0eee8"><span id="casino-chips">1000</span></div>
+      </div>
+      <div style="padding:.75rem;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:10px;text-align:center">
+        <div style="font-size:11px;color:#a78bfa">라운드</div>
+        <div style="font-size:22px;font-weight:700;color:#f0eee8"><span id="casino-round">1</span>/8</div>
+      </div>
+    </div>
+
+    <!-- 현재 게임 -->
+    <div style="padding:1.1rem;background:#1a1a22;border-radius:12px;border:1px solid rgba(255,255,255,0.08);margin-bottom:1rem">
+      <div id="casino-game-name" style="font-size:16px;font-weight:700;color:#f0eee8;margin-bottom:.4rem"></div>
+      <div id="casino-game-desc" style="font-size:13px;color:#a09e98;line-height:1.6;margin-bottom:.6rem"></div>
+      <div id="casino-ev" style="font-size:12px;color:#7c3aed;font-weight:500"></div>
+    </div>
+
+    <div id="casino-concept" style="font-size:12px;color:#c8a96e;margin-bottom:.75rem"></div>
+
+    <!-- 베팅 -->
+    <div style="display:flex;gap:8px;margin-bottom:.75rem">
+      <input id="casino-bet" type="number" min="10" placeholder="베팅 금액"
+        style="flex:1;padding:.7rem;border-radius:9px;border:1px solid rgba(255,255,255,0.15);
+               background:#24242f;color:#f0eee8;font-family:inherit;font-size:14px;outline:none">
+      <button id="casino-bet-btn" onclick="placeBet()"
+        style="padding:.7rem 1.25rem;border-radius:9px;border:none;background:#c8a96e;
+               color:#1a1400;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px">
+        베팅!
+      </button>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:1rem">
+      <button onclick="document.getElementById('casino-bet').value=50" style="flex:1;padding:5px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-size:12px">50</button>
+      <button onclick="document.getElementById('casino-bet').value=100" style="flex:1;padding:5px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-size:12px">100</button>
+      <button onclick="document.getElementById('casino-bet').value=200" style="flex:1;padding:5px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-size:12px">200</button>
+      <button onclick="document.getElementById('casino-bet').value=Math.floor(casinoState.chips/2)" style="flex:1;padding:5px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-size:12px">반액</button>
+      <button onclick="document.getElementById('casino-bet').value=casinoState.chips" style="flex:1;padding:5px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:#a09e98;cursor:pointer;font-size:12px">전액</button>
+    </div>
+
+    <!-- 결과 -->
+    <div id="casino-result" style="display:none;padding:1rem;border-radius:10px;font-size:14px;line-height:1.7;margin-bottom:.75rem"></div>
+    <button id="casino-next" onclick="casinoNext()" style="display:none;width:100%;padding:.8rem;border-radius:9px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px">다음 게임 →</button>
+  </div>
+</div>
 
 <!-- ══ 소개 페이지 오버레이 ══ -->
 <div class="about-overlay" id="about-overlay">
@@ -2185,6 +2378,9 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (document.getElementById('sub-modal').classList.contains('open')) closeSubModal();
     else if (document.getElementById('about-overlay').classList.contains('open')) closeAbout();
+    else if (document.getElementById('socrates-overlay').classList.contains('open')) closeSocrates();
+    else if (document.getElementById('history-overlay').classList.contains('open')) closeHistory();
+    else if (document.getElementById('casino-overlay').classList.contains('open')) closeCasino();
     else if (document.getElementById('game-overlay').classList.contains('open')) closeGame();
     else closeDrawer();
   }
@@ -2343,6 +2539,437 @@ document.getElementById('sub-modal').addEventListener('click', function(e) {
   if (e.target === this) closeSubModal();
 });
 </script>
+
+
+/* ══════════════════════════════════════
+   소크라테스 문답 게임
+══════════════════════════════════════ */
+const SOCRATES_TOPICS = [
+  { title:'지식이란 무엇인가?', desc:'우리는 무언가를 "안다"고 할 때 어떤 의미인가요?',
+    starter:'안다는 것은 무엇을 의미한다고 생각하십니까?',
+    system:`당신은 소크라테스입니다. 사용자와 "지식이란 무엇인가?"라는 주제로 철학적 대화를 나눕니다.
+소크라테스식 문답법을 사용하세요: 사용자의 모든 답변에 "왜 그렇게 생각하십니까?", "그 근거는 무엇인가요?", "그렇다면 ~는 어떻게 설명하시겠습니까?" 같은 심화 질문으로 응답하세요.
+사용자가 모순에 빠지면 부드럽게 지적하고, 더 깊은 사고로 이끄세요.
+응답은 2-3문장으로 간결하게, 반드시 질문으로 끝내세요.
+마지막 라운드(5라운드)에서는 대화를 통해 탐구한 내용을 따뜻하게 정리해주세요.` },
+  { title:'자유의지는 존재하는가?', desc:'우리의 선택은 진정 자유로운가요, 아니면 이미 결정된 것인가요?',
+    starter:'당신은 스스로 자유롭게 선택할 수 있다고 생각하십니까?',
+    system:`당신은 소크라테스입니다. "자유의지는 존재하는가?"라는 주제로 대화합니다.
+결정론·양립론·자유의지론 관점에서 사용자의 답변에 반례와 심화 질문을 제시하세요.
+신경과학·물리학·도덕 책임 등 다양한 각도에서 질문하세요.
+응답은 2-3문장으로 간결하게, 반드시 질문으로 끝내세요.` },
+  { title:'행복이란 무엇인가?', desc:'진정한 행복은 어디서 오는 걸까요?',
+    starter:'당신은 지금 행복하십니까? 그 행복이 무엇에서 오는지 설명해 주시겠습니까?',
+    system:`당신은 소크라테스입니다. "행복이란 무엇인가?"라는 주제로 대화합니다.
+공리주의·덕 윤리학·불교·심리학 관점에서 사용자의 답변을 탐구하세요.
+"그 행복이 사라진다면?", "다른 사람의 행복과 어떻게 연결됩니까?" 같은 질문으로 심화하세요.
+응답은 2-3문장으로 간결하게, 반드시 질문으로 끝내세요.` },
+];
+
+let sState = { topic:null, round:1, maxRounds:5, messages:[], loading:false };
+
+function openSocratesGame() {
+  closeDrawer();
+  sState = { topic:SOCRATES_TOPICS[0], round:1, maxRounds:5, messages:[], loading:false };
+  
+  // 소크라테스 오버레이 열기
+  const overlay = document.getElementById('socrates-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  // 토픽 선택 화면
+  document.getElementById('s-stage-select').style.display = 'block';
+  document.getElementById('s-stage-game').style.display = 'none';
+  document.querySelectorAll('.s-topic-item').forEach((el,i) => el.classList.toggle('active', i===0));
+}
+
+function closeSocrates() {
+  document.getElementById('socrates-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function sSelectTopic(idx, el) {
+  document.querySelectorAll('.s-topic-item').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  sState.topic = SOCRATES_TOPICS[idx];
+}
+
+async function sStartGame() {
+  document.getElementById('s-stage-select').style.display = 'none';
+  document.getElementById('s-stage-game').style.display = 'block';
+  sState.round = 1;
+  sState.messages = [];
+  
+  document.getElementById('s-topic-title').textContent = sState.topic.title;
+  document.getElementById('s-topic-desc').textContent = sState.topic.desc;
+  document.getElementById('s-chat').innerHTML = '';
+  document.getElementById('s-user-input').value = '';
+  
+  // 소크라테스 첫 질문
+  appendSMsg('ai', `🏛️ ${sState.topic.starter}`);
+  updateSRound();
+}
+
+function appendSMsg(role, text) {
+  const chat = document.getElementById('s-chat');
+  const div = document.createElement('div');
+  div.style.cssText = `margin-bottom:.75rem;padding:.9rem 1.1rem;border-radius:12px;font-size:14px;line-height:1.65;
+    ${role==='ai'
+      ? 'background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);color:#e8e4f0'
+      : 'background:rgba(200,169,110,0.1);border:1px solid rgba(200,169,110,0.2);color:#f0eee8;margin-left:1.5rem'}`;
+  div.innerHTML = role==='ai'
+    ? `<span style="font-size:11px;color:#a78bfa;font-weight:600">소크라테스</span><br>${text}`
+    : `<span style="font-size:11px;color:#c8a96e;font-weight:600">나의 답변</span><br>${text}`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function updateSRound() {
+  document.getElementById('s-round-display').textContent = Math.min(sState.round, sState.maxRounds);
+  const dots = document.getElementById('s-dots');
+  dots.innerHTML = '';
+  for (let i=1; i<=sState.maxRounds; i++) {
+    const d = document.createElement('div');
+    d.className = 'g-dot' + (i<sState.round?' done':i===sState.round?' current':'');
+    dots.appendChild(d);
+  }
+}
+
+async function sSendAnswer() {
+  const input = document.getElementById('s-user-input');
+  const text = input.value.trim();
+  if (!text || sState.loading) return;
+  
+  input.value = '';
+  appendSMsg('user', text);
+  sState.messages.push({ role:'user', content:text });
+  sState.loading = true;
+  document.getElementById('s-send-btn').disabled = true;
+  
+  const isFinal = sState.round >= sState.maxRounds;
+  
+  try {
+    const systemPrompt = sState.topic.system + (isFinal
+      ? '\n\n이것이 마지막 대화입니다. 지금까지 나눈 대화를 따뜻하게 정리하고, 탐구한 질문의 의미와 사용자가 보여준 사고의 깊이를 격려해주세요.'
+      : '');
+    
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:400,
+        system: systemPrompt,
+        messages: sState.messages
+      })
+    });
+    const data = await res.json();
+    const aiText = data.content?.[0]?.text || '죄송합니다. 다시 시도해주세요.';
+    
+    sState.messages.push({ role:'assistant', content:aiText });
+    appendSMsg('ai', aiText);
+    sState.round++;
+    updateSRound();
+    
+    if (isFinal) {
+      document.getElementById('s-input-area').style.display = 'none';
+      document.getElementById('s-end-area').style.display = 'block';
+    }
+  } catch(e) {
+    appendSMsg('ai', '연결 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+  }
+  
+  sState.loading = false;
+  document.getElementById('s-send-btn').disabled = false;
+}
+
+/* ══════════════════════════════════════
+   역사의 분기점 게임
+══════════════════════════════════════ */
+const HISTORY_SCENARIOS = [
+  { title:'임진왜란의 선택', year:'1592년', role:'조선의 신하',
+    desc:'일본군이 부산에 상륙했습니다. 조선은 어떻게 대응해야 할까요?',
+    system:`당신은 1592년 임진왜란 발발 당시 조선 조정의 신하들입니다. 선조 임금, 이이(율곡), 이순신 장군 등 다양한 인물 역할을 번갈아 맡습니다.
+사용자는 조선의 신하로, 전략적 결정을 내려야 합니다.
+각 선택마다 역사적 맥락에 맞게 반응하세요: 명나라 원군 요청, 자력 항전, 협상 시도 등.
+역사적 사실에 기반하되, 사용자의 선택에 따라 다른 전개를 보여주세요.
+응답은 3-4문장으로, 항상 사용자에게 다음 결정을 요구하며 끝내세요.` },
+  { title:'독립운동의 선택', year:'1919년', role:'독립운동가',
+    desc:'3·1 운동 이후, 독립을 위한 다양한 방법이 논의되고 있습니다.',
+    system:`당신은 1919년 3·1 운동 이후 다양한 독립운동 인물들입니다. 이승만(외교론), 안창호(실력양성론), 홍범도(무장투쟁론) 등의 역할을 맡습니다.
+사용자는 독립운동가로, 어떤 방식으로 독립을 추구할지 선택해야 합니다.
+각 선택의 역사적 장단점을 현실감 있게 보여주세요.
+응답은 3-4문장으로, 항상 다음 선택지를 제시하며 끝내세요.` },
+  { title:'1997년 IMF의 선택', year:'1997년', role:'대한민국 경제부 장관',
+    desc:'외환위기가 닥쳤습니다. IMF 구제금융을 받아야 할까요?',
+    system:`당신은 1997년 IMF 외환위기 당시 다양한 이해관계자들입니다. IMF 협상단, 재벌 대표, 노동조합, 언론 등의 역할을 맡습니다.
+사용자는 경제부 장관으로, 구제금융 조건과 국내 경제 정책을 결정해야 합니다.
+각 선택의 경제적 결과를 현실적으로 설명하세요.
+응답은 3-4문장으로, 항상 다음 결정을 요구하며 끝내세요.` },
+];
+
+let hState = { scenario:null, round:1, maxRounds:5, messages:[], loading:false };
+
+function openHistoryGame() {
+  closeDrawer();
+  hState = { scenario:HISTORY_SCENARIOS[0], round:1, maxRounds:5, messages:[], loading:false };
+  
+  const overlay = document.getElementById('history-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  document.getElementById('h-stage-select').style.display = 'block';
+  document.getElementById('h-stage-game').style.display = 'none';
+  document.querySelectorAll('.h-sc-item').forEach((el,i) => el.classList.toggle('active', i===0));
+}
+
+function closeHistory() {
+  document.getElementById('history-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function hSelectScenario(idx, el) {
+  document.querySelectorAll('.h-sc-item').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  hState.scenario = HISTORY_SCENARIOS[idx];
+}
+
+async function hStartGame() {
+  document.getElementById('h-stage-select').style.display = 'none';
+  document.getElementById('h-stage-game').style.display = 'block';
+  hState.round = 1;
+  hState.messages = [];
+  
+  document.getElementById('h-scenario-title').textContent = hState.scenario.title;
+  document.getElementById('h-scenario-year').textContent = hState.scenario.year + ' · ' + hState.scenario.role;
+  document.getElementById('h-scenario-desc').textContent = hState.scenario.desc;
+  document.getElementById('h-chat').innerHTML = '';
+  document.getElementById('h-user-input').value = '';
+  
+  // 첫 상황 제시
+  const intro = await hGetAIIntro();
+  appendHMsg('ai', intro);
+  updateHRound();
+}
+
+async function hGetAIIntro() {
+  try {
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6', max_tokens:400,
+        system: hState.scenario.system,
+        messages: [{ role:'user', content:`${hState.scenario.desc} 상황을 생생하게 묘사하고 첫 번째 선택을 요구하세요.` }]
+      })
+    });
+    const data = await res.json();
+    return data.content?.[0]?.text || '상황이 전개되고 있습니다. 어떻게 하시겠습니까?';
+  } catch { return '역사의 분기점에 서 있습니다. 어떤 선택을 하시겠습니까?'; }
+}
+
+function appendHMsg(role, text) {
+  const chat = document.getElementById('h-chat');
+  const div = document.createElement('div');
+  div.style.cssText = `margin-bottom:.75rem;padding:.9rem 1.1rem;border-radius:12px;font-size:14px;line-height:1.65;
+    ${role==='ai'
+      ? 'background:rgba(146,64,14,0.12);border:1px solid rgba(146,64,14,0.3);color:#fef3c7'
+      : 'background:rgba(200,169,110,0.1);border:1px solid rgba(200,169,110,0.2);color:#f0eee8;margin-left:1.5rem'}`;
+  div.innerHTML = role==='ai'
+    ? `<span style="font-size:11px;color:#fbbf24;font-weight:600">📜 역사 속 목소리</span><br>${text}`
+    : `<span style="font-size:11px;color:#c8a96e;font-weight:600">나의 선택</span><br>${text}`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function updateHRound() {
+  document.getElementById('h-round-display').textContent = Math.min(hState.round, hState.maxRounds);
+  const dots = document.getElementById('h-dots');
+  dots.innerHTML = '';
+  for (let i=1; i<=hState.maxRounds; i++) {
+    const d = document.createElement('div');
+    d.className = 'g-dot' + (i<hState.round?' done':i===hState.round?' current':'');
+    dots.appendChild(d);
+  }
+}
+
+async function hSendChoice() {
+  const input = document.getElementById('h-user-input');
+  const text = input.value.trim();
+  if (!text || hState.loading) return;
+  
+  input.value = '';
+  appendHMsg('user', text);
+  hState.messages.push({ role:'user', content:text });
+  hState.loading = true;
+  document.getElementById('h-send-btn').disabled = true;
+  
+  const isFinal = hState.round >= hState.maxRounds;
+  
+  try {
+    const systemPrompt = hState.scenario.system + (isFinal
+      ? '\n\n이것이 마지막 선택입니다. 사용자가 한 선택들의 결과를 역사적 사실과 비교하여 정리해주세요. 실제 역사는 어떻게 전개되었는지, 사용자의 선택과 어떻게 다른지 흥미롭게 설명해주세요.'
+      : '');
+    
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6', max_tokens:500,
+        system: systemPrompt,
+        messages: hState.messages
+      })
+    });
+    const data = await res.json();
+    const aiText = data.content?.[0]?.text || '역사는 계속됩니다...';
+    
+    hState.messages.push({ role:'assistant', content:aiText });
+    appendHMsg('ai', aiText);
+    hState.round++;
+    updateHRound();
+    
+    if (isFinal) {
+      document.getElementById('h-input-area').style.display = 'none';
+      document.getElementById('h-end-area').style.display = 'block';
+    }
+  } catch(e) {
+    appendHMsg('ai', '연결 오류. 잠시 후 다시 시도해주세요.');
+  }
+  
+  hState.loading = false;
+  document.getElementById('h-send-btn').disabled = false;
+}
+
+/* ══════════════════════════════════════
+   확률 카지노 게임
+══════════════════════════════════════ */
+let casinoState = {
+  chips: 1000, round:1, maxRounds:8,
+  currentGame: null, result: null, loading:false
+};
+
+const CASINO_GAMES = [
+  { name:'동전 던지기', desc:'앞면이 나올 확률은 50%입니다. 얼마를 베팅하시겠습니까?',
+    odds:2, prob:0.5, concept:'기댓값' },
+  { name:'주사위 게임', desc:'6이 나오면 6배를 받습니다. (확률 1/6)',
+    odds:6, prob:1/6, concept:'독립 시행' },
+  { name:'블랙잭 확률', desc:'현재 패: 14점. 카드를 받으면 8이상이 나와야 이깁니다.',
+    odds:2, prob:5/13, concept:'조건부 확률' },
+  { name:'복권 추첨', desc:'1000장 중 1등은 1장. 티켓 가격 10칩, 1등 상금 5000칩.',
+    odds:500, prob:1/1000, concept:'기댓값의 함정' },
+];
+
+function openCasinoGame() {
+  closeDrawer();
+  casinoState = { chips:1000, round:1, maxRounds:8, currentGame:null, result:null, loading:false };
+  
+  const overlay = document.getElementById('casino-overlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  initCasinoRound();
+}
+
+function closeCasino() {
+  document.getElementById('casino-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function initCasinoRound() {
+  const game = CASINO_GAMES[Math.floor(Math.random() * CASINO_GAMES.length)];
+  casinoState.currentGame = game;
+  
+  document.getElementById('casino-chips').textContent = casinoState.chips.toLocaleString();
+  document.getElementById('casino-round').textContent = casinoState.round;
+  document.getElementById('casino-game-name').textContent = game.name;
+  document.getElementById('casino-game-desc').textContent = game.desc;
+  document.getElementById('casino-concept').textContent = `📚 핵심 개념: ${game.concept}`;
+  document.getElementById('casino-bet').value = '100';
+  document.getElementById('casino-result').style.display = 'none';
+  document.getElementById('casino-next').style.display = 'none';
+  document.getElementById('casino-bet-btn').disabled = false;
+
+  // 기댓값 계산 표시
+  const ev = (game.prob * game.odds - (1-game.prob)).toFixed(2);
+  document.getElementById('casino-ev').textContent =
+    `기댓값: ${ev > 0 ? '+' : ''}${ev} (베팅액 기준) | 확률: ${(game.prob*100).toFixed(1)}%`;
+}
+
+async function placeBet() {
+  const bet = parseInt(document.getElementById('casino-bet').value);
+  if (!bet || bet <= 0 || bet > casinoState.chips) {
+    alert('올바른 베팅 금액을 입력하세요 (보유 칩 이하)');
+    return;
+  }
+  
+  document.getElementById('casino-bet-btn').disabled = true;
+  casinoState.loading = true;
+  
+  const game = casinoState.currentGame;
+  const win = Math.random() < game.prob;
+  const change = win ? bet * (game.odds - 1) : -bet;
+  casinoState.chips += change;
+  
+  const resultEl = document.getElementById('casino-result');
+  resultEl.style.display = 'block';
+  resultEl.style.cssText += win
+    ? 'background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,.3);color:#4ade80'
+    : 'background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,.3);color:#f87171';
+  
+  // AI 분석 요청
+  try {
+    const res = await fetch('/api/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6', max_tokens:250,
+        system:`당신은 MindArena 확률 카지노의 AI 딜러입니다. 수학 교육자로서 각 게임의 확률 개념을 친절하게 설명합니다.`,
+        messages:[{ role:'user', content:`
+게임: ${game.name}
+베팅: ${bet}칩
+결과: ${win ? '승리' : '패배'}
+변동: ${change > 0 ? '+' : ''}${change}칩
+현재 보유: ${casinoState.chips}칩
+핵심 개념: ${game.concept}
+
+이 결과를 바탕으로 ${game.concept} 개념을 2-3문장으로 설명하고, 장기적 관점에서 조언해주세요.`}]
+      })
+    });
+    const data = await res.json();
+    resultEl.innerHTML = `
+      <strong>${win ? '🎉 승리!' : '💸 패배'}</strong> ${change > 0 ? '+' : ''}${change}칩<br>
+      <span style="font-size:12px;opacity:.8">보유 칩: ${casinoState.chips.toLocaleString()}</span><br><br>
+      <span style="font-size:13px;opacity:.9">${data.content?.[0]?.text || ''}</span>`;
+  } catch {
+    resultEl.innerHTML = `<strong>${win ? '🎉 승리!' : '💸 패배'}</strong> ${change > 0 ? '+' : ''}${change}칩<br>보유 칩: ${casinoState.chips.toLocaleString()}`;
+  }
+  
+  document.getElementById('casino-chips').textContent = casinoState.chips.toLocaleString();
+  document.getElementById('casino-next').style.display = 'block';
+  casinoState.loading = false;
+}
+
+function casinoNext() {
+  casinoState.round++;
+  if (casinoState.round > casinoState.maxRounds || casinoState.chips <= 0) {
+    endCasino();
+  } else {
+    initCasinoRound();
+  }
+}
+
+function endCasino() {
+  const resultEl = document.getElementById('casino-result');
+  resultEl.style.display = 'block';
+  const profit = casinoState.chips - 1000;
+  resultEl.innerHTML = `
+    <strong>🎰 게임 종료!</strong><br>
+    최종 보유: ${casinoState.chips.toLocaleString()}칩 (${profit >= 0 ? '+' : ''}${profit}칩)<br><br>
+    <strong>📚 오늘의 확률 수업</strong><br>
+    장기적으로 카지노는 항상 이깁니다. 대부분의 게임에서 기댓값이 음수이기 때문입니다.
+    기댓값 = (당첨 확률 × 당첨금) - (낙첨 확률 × 베팅금)`;
+  document.getElementById('casino-next').style.display = 'none';
+  document.getElementById('casino-bet-btn').style.display = 'none';
+}
 
 </body>
 </html>
