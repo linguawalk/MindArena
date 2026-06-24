@@ -16,6 +16,7 @@
   --stem:#1d4ed8;   --stem-l:#eff6ff;
   --hum:#92400e;    --hum-l:#fef3c7;
   --arts:#0f766e;   --arts-l:#f0fdfa;
+  --foreign:#b45309; --foreign-l:#fff7ed;
 }
 html{scroll-behavior:smooth}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);
@@ -47,12 +48,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);
      margin-bottom:-2px;transition:all .15s;white-space:nowrap;
      display:flex;align-items:center;gap:7px}
 .tab:hover{color:var(--t2)}
-.tab[data-tab="lang"].active{color:var(--lang);border-bottom-color:var(--lang);font-weight:700}
+.tab[data-tab="korean"].active{color:var(--lang);border-bottom-color:var(--lang);font-weight:700}
 .tab[data-tab="stem"].active{color:var(--stem);border-bottom-color:var(--stem);font-weight:700}
 .tab[data-tab="hum"].active{color:var(--hum);border-bottom-color:var(--hum);font-weight:700}
 .tab[data-tab="arts"].active{color:var(--arts);border-bottom-color:var(--arts);font-weight:700}
+.tab[data-tab="foreign"].active{color:var(--foreign);border-bottom-color:var(--foreign);font-weight:700}
 .tab-ct{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500}
-.tab[data-tab="lang"].active .tab-ct{background:var(--lang-l);color:var(--lang)}
+.tab[data-tab="korean"].active .tab-ct{background:var(--lang-l);color:var(--lang)}
+.tab[data-tab="foreign"].active .tab-ct{background:var(--foreign-l);color:var(--foreign)}
 .tab[data-tab="stem"].active .tab-ct{background:var(--stem-l);color:var(--stem)}
 .tab[data-tab="hum"].active .tab-ct{background:var(--hum-l);color:var(--hum)}
 .tab[data-tab="arts"].active .tab-ct{background:var(--arts-l);color:var(--arts)}
@@ -70,6 +73,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);
 .sj.active.c-stem{background:var(--stem-l);border-color:var(--stem);color:var(--stem)}
 .sj.active.c-hum{background:var(--hum-l);border-color:var(--hum);color:var(--hum)}
 .sj.active.c-arts{background:var(--arts-l);border-color:var(--arts);color:var(--arts)}
+.sj.active.c-foreign{background:var(--foreign-l);border-color:var(--foreign);color:var(--foreign)}
 
 /* ── 콘텐츠 ── */
 .content{max-width:1020px;margin:0 auto;padding:1.75rem 1.5rem}
@@ -218,8 +222,11 @@ footer a:hover{color:var(--t)}
 
 <!-- ══ 탭 바 ══ -->
 <div class="tab-bar">
-  <button class="tab active" data-tab="lang" onclick="showTab('lang',this)">
-    🔤 언어 <span class="tab-ct">4과목</span>
+  <button class="tab active" data-tab="korean" onclick="showTab('korean',this)">
+    🔤 국어 <span class="tab-ct">3과목</span>
+  </button>
+  <button class="tab" data-tab="foreign" onclick="showTab('foreign',this)">
+    🌐 외국어 <span class="tab-ct">3과목</span>
   </button>
   <button class="tab" data-tab="stem" onclick="showTab('stem',this)">
     🔬 수학과학 <span class="tab-ct">6과목</span>
@@ -228,7 +235,7 @@ footer a:hover{color:var(--t)}
     🌍 인문사회 <span class="tab-ct">6과목</span>
   </button>
   <button class="tab" data-tab="arts" onclick="showTab('arts',this)">
-    🎨 예체능 <span class="tab-ct">4과목</span>
+    🎨 예체능 <span class="tab-ct">3과목</span>
   </button>
 </div>
 
@@ -310,11 +317,11 @@ footer a:hover{color:var(--t)}
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2rem">
       <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center">
-        <div style="font-size:24px;font-weight:700">20</div>
+        <div style="font-size:24px;font-weight:700">21</div>
         <div style="font-size:11px;color:var(--t3);margin-top:.2rem">과목</div>
       </div>
       <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center">
-        <div style="font-size:24px;font-weight:700">400+</div>
+        <div style="font-size:24px;font-weight:700">430+</div>
         <div style="font-size:11px;color:var(--t3);margin-top:.2rem">레벨</div>
       </div>
       <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center">
@@ -360,21 +367,32 @@ footer a:hover{color:var(--t)}
 // 전체 구조 데이터
 // ══════════════════════════════════════════════
 const STRUCTURE = {
-  lang: {
-    label:'언어', color:'var(--lang)', cls:'c-lang',
+  korean: {
+    label:'국어', color:'var(--lang)', cls:'c-lang',
     subjects: [
-      { id:'korean',  label:'🔤 국어',   levels:20, ready:true,
+      { id:'kor',   label:'🔤 국어', levels:20, ready:true,
         desc:'맞춤법·문법·어휘·독해까지 국어 전 영역을 퍼즐로 학습합니다.',
         tags:['문법·맞춤법','어휘·관용어','독해·추론','화법·작문'] },
-      { id:'hanja',   label:'漢 한자',   levels:20, ready:false,
+      { id:'hanja', label:'漢 한자', levels:20, ready:false,
         desc:'기초 한자 50자부터 고급 한자 500자와 사자성어까지 단계별로 학습합니다.',
         tags:['기초한자 50자','한자어 구성','사자성어','고급한자·한문'] },
-      { id:'lit',     label:'📖 문학',   levels:20, ready:false,
+      { id:'lit',   label:'📖 문학', levels:20, ready:false,
         desc:'현대시·소설·고전문학을 작품 분석 퍼즐로 깊이 있게 학습합니다.',
         tags:['시 분석','소설 구조','고전시가','작가·작품 매칭'] },
-      { id:'english', label:'🌐 영어',   levels:20, ready:false,
+    ]
+  },
+  foreign: {
+    label:'외국어', color:'#b45309', cls:'c-foreign',
+    subjects: [
+      { id:'english',  label:'🌐 영어',   levels:20, ready:false,
         desc:'파닉스부터 수능 유형까지 영어 전 과정을 퍼즐로 정복합니다.',
         tags:['파닉스·기초문법','시제·조동사','독해 전략','수능 유형'] },
+      { id:'japanese', label:'🇯🇵 일본어', levels:20, ready:false,
+        desc:'히라가나부터 JLPT N2까지 일본어를 퍼즐로 학습합니다.',
+        tags:['히라가나·가타카나','기초 문형','동사 활용','독해·청해'] },
+      { id:'chinese',  label:'🇨🇳 중국어', levels:20, ready:false,
+        desc:'성조·병음부터 HSK 4급까지 중국어를 퍼즐로 학습합니다.',
+        tags:['성조·병음','기초 문형','어법 심화','독해·작문'] },
     ]
   },
   stem: {
@@ -426,18 +444,15 @@ const STRUCTURE = {
   arts: {
     label:'예체능', color:'var(--arts)', cls:'c-arts',
     subjects: [
-      { id:'music',   label:'🎵 음악',   levels:28, ready:true, special:'music',
+      { id:'music',  label:'🎵 음악', levels:28, ready:true, special:'music',
         desc:'기초 악전부터 화성학·음악사까지 음악 이론을 청각 게임으로 배웁니다.',
         tags:['기초 악전','화성학','음악사','장르·편곡'] },
-      { id:'visual',  label:'🎨 미술',   levels:20, ready:true, special:'art',
+      { id:'visual', label:'🎨 미술', levels:20, ready:true, special:'art',
         desc:'색채·조형·미술사·디자인을 시각 게임으로 직접 체험합니다.',
         tags:['색채 이론','조형 원리','미술사','디자인'] },
-      { id:'pe',      label:'⚽ 체육',   levels:22, ready:false,
+      { id:'pe',     label:'⚽ 체육', levels:22, ready:false,
         desc:'운동과학·스포츠 전술·심리·역사·윤리를 퍼즐로 배웁니다.',
         tags:['운동과학','스포츠 전술','스포츠 심리','스포츠 윤리'] },
-      { id:'drama',   label:'🎭 연극영화', levels:20, ready:false,
-        desc:'연극·영화의 역사·이론·장르·작품을 퍼즐로 탐구합니다.',
-        tags:['연극 역사·이론','영화 장르·기법','한국 영화','세계 영화사'] },
     ]
   }
 };
@@ -446,7 +461,7 @@ const STRUCTURE = {
 // 국어 레벨 데이터 (20레벨)
 // ══════════════════════════════════════════════
 const LEVELS = {
-  korean: [
+  kor: [
     {n:1, title:'자음과 모음', desc:'한글 자음 14개·모음 10개 구분과 이름', type:'선택형·매칭', ready:true},
     {n:2, title:'받침 읽기', desc:'홑받침·겹받침 발음과 표기', type:'선택형·빈칸', ready:true},
     {n:3, title:'문장 부호', desc:'마침표·쉼표·물음표·느낌표 쓰임', type:'선택형', ready:false},
@@ -467,14 +482,80 @@ const LEVELS = {
     {n:18, title:'높임법', desc:'주체·객체·상대 높임법 완전 정복', type:'선택형·빈칸', ready:false},
     {n:19, title:'언어와 매체', desc:'디지털 언어·매체 읽기', type:'선택형', ready:false},
     {n:20, title:'수능 국어 유형', desc:'수능 국어 전 유형 실전 연습', type:'선택형', ready:false},
-  ]
+  ],
+  english: [
+    {n:1,  title:'알파벳과 파닉스',    desc:'알파벳 26자 대소문자·파닉스 기초 규칙',        type:'선택형·매칭',   ready:false},
+    {n:2,  title:'기초 어휘 (생활)',    desc:'색깔·숫자·동물·음식·가족 기초 단어',           type:'매칭·선택형',   ready:false},
+    {n:3,  title:'be동사',             desc:'am·are·is 긍정·부정·의문문',                  type:'선택형·빈칸',   ready:false},
+    {n:4,  title:'일반동사 현재형',     desc:'3인칭 단수 -s, do/does 의문문',               type:'선택형·빈칸',   ready:false},
+    {n:5,  title:'현재진행형',         desc:'be동사 + V-ing 구조와 쓰임',                  type:'선택형·빈칸',   ready:false},
+    {n:6,  title:'과거시제',           desc:'규칙·불규칙 과거형, did 의문문',               type:'선택형·빈칸',   ready:false},
+    {n:7,  title:'미래시제',           desc:'will / be going to 용법 구분',                type:'선택형',       ready:false},
+    {n:8,  title:'조동사',             desc:'can·must·should·may 용법',                    type:'선택형·매칭',   ready:false},
+    {n:9,  title:'to부정사·동명사',    desc:'to V / V-ing의 명사·형용사·부사적 용법',       type:'선택형·분류형', ready:false},
+    {n:10, title:'관계대명사',         desc:'who·which·that·whom 기초',                    type:'선택형·빈칸',   ready:false},
+    {n:11, title:'비교급·최상급',      desc:'형용사·부사 비교급·최상급 변화',               type:'선택형·빈칸',   ready:false},
+    {n:12, title:'수동태',             desc:'be + p.p. 능동·수동 전환',                    type:'선택형·빈칸',   ready:false},
+    {n:13, title:'가정법',             desc:'가정법 과거·과거완료·혼합 가정',               type:'선택형·빈칸',   ready:false},
+    {n:14, title:'중학 핵심 어휘',     desc:'중학 필수 어휘 1000 퍼즐',                    type:'매칭·선택형',   ready:false},
+    {n:15, title:'독해 기초',          desc:'주제·제목·요지 파악 전략',                     type:'선택형',       ready:false},
+    {n:16, title:'빈칸 추론',          desc:'문맥으로 빈칸에 알맞은 말 찾기',               type:'선택형',       ready:false},
+    {n:17, title:'글의 순서·삽입',     desc:'단락 순서 배열, 문장 삽입 전략',               type:'순서배열·선택형',ready:false},
+    {n:18, title:'수능 필수 어휘',     desc:'수능 빈출 어휘 2000 집중 학습',               type:'매칭·선택형',   ready:false},
+    {n:19, title:'어법 판단',          desc:'수능 어법 문항 완전 정복',                     type:'선택형·교정형', ready:false},
+    {n:20, title:'수능 영어 실전',     desc:'수능 전 유형 실전 연습',                       type:'선택형',       ready:false},
+  ],
+  japanese: [
+    {n:1,  title:'히라가나',           desc:'히라가나 46자 완전 습득',                      type:'매칭·선택형',   ready:false},
+    {n:2,  title:'가타카나',           desc:'가타카나 46자와 외래어 표기',                  type:'매칭·선택형',   ready:false},
+    {n:3,  title:'기초 인사·표현',     desc:'おはよう・すみません 등 기초 회화',            type:'매칭·선택형',   ready:false},
+    {n:4,  title:'명사·조사 기초',     desc:'は·が·を·に·で·へ·と 조사 완전 정복',         type:'선택형·빈칸',   ready:false},
+    {n:5,  title:'형용사 (い·な형)',    desc:'い형용사·な형용사 활용과 연결',               type:'선택형·빈칸',   ready:false},
+    {n:6,  title:'동사 ます형',         desc:'1·2·3그룹 동사 ます형 변환',                  type:'선택형·빈칸',   ready:false},
+    {n:7,  title:'て형·た형',           desc:'て형 연결·의뢰·た형 과거 표현',               type:'선택형·빈칸',   ready:false},
+    {n:8,  title:'ない형·가능형',       desc:'부정형·가능형·의지형 활용',                   type:'선택형·빈칸',   ready:false},
+    {n:9,  title:'수수동사',           desc:'あげる·くれる·もらう 주고받기',               type:'선택형·매칭',   ready:false},
+    {n:10, title:'경어 기초',          desc:'丁寧語·尊敬語·謙譲語 기초',                  type:'선택형·매칭',   ready:false},
+    {n:11, title:'시간·수량 표현',     desc:'숫자·날짜·시간·조수사 완전 정복',             type:'선택형·빈칸',   ready:false},
+    {n:12, title:'조건·이유 표현',     desc:'たら·ば·と·ので·から 구분',                   type:'선택형·빈칸',   ready:false},
+    {n:13, title:'수동·사역',          desc:'수동형·사역형·사역수동형',                     type:'선택형·빈칸',   ready:false},
+    {n:14, title:'JLPT N4 어휘',      desc:'JLPT N4 필수 어휘 300 집중 학습',             type:'매칭·선택형',   ready:false},
+    {n:15, title:'JLPT N3 어휘',      desc:'JLPT N3 필수 어휘 400 집중 학습',             type:'매칭·선택형',   ready:false},
+    {n:16, title:'한자 읽기 (음독)',    desc:'音読み 한자 200자',                            type:'선택형·매칭',   ready:false},
+    {n:17, title:'한자 읽기 (훈독)',    desc:'訓読み 한자 200자',                            type:'선택형·매칭',   ready:false},
+    {n:18, title:'독해 기초',          desc:'짧은 일본어 지문 독해 전략',                   type:'선택형',       ready:false},
+    {n:19, title:'청해·회화 패턴',     desc:'일상 회화 패턴 50 완전 정복',                  type:'선택형·매칭',   ready:false},
+    {n:20, title:'수능 일본어 실전',   desc:'수능 일본어 전 유형 실전 연습',                type:'선택형',       ready:false},
+  ],
+  chinese: [
+    {n:1,  title:'성조와 병음 기초',   desc:'4성+경성, 병음 시스템 완전 이해',             type:'선택형·매칭',   ready:false},
+    {n:2,  title:'기초 인사·표현',     desc:'你好·谢谢·对不起 등 기초 회화',               type:'매칭·선택형',   ready:false},
+    {n:3,  title:'기초 문형 (是·有)',  desc:'是자문·有자문·수량 표현',                     type:'선택형·빈칸',   ready:false},
+    {n:4,  title:'동사 술어문',        desc:'일반 동사 술어문과 부정·의문',                 type:'선택형·빈칸',   ready:false},
+    {n:5,  title:'조동사·부사',        desc:'想·要·能·可以·会와 핵심 부사',                type:'선택형·빈칸',   ready:false},
+    {n:6,  title:'시간·장소 표현',     desc:'시간사·방위사·장소 표현 완전 정복',            type:'선택형·빈칸',   ready:false},
+    {n:7,  title:'정도보어·결과보어',  desc:'보어 구조와 가능보어',                         type:'선택형·빈칸',   ready:false},
+    {n:8,  title:'把구문·被구문',      desc:'처치문·수동문 구조',                           type:'선택형·빈칸',   ready:false},
+    {n:9,  title:'연동문·겸어문',      desc:'두 동사 연결 구조',                            type:'선택형·빈칸',   ready:false},
+    {n:10, title:'比교문',             desc:'比·没有·一样 비교 표현',                       type:'선택형·빈칸',   ready:false},
+    {n:11, title:'HSK 3급 어휘',      desc:'HSK 3급 필수 어휘 300 집중 학습',             type:'매칭·선택형',   ready:false},
+    {n:12, title:'HSK 4급 어휘',      desc:'HSK 4급 필수 어휘 400 집중 학습',             type:'매칭·선택형',   ready:false},
+    {n:13, title:'한자 간체자',        desc:'간체자 200자 독해와 필순',                     type:'선택형·매칭',   ready:false},
+    {n:14, title:'한자 번체자 비교',   desc:'간체자·번체자 대응 완전 정복',                 type:'매칭',         ready:false},
+    {n:15, title:'중국 문화·시사',     desc:'중국 명절·문화·현대 사회 어휘',               type:'선택형·매칭',   ready:false},
+    {n:16, title:'독해 기초',          desc:'짧은 중국어 지문 독해 전략',                   type:'선택형',       ready:false},
+    {n:17, title:'작문 기초',          desc:'기본 문형으로 문장 만들기',                    type:'순서배열·빈칸', ready:false},
+    {n:18, title:'청해·회화 패턴',     desc:'일상 회화 패턴 50 완전 정복',                  type:'선택형·매칭',   ready:false},
+    {n:19, title:'수능 중국어 어휘',   desc:'수능 중국어 빈출 어휘 집중 학습',              type:'매칭·선택형',   ready:false},
+    {n:20, title:'수능 중국어 실전',   desc:'수능 중국어 전 유형 실전 연습',                type:'선택형',       ready:false},
+  ],
 };
 
 // ══════════════════════════════════════════════
 // 퍼즐 문제 데이터
 // ══════════════════════════════════════════════
 const PUZZLES = {
-  'korean-1': {
+  'kor-1': {
     title:'자음과 모음',
     color:'var(--lang)',
     questions: [
@@ -523,7 +604,7 @@ const PUZZLES = {
         explain:'한글 기본 모음은 10개입니다. (ㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ)' },
     ]
   },
-  'korean-2': {
+  'kor-2': {
     title:'받침 읽기',
     color:'var(--lang)',
     questions: [
@@ -575,7 +656,7 @@ const PUZZLES = {
 // ══════════════════════════════════════════════
 // 상태
 // ══════════════════════════════════════════════
-let ST = { tab:'lang', subj:'korean' };
+let ST = { tab:'korean', subj:'kor' };
 let PZ = { qs:[], idx:0, score:0, answered:false, key:'', color:'' };
 let matchState = { left:null, leftIdx:-1, matched:[], total:0, correct:0 };
 let sortState = { items:[], dragging:-1 };
@@ -602,7 +683,7 @@ function renderSubjBar() {
     btn.textContent = s.label;
     btn.addEventListener('click', () => {
       ST.subj = s.id;
-      document.querySelectorAll('.sj').forEach(b=>b.classList.remove('active','c-lang','c-stem','c-hum','c-arts'));
+      document.querySelectorAll('.sj').forEach(b=>b.classList.remove('active','c-lang','c-stem','c-hum','c-arts','c-foreign'));
       btn.classList.add('active', grp.cls);
       renderContent();
     });
