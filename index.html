@@ -1100,7 +1100,7 @@ function buildArtGame(){
 }
 
 const AG_PRESETS=[{r:255,g:0,b:0,n:'빨강'},{r:0,g:255,b:0,n:'초록'},{r:0,g:0,b:255,n:'파랑'},{r:255,g:255,b:0,n:'노랑'},{r:0,g:255,b:255,n:'시안'},{r:255,g:0,b:255,n:'마젠타'},{r:255,g:128,b:0,n:'주황'},{r:128,g:0,b:255,n:'보라'},{r:64,g:64,b:64,n:'회색'}];
-let agTarget={r:0,g:0,b:0},agMSc=0,agTool='pen',agColor='#000000',agSz=6,agDrw=false,agLx=0,agLy=0;
+let agTarget={r:0,g:0,b:0},agMSc=0,agDrawTool='pen',agColor='#000000',agSz=6,agDrw=false,agLx=0,agLy=0;
 let pxColor='#000000',pxData=new Array(256).fill('#fff'),pxPainting=false;
 const AG_COLS=['#000000','#fff','#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899','#6b7280','#c8a96e'];
 const PX_COLS=['#000000','#fff','#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899','#6b7280','#c8a96e','#f5f5dc'];
@@ -1173,7 +1173,7 @@ function buildDrawGame(c){
   c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">✏️ 자유 드로잉</div>
     <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.6rem" id="ag-dp"></div>
     <div style="display:flex;gap:6px;margin-bottom:.6rem;flex-wrap:wrap;align-items:center">
-      ${[['pen','✏️ 펜'],['brush','🖌️ 브러시'],['eraser','🧹 지우개']].map(([t,l])=>`<button id="ag-t-${t}" onclick="agTool('${t}')" style="padding:5px 11px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">${l}</button>`).join('')}
+      ${[['pen','✏️ 펜'],['brush','🖌️ 브러시'],['eraser','🧹 지우개']].map(([t,l])=>`<button id="ag-t-${t}" onclick="setDrawTool('${t}')" style="padding:5px 11px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">${l}</button>`).join('')}
       <input type="range" id="ag-bs" min="2" max="40" value="6" oninput="agBs()" style="width:70px">
       <span style="font-size:12px;color:#a09e98" id="ag-bv">6</span>px
     </div>
@@ -1186,20 +1186,20 @@ function buildDrawGame(c){
   // 팔레트
   const p=document.getElementById('ag-dp');
   AG_COLS.forEach((cl,i)=>{const sw=document.createElement('div');sw.style.cssText=`width:24px;height:24px;border-radius:4px;cursor:pointer;background:${cl};border:${i===0?'2px solid white':'2px solid transparent'}`;if(cl==='#fff')sw.style.border='2px solid #666';sw.addEventListener('click',()=>{document.querySelectorAll('#ag-dp>div').forEach(s=>s.style.borderColor='transparent');sw.style.borderColor='white';agColor=cl;});p.appendChild(sw);});
-  agTool('pen');
+  setDrawTool('pen');
   // 캔버스
   const cv=document.getElementById('ag-cv');if(!cv||cv.dataset.init)return;cv.dataset.init='1';
   const w=cv.parentElement.clientWidth||360;cv.width=w;cv.height=Math.min(w*.6,240);
   const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
   const gp=(e,c)=>{const r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*(c.width/r.width),y:(e.clientY-r.top)*(c.height/r.height)};};
-  const dd=e=>{if(!agDrw)return;const ctx=cv.getContext('2d');const pos=gp(e,cv);ctx.beginPath();ctx.moveTo(agLx,agLy);ctx.lineTo(pos.x,pos.y);ctx.strokeStyle=agTool==='eraser'?'#fff':agColor;ctx.lineWidth=agTool==='brush'?agSz*2:agSz;ctx.lineCap='round';ctx.lineJoin='round';ctx.globalAlpha=agTool==='brush'?.5:1;ctx.stroke();ctx.globalAlpha=1;agLx=pos.x;agLy=pos.y;};
+  const dd=e=>{if(!agDrw)return;const ctx=cv.getContext('2d');const pos=gp(e,cv);ctx.beginPath();ctx.moveTo(agLx,agLy);ctx.lineTo(pos.x,pos.y);ctx.strokeStyle=agDrawTool==='eraser'?'#fff':agColor;ctx.lineWidth=agDrawTool==='brush'?agSz*2:agSz;ctx.lineCap='round';ctx.lineJoin='round';ctx.globalAlpha=agDrawTool==='brush'?.5:1;ctx.stroke();ctx.globalAlpha=1;agLx=pos.x;agLy=pos.y;};
   cv.addEventListener('mousedown',e=>{agDrw=true;const p=gp(e,cv);agLx=p.x;agLy=p.y;});
   cv.addEventListener('mousemove',dd);cv.addEventListener('mouseup',()=>agDrw=false);cv.addEventListener('mouseleave',()=>agDrw=false);
   cv.addEventListener('touchstart',e=>{e.preventDefault();agDrw=true;const p=gp(e.touches[0],cv);agLx=p.x;agLy=p.y;},{passive:false});
   cv.addEventListener('touchmove',e=>{e.preventDefault();dd(e.touches[0]);},{passive:false});
   cv.addEventListener('touchend',()=>agDrw=false);
 }
-function agTool(t){agTool=t;['pen','brush','eraser'].forEach(n=>{const b=document.getElementById('ag-t-'+n);if(b){b.style.background=n===t?'rgba(15,118,110,.2)':'transparent';b.style.borderColor=n===t?'rgba(15,118,110,.8)':'rgba(255,255,255,.1)';b.style.color=n===t?'#f0eee8':'#a09e98';}});}
+function setDrawTool(t){agDrawTool=t;['pen','brush','eraser'].forEach(n=>{const b=document.getElementById('ag-t-'+n);if(b){b.style.background=n===t?'rgba(15,118,110,.2)':'transparent';b.style.borderColor=n===t?'rgba(15,118,110,.8)':'rgba(255,255,255,.1)';b.style.color=n===t?'#f0eee8':'#a09e98';}});}
 function agBs(){agSz=+document.getElementById('ag-bs').value;const v=document.getElementById('ag-bv');if(v)v.textContent=agSz;}
 function agClear(){const cv=document.getElementById('ag-cv');if(!cv)return;const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);}
 function agSave(){const cv=document.getElementById('ag-cv');if(!cv)return;const a=document.createElement('a');a.download='art.png';a.href=cv.toDataURL();a.click();}
