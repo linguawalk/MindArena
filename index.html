@@ -350,8 +350,8 @@ const CATS = [
   {id:'02_logic',    icon:'🧠', label:'논리',    desc:'조건을 분석하고 반드시 참인 결론을 추론하세요.',       color:'var(--log)', levels:15, total:150},
   {id:'05_spatial',  icon:'🔷', label:'공간',    desc:'도형의 변환·대칭·좌표를 머릿속에서 조작하세요.',      color:'var(--spa)', levels:15, total:150},
   {id:'07_strategy', icon:'♟️', label:'전략',    desc:'게임 상황을 분석하고 최적의 선택을 찾으세요.',        color:'var(--str)', levels:15, total:150},
-  {id:'music',       icon:'🎵', label:'음악',    desc:'음이름·리듬·코드·장단조를 귀로 듣고 맞히세요.',       color:'var(--mus)', levels:null, total:5,  action:'openDov("music-ov","pitch")'},
-  {id:'art',         icon:'🎨', label:'미술',    desc:'색 혼합·명도채도·드로잉·픽셀아트를 직접 체험하세요.', color:'var(--art)', levels:null, total:4,  action:'openDov("art-ov","mix")'},
+  {id:'music',       icon:'🎵', label:'음악',    desc:'음이름·리듬·코드·장단조를 귀로 듣고 맞히세요.',       color:'var(--mus)', levels:null, total:5,  action:"openDov('music-ov','pitch')"},
+  {id:'art',         icon:'🎨', label:'미술',    desc:'색 혼합·명도채도·드로잉·픽셀아트를 직접 체험하세요.', color:'var(--art)', levels:null, total:4,  action:"openDov('art-ov','mix')"},
 ];
 
 let GS={};
@@ -432,11 +432,21 @@ function renderPuzzle(){
       ${p.hints.length?`<button class="hint-btn" id="hint-btn" onclick="showHint()">💡 힌트 보기 (${p.hints.length}개)</button><div id="hint-box"></div>`:''}
     </div>
     ${isReveal?`
-      <div class="reveal-ans" id="rev-ans">${p.answer}</div>
-      <div class="exp-box" id="exp-box">${p.explanation||''}</div>
-      <div class="gbtns">
+      <div style="background:var(--bg2);border-radius:10px;padding:.85rem 1rem;margin-bottom:.75rem;font-size:13px;color:var(--t2)">
+        💭 스스로 생각해본 후 정답을 확인하세요.
+      </div>
+      <div class="reveal-ans" id="rev-ans" style="display:none">${p.answer}</div>
+      <div class="exp-box" id="exp-box" style="display:none">${p.explanation||''}</div>
+      <div class="gbtns" id="reveal-btns">
         <button class="gbp" style="background:${col}" onclick="showReveal()">💡 정답 보기</button>
         <button class="gbs" onclick="closeGame()">나가기</button>
+      </div>
+      <div id="self-eval" style="display:none;margin-top:.75rem">
+        <div style="font-size:13px;color:var(--t3);margin-bottom:.5rem;text-align:center">스스로 맞혔나요?</div>
+        <div style="display:flex;gap:8px">
+          <button class="gbp" style="flex:1;background:#16a34a" onclick="selfEval(true)">✅ 맞혔어요</button>
+          <button class="gbp" style="flex:1;background:#dc2626" onclick="selfEval(false)">❌ 몰랐어요</button>
+        </div>
       </div>
     `:`
       <input class="ans-input" id="ans-inp" type="text"
@@ -500,15 +510,19 @@ function submitAns(){
 }
 
 function showReveal(){
-  document.getElementById('rev-ans').style.display='block';
-  const exp=document.getElementById('exp-box'); if(exp)exp.style.display='block';
+  const rev=document.getElementById('rev-ans');
+  const exp=document.getElementById('exp-box');
+  const rb=document.getElementById('reveal-btns');
+  const se=document.getElementById('self-eval');
+  if(rev)rev.style.display='block';
+  if(exp)exp.style.display='block';
+  if(rb)rb.style.display='none';
+  if(se)se.style.display='block';
   GS.answered=true;
-  const btns=document.querySelector('#gov-body .gbtns');
-  if(btns)btns.innerHTML=`
-    <button class="gbp" style="background:${GS.meta.color}" onclick="nextPuzzle()">
-      ${GS.idx>=GS.problems.length-1?'결과 보기 →':'다음 문제 →'}
-    </button>
-    <button class="gbs" onclick="closeGame()">나가기</button>`;
+}
+function selfEval(knew){
+  if(knew)GS.correct++;
+  nextPuzzle();
 }
 function nextPuzzle(){GS.idx++;renderPuzzle();}
 
