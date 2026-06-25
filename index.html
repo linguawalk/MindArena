@@ -184,6 +184,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-
 .ctags{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:.9rem}
 .ctag{padding:4px 12px;border-radius:14px;font-size:12px;background:var(--bg3);color:var(--t2)}
 
+.ii-slot:hover{border-color:var(--lang)!important;background:var(--lang-l)!important;}
+
 footer{border-top:.5px solid var(--bd);padding:1.25rem 1.5rem;display:flex;align-items:center;
        justify-content:space-between;font-size:12px;color:var(--t3);flex-wrap:wrap;gap:.5rem;margin-top:2rem}
 footer a{color:var(--t3);text-decoration:none}
@@ -212,8 +214,8 @@ footer a:hover{color:var(--t)}
 
 <div class="tabs">
   <button class="tab on" data-t="lang" onclick="showTab('lang',this)">🔤 언어 <span class="tct">3과목</span></button>
-  <button class="tab" data-t="stem" onclick="showTab('stem',this)">🔬 수학과학기술 <span class="tct">6과목</span></button>
-  <button class="tab" data-t="soc" onclick="showTab('soc',this)">🌍 사회 <span class="tct">4과목</span></button>
+  <button class="tab" data-t="stem" onclick="showTab('stem',this)">🔬 수학·과학·컴퓨터 <span class="tct">6과목</span></button>
+  <button class="tab" data-t="soc" onclick="showTab('soc',this)">🌍 인문·사회 <span class="tct">4과목</span></button>
   <button class="tab" data-t="arts" onclick="showTab('arts',this)">🎶 음악·미술 <span class="tct">2과목</span></button>
 </div>
 
@@ -294,33 +296,33 @@ footer a:hover{color:var(--t)}
 // ═══════════════════════════════════
 const TABS = {
   lang:{label:'언어',color:'var(--lang)',sc:'sl',subjects:[
-    {id:'hanja',icon:'漢',label:'한자',desc:'카드 매칭·획순 그리기·사자성어 조합으로 한자를 게임으로 익힙니다.',
+    {id:'hanja',icon:'漢',label:'한자',desc:'카드 매칭·한자 속도전·사자성어 조합으로 한자를 게임으로 익힙니다.',
      games:[
       {id:'hanja-flip',icon:'🀄',title:'한자 카드 매칭',type:'기억력 게임',desc:'한자와 뜻 카드를 뒤집어 같은 쌍을 찾으세요. 레벨이 올라갈수록 카드가 늘어납니다.',ready:true},
-      {id:'hanja-speed',icon:'⚡',title:'한자 뜻 속도전',type:'속도 게임',desc:'한자가 나타나면 빠르게 뜻을 선택! 30초 동안 최대한 많이 맞히세요.',ready:false},
-      {id:'hanja-idiom',icon:'🧩',title:'사자성어 조합',type:'조합 퍼즐',desc:'흩어진 한자 4개를 올바른 사자성어로 조합하세요.',ready:false},
+      {id:'hanja-speed',icon:'⚡',title:'한자 뜻 속도전',type:'속도 게임',desc:'한자가 나타나면 빠르게 뜻을 선택! 30초 동안 최대한 많이 맞히세요.',ready:true},
+      {id:'hanja-idiom',icon:'🧩',title:'사자성어 조합',type:'조합 퍼즐',desc:'흩어진 한자 4개를 올바른 사자성어로 조합하세요.',ready:true},
       {id:'hanja-stroke',icon:'✍️',title:'획순 따라 그리기',type:'드로잉 게임',desc:'캔버스에 한자 획순을 따라 그려보세요.',ready:false},
     ]},
-    {id:'english',icon:'🌐',label:'영어',desc:'단어 카드 메모리·문장 조합·속도 게임으로 영어를 게임처럼 배웁니다.',
+    {id:'english',icon:'🌐',label:'영어',desc:'단어 카드 메모리·단어 스피드·문장 조합 게임으로 영어를 게임처럼 배웁니다.',
      games:[
       {id:'eng-memory',icon:'🃏',title:'영어 단어 카드',type:'메모리 게임',desc:'영어 단어와 한국어 뜻 카드를 뒤집어 같은 쌍을 찾으세요.',ready:true},
-      {id:'eng-speed',icon:'⚡',title:'단어 스피드 게임',type:'속도 게임',desc:'뜻을 보고 영어 단어를 빠르게 선택! 시간이 갈수록 빨라집니다.',ready:false},
-      {id:'eng-sentence',icon:'📝',title:'문장 조합 게임',type:'드래그 게임',desc:'단어 카드를 드래그하여 올바른 영어 문장을 완성하세요.',ready:false},
+      {id:'eng-speed',icon:'⚡',title:'단어 스피드 게임',type:'속도 게임',desc:'뜻을 보고 영어 단어를 빠르게 선택! 시간이 갈수록 빨라집니다.',ready:true},
+      {id:'eng-sentence',icon:'📝',title:'문장 조합 게임',type:'드래그 게임',desc:'단어 카드를 드래그하여 올바른 영어 문장을 완성하세요.',ready:true},
       {id:'eng-grammar',icon:'🔧',title:'문법 오류 찾기',type:'탐정 게임',desc:'문장에서 틀린 곳을 찾아 클릭하세요. 문법 감각을 게임으로!',ready:false},
     ]},
     {id:'japanese',icon:'🇯🇵',label:'일본어',desc:'히라가나 카드·단어 매칭·가나 따라쓰기 게임으로 일본어를 배웁니다.',
      games:[
-      {id:'jpn-kana',icon:'🀄',title:'히라가나·가타카나 카드',type:'메모리 게임',desc:'히라가나/가타카나와 발음 카드를 매칭하세요.',ready:false},
+      {id:'jpn-kana',icon:'🀄',title:'히라가나·가타카나 카드',type:'메모리 게임',desc:'히라가나/가타카나와 발음 카드를 매칭하세요.',ready:true},
       {id:'jpn-word',icon:'🃏',title:'일본어 단어 매칭',type:'매칭 게임',desc:'일본어 단어와 한국어 뜻을 연결하세요.',ready:false},
       {id:'jpn-stroke',icon:'✍️',title:'가나 따라쓰기',type:'드로잉 게임',desc:'캔버스에서 히라가나와 가타카나를 따라 써보세요.',ready:false},
       {id:'jpn-speed',icon:'⚡',title:'독해 스피드',type:'속도 게임',desc:'일본어 문장을 보고 의미를 빠르게 선택하세요.',ready:false},
     ]},
   ]},
-  stem:{label:'수학과학기술',color:'var(--stem)',sc:'ss',subjects:[
-    {id:'math',icon:'🔢',label:'수학',desc:'계산 속도 게임·도형 퍼즐·수 패턴 찾기로 수학을 게임처럼 배웁니다.',
+  stem:{label:'수학·과학·컴퓨터',color:'var(--stem)',sc:'ss',subjects:[
+    {id:'math',icon:'🔢',label:'수학',desc:'계산 속도 게임·수 패턴 찾기·도형 퍼즐로 수학을 게임처럼 배웁니다.',
      games:[
       {id:'math-calc',icon:'⚡',title:'계산 속도 게임',type:'속도 게임',desc:'사칙연산 문제를 최대한 빠르게 풀어보세요! 레벨별로 난이도가 올라갑니다.',ready:true},
-      {id:'math-pattern',icon:'🔍',title:'수 패턴 찾기',type:'추론 게임',desc:'수열의 빈칸을 채우세요. 등차·등비·피보나치 등 다양한 패턴!',ready:false},
+      {id:'math-pattern',icon:'🔍',title:'수 패턴 찾기',type:'추론 게임',desc:'수열의 빈칸을 채우세요. 등차·등비·피보나치 등 다양한 패턴!',ready:true},
       {id:'math-shape',icon:'🔷',title:'도형 퍼즐',type:'퍼즐 게임',desc:'도형 조각을 드래그하여 빈 공간을 채우세요.',ready:false},
       {id:'math-equation',icon:'⚖️',title:'방정식 균형',type:'균형 게임',desc:'저울 양쪽의 균형을 맞추어 방정식을 완성하세요.',ready:false},
     ]},
@@ -355,11 +357,11 @@ const TABS = {
       {id:'prog-algo',icon:'🗺️',title:'알고리즘 미로',type:'미로 게임',desc:'최소 명령으로 미로를 탈출하는 알고리즘을 짜보세요.',ready:false},
     ]},
   ]},
-  soc:{label:'사회',color:'var(--soc)',sc:'sc',subjects:[
-    {id:'khistory',icon:'🏯',label:'한국사',desc:'타임라인 드래그·역사 지도·인물 카드 매칭으로 한국사를 게임으로 배웁니다.',
+  soc:{label:'인문·사회',color:'var(--soc)',sc:'sc',subjects:[
+    {id:'khistory',icon:'🏯',label:'한국사',desc:'타임라인 드래그·역사 인물 카드 매칭으로 한국사를 게임으로 배웁니다.',
      games:[
       {id:'kh-timeline',icon:'⏳',title:'역사 타임라인',type:'순서 게임',desc:'역사 사건을 연대순으로 드래그하여 배열하세요. 시대의 흐름을 몸으로 익힙니다.',ready:true},
-      {id:'kh-figure',icon:'🃏',title:'역사 인물 카드',type:'매칭 게임',desc:'역사 인물과 업적을 매칭하세요. 세종대왕·이순신·김구 등!',ready:false},
+      {id:'kh-figure',icon:'🃏',title:'역사 인물 카드',type:'매칭 게임',desc:'역사 인물과 업적을 매칭하세요. 세종대왕·이순신·김구 등!',ready:true},
       {id:'kh-map',icon:'🗺️',title:'역사 지도 클릭',type:'지도 게임',desc:'시대별 국가 영역을 지도에서 찾아 클릭하세요.',ready:false},
       {id:'kh-artifact',icon:'🏺',title:'유물 시대 맞히기',type:'카드 게임',desc:'유물 사진을 보고 어느 시대의 것인지 맞혀보세요.',ready:false},
     ]},
@@ -558,10 +560,17 @@ function closeGame(){
 }
 function startGame(id){
   if(id==='hanja-flip')startHanjaFlip();
+  else if(id==='hanja-speed')startHanjaSpeed();
+  else if(id==='hanja-idiom')startHanjaIdiom();
   else if(id==='eng-memory')startEngMemory();
+  else if(id==='eng-speed')startEngSpeed();
+  else if(id==='eng-sentence')startEngSentence();
+  else if(id==='jpn-kana')startJpnKana();
   else if(id==='kh-timeline')startTimeline();
+  else if(id==='kh-figure')startKhFigure();
   else if(id==='geo-flag')startFlagGame();
   else if(id==='math-calc')startCalcGame();
+  else if(id==='math-pattern')startMathPattern();
 }
 
 // ═══════════════════════════════════
@@ -867,8 +876,527 @@ function endCalcGame(){
 }
 
 // ═══════════════════════════════════
-// 음악·미술 오버레이
+// 6. 한자 뜻 속도전 ⚡
 // ═══════════════════════════════════
+function startHanjaSpeed(lv=1){
+  if(calcTimer){clearInterval(calcTimer);calcTimer=null;}
+  const pool=[...HANJA_POOL].sort(()=>Math.random()-.5);
+  GS={lv,pool,idx:0,score:0,correct:0,wrong:0,timeLeft:30,answered:false};
+  openGame('⚡ 한자 뜻 속도전',`
+    <div class="gscore">
+      <div class="gsi">점수 <span class="gsv" id="hs-s" style="color:var(--lang)">0</span></div>
+      <div class="gsi">정답 <span class="gsv" id="hs-ok">0</span></div>
+      <div class="gsi">오답 <span class="gsv" id="hs-ng">0</span></div>
+    </div>
+    <div class="tbar"><div class="tfill" id="hs-tf" style="width:100%;background:var(--lang)"></div></div>
+    <div style="font-size:12px;color:var(--t3);text-align:right;margin:.25rem 0" id="hs-t">30초</div>
+    <div style="font-size:72px;font-weight:700;text-align:center;padding:1.5rem;background:var(--bg2);border-radius:14px;margin-bottom:.75rem;letter-spacing:.05em" id="hs-q"></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px" id="hs-opts"></div>
+    <div class="gfb" id="hs-fb"></div>
+    <div class="gbtns" style="margin-top:.75rem"><button class="gbs" onclick="if(calcTimer){clearInterval(calcTimer);calcTimer=null;}closeGame()">나가기</button></div>`);
+  renderHanjaSpeedQ();
+  calcTimer=setInterval(()=>{
+    GS.timeLeft--;
+    const pct=GS.timeLeft/30*100;
+    const tf=document.getElementById('hs-tf'),tt=document.getElementById('hs-t');
+    if(tf){tf.style.width=pct+'%';tf.style.background=pct>50?'var(--lang)':pct>25?'#f59e0b':'#ef4444';}
+    if(tt)tt.textContent=GS.timeLeft+'초';
+    if(GS.timeLeft<=0){clearInterval(calcTimer);calcTimer=null;endHanjaSpeed();}
+  },1000);
+}
+function renderHanjaSpeedQ(){
+  const it=GS.pool[GS.idx%GS.pool.length];
+  GS.cur=it;
+  const q=document.getElementById('hs-q');
+  if(q)q.textContent=it.h;
+  // 4개 선택지: 정답 + 오답 3개
+  const wrong=[...HANJA_POOL].filter(x=>x.h!==it.h).sort(()=>Math.random()-.5).slice(0,3);
+  const opts=[{...it,ok:true},...wrong.map(x=>({...x,ok:false}))].sort(()=>Math.random()-.5);
+  const el=document.getElementById('hs-opts');
+  if(!el)return;
+  el.innerHTML=opts.map(o=>`<button class="fopt" onclick="ansHanjaSpeed('${o.m}','${it.m}',this)">${o.m}</button>`).join('');
+}
+function ansHanjaSpeed(chosen,correct,btn){
+  if(GS.answered)return;GS.answered=true;
+  const ok=chosen===correct;
+  document.querySelectorAll('#hs-opts .fopt').forEach(b=>{
+    if(b.textContent===correct)b.classList.add('ok');
+    else if(b===btn&&!ok)b.classList.add('ng');
+    b.style.pointerEvents='none';
+  });
+  if(ok){GS.score+=10;GS.correct++;}else GS.wrong++;
+  const s=document.getElementById('hs-s'),okEl=document.getElementById('hs-ok'),ngEl=document.getElementById('hs-ng');
+  if(s)s.textContent=GS.score;if(okEl)okEl.textContent=GS.correct;if(ngEl)ngEl.textContent=GS.wrong;
+  GS.idx++;
+  setTimeout(()=>{
+    if(!document.getElementById('hs-q'))return;
+    GS.answered=false;
+    document.querySelectorAll('#hs-opts .fopt').forEach(b=>{b.classList.remove('ok','ng');b.style.pointerEvents='';});
+    renderHanjaSpeedQ();
+  },ok?300:700);
+}
+function endHanjaSpeed(){
+  const body=document.getElementById('gov-body');if(!body)return;
+  body.innerHTML=`<div style="text-align:center;padding:2rem 0">
+    <div style="font-size:48px;margin-bottom:.5rem">⚡</div>
+    <div style="font-size:36px;font-weight:700;color:var(--lang);margin-bottom:.35rem">${GS.score}점</div>
+    <div style="font-size:14px;color:var(--t2);margin-bottom:1.5rem">정답 ${GS.correct}개 · 오답 ${GS.wrong}개 ${GS.score>=100?'🎉 한자 고수!':GS.score>=50?'👍 잘 했습니다!':'📚 더 연습해보세요!'}</div>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="gbp" style="background:var(--lang)" onclick="startHanjaSpeed()">다시 하기</button>
+      <button class="gbs" onclick="closeGame()">나가기</button>
+    </div></div>`;
+}
+
+// ═══════════════════════════════════
+// 7. 사자성어 조합 🧩
+// ═══════════════════════════════════
+const IDIOMS=[
+  {chars:['一','石','二','鳥'],meaning:'일석이조 — 돌 하나로 새 두 마리'},
+  {chars:['百','聞','不','如'],meaning:'백문불여 — 백 번 듣는 것이 한 번 보는 것만 못함'},
+  {chars:['千','里','馬','駒'],meaning:'천리마구 — 하루에 천 리를 달리는 말'},
+  {chars:['四','面','楚','歌'],meaning:'사면초가 — 사방이 적에게 둘러싸인 고립무원'},
+  {chars:['同','苦','同','樂'],meaning:'동고동락 — 괴로움과 즐거움을 함께 함'},
+  {chars:['七','顚','八','起'],meaning:'칠전팔기 — 일곱 번 넘어지고 여덟 번 일어남'},
+  {chars:['水','魚','之','交'],meaning:'수어지교 — 물과 물고기처럼 떼려야 뗄 수 없는 관계'},
+  {chars:['靑','出','於','藍'],meaning:'청출어람 — 쪽에서 나온 청색이 쪽보다 더 푸름'},
+];
+function startHanjaIdiom(qi=0){
+  const q=IDIOMS[qi%IDIOMS.length];
+  const shuffled=[...q.chars].sort(()=>Math.random()-.5);
+  GS={q,qi,placed:[null,null,null,null],bank:[...shuffled],score:0};
+  openGame('🧩 사자성어 조합',`
+    <div class="gscore">
+      <div class="gsi">${qi+1} / ${IDIOMS.length}</div>
+      <div class="gsi" style="font-size:12px;color:var(--t2)">${q.meaning}</div>
+    </div>
+    <div style="font-size:13px;color:var(--t2);margin-bottom:1rem">한자를 클릭해서 빈칸에 순서대로 넣으세요.</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem" id="ii-slots">
+      ${[0,1,2,3].map(i=>`<div class="ii-slot" id="ii-s${i}" data-i="${i}"
+        onclick="idiomSlotClick(${i})"
+        style="height:72px;border-radius:12px;border:2.5px dashed var(--bd);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;background:var(--bg2)">
+      </div>`).join('')}
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:1rem" id="ii-bank"></div>
+    <div class="gfb" id="ii-fb"></div>
+    <div class="gbtns">
+      <button class="gbp" style="background:var(--lang)" onclick="checkIdiom()">✓ 확인</button>
+      <button class="gbs" onclick="startHanjaIdiom(${qi})">🔄 다시</button>
+      <button class="gbs" onclick="closeGame()">나가기</button>
+    </div>`);
+  renderIdiomBank();
+}
+function renderIdiomBank(){
+  const bank=document.getElementById('ii-bank');
+  if(!bank)return;
+  bank.innerHTML=GS.bank.map((ch,i)=>ch?`<button onclick="idiomBankClick(${i})" style="width:56px;height:56px;border-radius:10px;border:2px solid var(--lang);background:var(--lang-l);font-size:28px;cursor:pointer;font-family:inherit">${ch}</button>`:'').join('');
+}
+let idiomSelected={from:'',idx:-1};
+function idiomBankClick(i){
+  idiomSelected={from:'bank',idx:i};
+  document.querySelectorAll('#ii-bank button').forEach((b,j)=>b.style.boxShadow=j===i?'0 0 0 3px var(--lang)':'');
+}
+function idiomSlotClick(i){
+  if(idiomSelected.from==='bank'&&idiomSelected.idx>=0){
+    // place bank char into slot
+    const ch=GS.bank[idiomSelected.idx];
+    if(!ch)return;
+    if(GS.placed[i]){GS.bank[GS.bank.findIndex((x,j)=>!x&&j>=0)||idiomSelected.idx]=GS.placed[i];}
+    // return existing slot char to bank
+    if(GS.placed[i]!==null){
+      const freeIdx=GS.bank.findIndex(x=>!x);
+      if(freeIdx>=0)GS.bank[freeIdx]=GS.placed[i]; else GS.bank.push(GS.placed[i]);
+    }
+    GS.placed[i]=ch;GS.bank[idiomSelected.idx]=null;
+    idiomSelected={from:'',idx:-1};
+    updateIdiomSlots();renderIdiomBank();
+  } else if(GS.placed[i]!==null){
+    // return to bank
+    const freeIdx=GS.bank.findIndex(x=>!x);
+    if(freeIdx>=0)GS.bank[freeIdx]=GS.placed[i]; else GS.bank.push(GS.placed[i]);
+    GS.placed[i]=null;
+    idiomSelected={from:'',idx:-1};
+    updateIdiomSlots();renderIdiomBank();
+  }
+}
+function updateIdiomSlots(){
+  [0,1,2,3].forEach(i=>{
+    const sl=document.getElementById('ii-s'+i);
+    if(!sl)return;
+    sl.textContent=GS.placed[i]||'';
+    sl.style.background=GS.placed[i]?'var(--lang-l)':'var(--bg2)';
+    sl.style.borderColor=GS.placed[i]?'var(--lang)':'var(--bd)';
+  });
+}
+function checkIdiom(){
+  if(GS.placed.some(x=>!x)){
+    const fb=document.getElementById('ii-fb');if(fb){fb.className='gfb ng';fb.textContent='빈칸을 모두 채워주세요!';} return;
+  }
+  const correct=JSON.stringify(GS.placed)===JSON.stringify(GS.q.chars);
+  const fb=document.getElementById('ii-fb');
+  fb.className=`gfb ${correct?'ok':'ng'}`;
+  if(correct){
+    fb.textContent='🎉 정답! '+GS.q.meaning;
+    document.querySelector('.gbtns').innerHTML=`
+      ${GS.qi<IDIOMS.length-1?`<button class="gbp" style="background:var(--lang)" onclick="startHanjaIdiom(${GS.qi+1})">다음 성어 →</button>`:'<button class="gbp" style="background:var(--lang)" onclick="startHanjaIdiom(0)">처음부터</button>'}
+      <button class="gbs" onclick="closeGame()">나가기</button>`;
+  } else {
+    fb.textContent='❌ 틀렸습니다. 다시 시도해보세요!';
+    setTimeout(()=>{fb.className='gfb';},1500);
+  }
+}
+
+// ═══════════════════════════════════
+// 8. 영어 단어 스피드 ⚡
+// ═══════════════════════════════════
+function startEngSpeed(){
+  if(calcTimer){clearInterval(calcTimer);calcTimer=null;}
+  const pool=[...ENG_POOL].sort(()=>Math.random()-.5);
+  GS={pool,idx:0,score:0,correct:0,wrong:0,timeLeft:30,answered:false};
+  openGame('⚡ 단어 스피드 게임',`
+    <div class="gscore">
+      <div class="gsi">점수 <span class="gsv" id="es-s" style="color:var(--lang)">0</span></div>
+      <div class="gsi">정답 <span class="gsv" id="es-ok">0</span></div>
+    </div>
+    <div class="tbar"><div class="tfill" id="es-tf" style="width:100%;background:var(--lang)"></div></div>
+    <div style="font-size:12px;color:var(--t3);text-align:right;margin:.25rem 0" id="es-t">30초</div>
+    <div style="font-size:15px;color:var(--t2);text-align:center;margin-bottom:.5rem">뜻을 보고 영어 단어를 선택하세요!</div>
+    <div style="font-size:32px;font-weight:700;text-align:center;padding:1.25rem;background:var(--bg2);border-radius:14px;margin-bottom:.75rem" id="es-q"></div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px" id="es-opts"></div>
+    <div class="gfb" id="es-fb"></div>
+    <div class="gbtns" style="margin-top:.75rem"><button class="gbs" onclick="if(calcTimer){clearInterval(calcTimer);calcTimer=null;}closeGame()">나가기</button></div>`);
+  renderEngSpeedQ();
+  calcTimer=setInterval(()=>{
+    GS.timeLeft--;
+    const pct=GS.timeLeft/30*100;
+    const tf=document.getElementById('es-tf'),tt=document.getElementById('es-t');
+    if(tf){tf.style.width=pct+'%';tf.style.background=pct>50?'var(--lang)':pct>25?'#f59e0b':'#ef4444';}
+    if(tt)tt.textContent=GS.timeLeft+'초';
+    if(GS.timeLeft<=0){clearInterval(calcTimer);calcTimer=null;endEngSpeed();}
+  },1000);
+}
+function renderEngSpeedQ(){
+  const it=GS.pool[GS.idx%GS.pool.length];GS.cur=it;
+  const q=document.getElementById('es-q');if(q)q.textContent=it.k;
+  const wrong=[...ENG_POOL].filter(x=>x.e!==it.e).sort(()=>Math.random()-.5).slice(0,3);
+  const opts=[it,...wrong].sort(()=>Math.random()-.5);
+  const el=document.getElementById('es-opts');if(!el)return;
+  el.innerHTML=opts.map(o=>`<button class="fopt" onclick="ansEngSpeed('${o.e}','${it.e}',this)">${o.e}</button>`).join('');
+}
+function ansEngSpeed(chosen,correct,btn){
+  if(GS.answered)return;GS.answered=true;
+  const ok=chosen===correct;
+  document.querySelectorAll('#es-opts .fopt').forEach(b=>{
+    if(b.textContent===correct)b.classList.add('ok');
+    else if(b===btn&&!ok)b.classList.add('ng');
+    b.style.pointerEvents='none';
+  });
+  if(ok){GS.score+=10;GS.correct++;}else GS.wrong++;
+  const s=document.getElementById('es-s'),okEl=document.getElementById('es-ok');
+  if(s)s.textContent=GS.score;if(okEl)okEl.textContent=GS.correct;
+  GS.idx++;
+  setTimeout(()=>{
+    if(!document.getElementById('es-q'))return;
+    GS.answered=false;
+    document.querySelectorAll('#es-opts .fopt').forEach(b=>{b.classList.remove('ok','ng');b.style.pointerEvents='';});
+    renderEngSpeedQ();
+  },ok?300:700);
+}
+function endEngSpeed(){
+  const body=document.getElementById('gov-body');if(!body)return;
+  body.innerHTML=`<div style="text-align:center;padding:2rem 0">
+    <div style="font-size:48px">⚡</div>
+    <div style="font-size:36px;font-weight:700;color:var(--lang);margin:.5rem 0">${GS.score}점</div>
+    <div style="font-size:14px;color:var(--t2);margin-bottom:1.5rem">정답 ${GS.correct}개 ${GS.score>=100?'🎉 영어 고수!':GS.score>=50?'👍 잘 했어요!':'📚 더 연습!'}</div>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="gbp" style="background:var(--lang)" onclick="startEngSpeed()">다시 하기</button>
+      <button class="gbs" onclick="closeGame()">나가기</button>
+    </div></div>`;
+}
+
+// ═══════════════════════════════════
+// 9. 영어 문장 조합 📝
+// ═══════════════════════════════════
+const ENG_SENTENCES=[
+  {words:['I','like','to','read','books'],korean:'나는 책 읽는 것을 좋아한다'},
+  {words:['She','is','very','happy','today'],korean:'그녀는 오늘 매우 행복하다'},
+  {words:['We','play','soccer','every','day'],korean:'우리는 매일 축구를 한다'},
+  {words:['The','cat','sits','on','the','mat'],korean:'고양이가 매트 위에 앉아 있다'},
+  {words:['He','wants','to','be','a','doctor'],korean:'그는 의사가 되고 싶다'},
+  {words:['They','study','English','at','school'],korean:'그들은 학교에서 영어를 공부한다'},
+  {words:['My','mother','cooks','delicious','food'],korean:'우리 어머니는 맛있는 음식을 요리하신다'},
+  {words:['The','sun','rises','in','the','east'],korean:'태양은 동쪽에서 뜬다'},
+];
+function startEngSentence(qi=0){
+  const q=ENG_SENTENCES[qi%ENG_SENTENCES.length];
+  const shuffled=[...q.words].sort(()=>Math.random()-.5);
+  GS={q,qi,placed:[],bank:[...shuffled]};
+  openGame('📝 문장 조합 게임',`
+    <div style="font-size:13px;color:var(--t2);margin-bottom:.35rem">한국어 뜻:</div>
+    <div style="font-size:16px;font-weight:600;padding:.75rem 1rem;background:var(--bg2);border-radius:10px;margin-bottom:1rem">${q.korean}</div>
+    <div style="font-size:13px;color:var(--t2);margin-bottom:.5rem">단어를 클릭해서 문장을 완성하세요:</div>
+    <div id="es2-placed" onclick="esPlacedClick(event)"
+      style="min-height:56px;padding:.6rem;border-radius:12px;border:2px dashed var(--lang);background:var(--lang-l);display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem;cursor:pointer;align-items:center">
+      <span id="es2-ph" style="font-size:13px;color:var(--t3)">여기에 단어를 배치하세요</span>
+    </div>
+    <div id="es2-bank" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem"></div>
+    <div class="gfb" id="es2-fb"></div>
+    <div class="gbtns">
+      <button class="gbp" style="background:var(--lang)" onclick="checkEngSentence()">✓ 확인</button>
+      <button class="gbs" onclick="startEngSentence(${qi})">🔄 다시</button>
+      <button class="gbs" onclick="closeGame()">나가기</button>
+    </div>`);
+  renderEsSentenceBank();
+}
+function renderEsSentenceBank(){
+  const bank=document.getElementById('es2-bank');if(!bank)return;
+  bank.innerHTML=GS.bank.map((w,i)=>w!==null?`<button onclick="esBankClick(${i})" style="padding:8px 14px;border-radius:8px;border:1.5px solid var(--lang);background:white;font-size:14px;cursor:pointer;font-family:inherit">${w}</button>`:'' ).join('');
+}
+function esBankClick(i){
+  const w=GS.bank[i];if(!w)return;
+  GS.placed.push(w);GS.bank[i]=null;
+  updateEsPlaced();renderEsSentenceBank();
+}
+function esPlacedClick(e){
+  // clicking a placed word removes it back to bank
+  const btn=e.target.closest('button');if(!btn)return;
+  const i=+btn.dataset.i;
+  const w=GS.placed[i];
+  GS.placed.splice(i,1);
+  const freeIdx=GS.bank.findIndex(x=>x===null);
+  if(freeIdx>=0)GS.bank[freeIdx]=w;else GS.bank.push(w);
+  updateEsPlaced();renderEsSentenceBank();
+}
+function updateEsPlaced(){
+  const el=document.getElementById('es2-placed');if(!el)return;
+  const ph=document.getElementById('es2-ph');
+  if(GS.placed.length===0){
+    el.innerHTML='<span id="es2-ph" style="font-size:13px;color:var(--t3)">여기에 단어를 배치하세요</span>';
+  } else {
+    el.innerHTML=GS.placed.map((w,i)=>`<button data-i="${i}" style="padding:8px 14px;border-radius:8px;border:1.5px solid #2563eb;background:var(--stem-l);font-size:14px;cursor:pointer;font-family:inherit">${w}</button>`).join('');
+  }
+}
+function checkEngSentence(){
+  if(GS.placed.length!==GS.q.words.length){
+    const fb=document.getElementById('es2-fb');if(fb){fb.className='gfb ng';fb.textContent='모든 단어를 배치해주세요!';}return;
+  }
+  const correct=JSON.stringify(GS.placed)===JSON.stringify(GS.q.words);
+  const fb=document.getElementById('es2-fb');
+  fb.className=`gfb ${correct?'ok':'ng'}`;
+  if(correct){
+    fb.textContent='🎉 정답! '+GS.q.words.join(' ');
+    document.querySelector('.gbtns').innerHTML=`
+      <button class="gbp" style="background:var(--lang)" onclick="startEngSentence(${GS.qi+1})">다음 문장 →</button>
+      <button class="gbs" onclick="closeGame()">나가기</button>`;
+  } else {
+    fb.textContent=`❌ 정답: ${GS.q.words.join(' ')}`;
+    setTimeout(()=>{fb.className='gfb';},2000);
+  }
+}
+
+// ═══════════════════════════════════
+// 10. 히라가나 카드 매칭 🀄
+// ═══════════════════════════════════
+const HIRAGANA_POOL=[
+  {h:'あ',r:'a'},{h:'い',r:'i'},{h:'う',r:'u'},{h:'え',r:'e'},{h:'お',r:'o'},
+  {h:'か',r:'ka'},{h:'き',r:'ki'},{h:'く',r:'ku'},{h:'け',r:'ke'},{h:'こ',r:'ko'},
+  {h:'さ',r:'sa'},{h:'し',r:'shi'},{h:'す',r:'su'},{h:'せ',r:'se'},{h:'そ',r:'so'},
+  {h:'た',r:'ta'},{h:'ち',r:'chi'},{h:'つ',r:'tsu'},{h:'て',r:'te'},{h:'と',r:'to'},
+  {h:'な',r:'na'},{h:'に',r:'ni'},{h:'ぬ',r:'nu'},{h:'ね',r:'ne'},{h:'の',r:'no'},
+];
+function startJpnKana(lv=1){
+  const n=Math.min(3+lv*2,10);
+  const pool=[...HIRAGANA_POOL].sort(()=>Math.random()-.5).slice(0,n);
+  const cards=[];
+  pool.forEach((it,i)=>{
+    cards.push({id:i*2,pid:i,type:'h',text:it.h});
+    cards.push({id:i*2+1,pid:i,type:'r',text:it.r});
+  });
+  cards.sort(()=>Math.random()-.5);
+  GS={cards,lv,flipped:[],matched:new Set(),moves:0,start:Date.now()};
+  openGame('🀄 히라가나 카드 매칭',`
+    <div class="gscore">
+      <div class="gsi">레벨 <span class="gsv">${lv}</span></div>
+      <div class="gsi">매칭 <span class="gsv" id="jk-m">0</span>/${n}</div>
+      <div class="gsi">시도 <span class="gsv" id="jk-mv">0</span></div>
+    </div>
+    <div class="cg cg4" id="jk-g" style="grid-template-columns:repeat(4,1fr)"></div>
+    <div class="gfb" id="jk-fb"></div>
+    <div class="gbtns" style="margin-top:.75rem">
+      <button class="gbp" style="background:#dc2626" onclick="startJpnKana(${lv})">🔄 다시하기</button>
+      <button class="gbs" onclick="closeGame()">나가기</button>
+    </div>`);
+  const g=document.getElementById('jk-g');
+  cards.forEach(c=>{
+    const d=document.createElement('div');
+    d.className='fc';d.dataset.id=c.id;d.dataset.pid=c.pid;d.dataset.type=c.type;
+    d.innerHTML=`<div class="fc-i"><div class="fc-f" style="background:linear-gradient(135deg,#dc2626,#b91c1c)">JP</div><div class="fc-b" style="font-size:${c.type==='h'?'28px':'16px'};font-weight:700">${c.text}</div></div>`;
+    d.addEventListener('click',()=>jkClick(d));
+    g.appendChild(d);
+  });
+}
+function jkClick(card){
+  if(GS.flipped.length>=2||card.classList.contains('flipped')||card.classList.contains('matched'))return;
+  card.classList.add('flipped');GS.flipped.push(card);
+  if(GS.flipped.length===2){
+    GS.moves++;
+    const mv=document.getElementById('jk-mv');if(mv)mv.textContent=GS.moves;
+    const[a,b]=GS.flipped;
+    if(a.dataset.pid===b.dataset.pid&&a.dataset.id!==b.dataset.id){
+      setTimeout(()=>{
+        a.classList.add('matched');b.classList.add('matched');
+        GS.matched.add(a.dataset.pid);GS.flipped=[];
+        const mc=GS.matched.size,tot=GS.cards.length/2;
+        const mel=document.getElementById('jk-m');if(mel)mel.textContent=mc;
+        if(mc===tot){
+          const s=Math.round((Date.now()-GS.start)/1000);
+          const fb=document.getElementById('jk-fb');
+          if(fb){fb.className='gfb ok';fb.textContent=`🎉 완성! ${GS.moves}번 시도 · ${s}초`;}
+          const btns=document.querySelector('.gbtns');
+          if(btns)btns.innerHTML=`<button class="gbp" style="background:#dc2626" onclick="startJpnKana(${GS.lv+1})">다음 레벨 →</button><button class="gbs" onclick="closeGame()">나가기</button>`;
+        }
+      },300);
+    } else {
+      setTimeout(()=>{a.classList.remove('flipped');b.classList.remove('flipped');GS.flipped=[];},800);
+    }
+  }
+}
+
+// ═══════════════════════════════════
+// 11. 역사 인물 카드 매칭 🃏
+// ═══════════════════════════════════
+const KH_FIGURES=[
+  {p:'세종대왕',a:'훈민정음 창제 (1443)'},{p:'이순신',a:'거북선으로 왜군 격파'},
+  {p:'광개토대왕',a:'고구려 최대 영토 확장'},{p:'원효',a:'불교 대중화·해골물 깨달음'},
+  {p:'김구',a:'대한민국임시정부 주석'},{p:'유관순',a:'3·1 운동 만세 운동'},
+  {p:'장영실',a:'측우기·자격루 발명'},{p:'정약용',a:'거중기·목민심서 저술'},
+  {p:'을지문덕',a:'살수대첩으로 수나라 격퇴'},{p:'강감찬',a:'귀주대첩으로 거란 격퇴'},
+];
+function startKhFigure(lv=1){
+  const n=Math.min(3+lv*2,8);
+  const pool=[...KH_FIGURES].sort(()=>Math.random()-.5).slice(0,n);
+  const cards=[];
+  pool.forEach((it,i)=>{
+    cards.push({id:i*2,pid:i,type:'p',text:it.p});
+    cards.push({id:i*2+1,pid:i,type:'a',text:it.a});
+  });
+  cards.sort(()=>Math.random()-.5);
+  GS={cards,lv,flipped:[],matched:new Set(),moves:0,start:Date.now()};
+  openGame('🃏 역사 인물 카드',`
+    <div class="gscore">
+      <div class="gsi">레벨 <span class="gsv">${lv}</span></div>
+      <div class="gsi">매칭 <span class="gsv" id="kf-m">0</span>/${n}</div>
+      <div class="gsi">시도 <span class="gsv" id="kf-mv">0</span></div>
+    </div>
+    <div class="cg" id="kf-g" style="grid-template-columns:repeat(3,1fr);gap:8px"></div>
+    <div class="gfb" id="kf-fb"></div>
+    <div class="gbtns" style="margin-top:.75rem">
+      <button class="gbp" style="background:var(--soc)" onclick="startKhFigure(${lv})">🔄 다시하기</button>
+      <button class="gbs" onclick="closeGame()">나가기</button>
+    </div>`);
+  const g=document.getElementById('kf-g');
+  cards.forEach(c=>{
+    const d=document.createElement('div');
+    d.className='fc';d.dataset.id=c.id;d.dataset.pid=c.pid;d.dataset.type=c.type;
+    d.style.height='80px';
+    d.innerHTML=`<div class="fc-i"><div class="fc-f" style="background:linear-gradient(135deg,#b45309,#92400e)">${c.type==='p'?'인물':'업적'}</div><div class="fc-b" style="font-size:${c.type==='p'?'15px':'11px'};padding:.35rem">${c.text}</div></div>`;
+    d.addEventListener('click',()=>kfClick(d));
+    g.appendChild(d);
+  });
+}
+function kfClick(card){
+  if(GS.flipped.length>=2||card.classList.contains('flipped')||card.classList.contains('matched'))return;
+  card.classList.add('flipped');GS.flipped.push(card);
+  if(GS.flipped.length===2){
+    GS.moves++;
+    const mv=document.getElementById('kf-mv');if(mv)mv.textContent=GS.moves;
+    const[a,b]=GS.flipped;
+    if(a.dataset.pid===b.dataset.pid&&a.dataset.id!==b.dataset.id){
+      setTimeout(()=>{
+        a.classList.add('matched');b.classList.add('matched');
+        GS.matched.add(a.dataset.pid);GS.flipped=[];
+        const mc=GS.matched.size,tot=GS.cards.length/2;
+        const mel=document.getElementById('kf-m');if(mel)mel.textContent=mc;
+        if(mc===tot){
+          const s=Math.round((Date.now()-GS.start)/1000);
+          const fb=document.getElementById('kf-fb');
+          if(fb){fb.className='gfb ok';fb.textContent=`🎉 완성! ${GS.moves}번 시도 · ${s}초`;}
+          const btns=document.querySelector('.gbtns');
+          if(btns)btns.innerHTML=`<button class="gbp" style="background:var(--soc)" onclick="startKhFigure(${GS.lv+1})">다음 레벨 →</button><button class="gbs" onclick="closeGame()">나가기</button>`;
+        }
+      },300);
+    } else {
+      setTimeout(()=>{a.classList.remove('flipped');b.classList.remove('flipped');GS.flipped=[];},800);
+    }
+  }
+}
+
+// ═══════════════════════════════════
+// 12. 수 패턴 찾기 🔍
+// ═══════════════════════════════════
+function genPattern(){
+  const types=['arith','geo','fib','sq','cube'];
+  const t=types[Math.floor(Math.random()*types.length)];
+  let seq,ans,hint;
+  if(t==='arith'){
+    const d=rnd(9)+1,s=rnd(10);
+    seq=[s,s+d,s+2*d,s+3*d];ans=s+4*d;hint='등차수열';
+  } else if(t==='geo'){
+    const r=[2,3,4][Math.floor(Math.random()*3)],s=rnd(5);
+    seq=[s,s*r,s*r**2,s*r**3];ans=s*r**4;hint='등비수열';
+  } else if(t==='fib'){
+    const a=rnd(5),b=rnd(5)+1;
+    seq=[a,b,a+b,a+2*b];ans=2*a+3*b;hint='피보나치형';
+  } else if(t==='sq'){
+    const s=rnd(5);
+    seq=[s**2,(s+1)**2,(s+2)**2,(s+3)**2];ans=(s+4)**2;hint='완전제곱수';
+  } else {
+    seq=[1,8,27,64];ans=125;hint='세제곱수';
+  }
+  return{seq,ans,hint,t};
+}
+function startMathPattern(qi=0){
+  const q=genPattern();
+  const wrongSet=new Set();
+  while(wrongSet.size<3){const w=q.ans+rnd(20)*(Math.random()>.5?1:-1);if(w!==q.ans&&w>0)wrongSet.add(w);}
+  const opts=[q.ans,...wrongSet].sort(()=>Math.random()-.5);
+  GS={q,qi,score:(GS.score||0),answered:false};
+  const display=[...q.seq,'?'];
+  openGame('🔍 수 패턴 찾기',`
+    <div class="gscore">
+      <div class="gsi">${qi+1}번째 문제</div>
+      <div class="gsi">점수 <span class="gsv" style="color:var(--stem)">${GS.score||0}</span></div>
+      <div class="gsi" style="font-size:12px;color:var(--t2)">힌트: ${q.hint}</div>
+    </div>
+    <div style="font-size:13px;color:var(--t2);text-align:center;margin-bottom:.5rem">빈칸 <strong>?</strong>에 들어갈 수는?</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:1.25rem">
+      ${display.map(n=>`<div style="min-width:52px;height:52px;border-radius:12px;background:${n==='?'?'var(--stem-l)':'var(--bg2)'};border:2px solid ${n==='?'?'var(--stem)':'var(--bd)'};display:flex;align-items:center;justify-content:center;font-size:${n==='?'?'22px':'18px'};font-weight:700;color:${n==='?'?'var(--stem)':'var(--t)'};padding:0 .5rem">${n}</div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+      ${opts.map(o=>`<button class="fopt" onclick="ansPattern(${o},${q.ans},this)">${o}</button>`).join('')}
+    </div>
+    <div class="gfb" id="mp-fb"></div>
+    <div class="gbtns" style="margin-top:.75rem">
+      <button class="gbs" onclick="closeGame()">나가기</button>
+    </div>`);
+}
+function ansPattern(chosen,correct,btn){
+  if(GS.answered)return;GS.answered=true;
+  const ok=chosen===correct;
+  document.querySelectorAll('.fopt').forEach(b=>{
+    if(+b.textContent===correct)b.classList.add('ok');
+    else if(b===btn&&!ok)b.classList.add('ng');
+    b.style.pointerEvents='none';
+  });
+  if(ok)GS.score=(GS.score||0)+10;
+  const fb=document.getElementById('mp-fb');
+  fb.className=`gfb ${ok?'ok':'ng'}`;
+  fb.textContent=ok?`✅ 정답! ${correct}입니다 (${GS.q.hint})`:`❌ 정답은 ${correct} (${GS.q.hint})`;
+  document.querySelector('.gbtns').innerHTML=`
+    <button class="gbp" style="background:var(--stem)" onclick="startMathPattern(${GS.qi+1})">다음 문제 →</button>
+    <button class="gbs" onclick="closeGame()">나가기</button>`;
+}
+
+
 let musicInit=false,artInit=false;
 function openDov(id,tab){
   document.getElementById(id).classList.add('open');
