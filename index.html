@@ -219,6 +219,7 @@ footer a:hover{color:var(--t)}
   .cg4{grid-template-columns:repeat(3,1fr)}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -607,10 +608,35 @@ function toggleFaq(el){
   if(arr)  arr.style.transform  = isOpen ? '' : 'rotate(180deg)';
 }
 
-function submitContact(e){
+// ── EmailJS 초기화 ──
+emailjs.init('PlkQ_zVrwgwgOf80m');
+
+async function submitContact(e){
   e.preventDefault();
-  document.getElementById('contact-form').style.display='none';
-  document.getElementById('contact-ok').style.display='block';
+  const form = document.getElementById('contact-form');
+  const btn  = form.querySelector('button[type="submit"]');
+  const origText = btn.textContent;
+
+  btn.textContent = '전송 중...';
+  btn.disabled = true;
+
+  const templateParams = {
+    title:   form.querySelector('[name="type"]').value,
+    name:    form.querySelector('[name="name"]').value,
+    email:   form.querySelector('[name="email"]').value,
+    message: form.querySelector('[name="message"]').value,
+  };
+
+  try {
+    await emailjs.send('kysbrest', 'b3hx54c', templateParams);
+    form.style.display = 'none';
+    document.getElementById('contact-ok').style.display = 'block';
+  } catch(err) {
+    console.error('EmailJS 오류:', err);
+    alert('전송 중 오류가 발생했습니다.\n직접 문의: admin@linguawalk.net');
+    btn.textContent = origText;
+    btn.disabled = false;
+  }
 }
 
 // ── 로그인 (Firebase 설정 후 교체) ──
@@ -755,7 +781,8 @@ window.addEventListener('DOMContentLoaded',()=>renderCats());
           <div style="font-size:16px;font-weight:700;color:#15803d;margin-bottom:.35rem">문의가 접수되었습니다</div>
           <div style="font-size:13px;color:#166534">빠른 시일 내에 답변 드리겠습니다.</div>
         </div>
-        <form id="contact-form" onsubmit="submitContact(event)">
+        <form id="contact-form" onsubmit="submitContact(event)"
+              >
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
             <div>
               <div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:4px">이름 *</div>
@@ -784,6 +811,10 @@ window.addEventListener('DOMContentLoaded',()=>renderCats());
           <button type="submit"
             style="width:100%;padding:.85rem;border-radius:10px;border:none;background:var(--acc);
                    color:white;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer">문의 보내기</button>
+          <p style="text-align:center;margin-top:1rem;font-size:12px;color:var(--t3)">
+            또는 이메일로 직접 문의:
+            <a href="mailto:admin@linguawalk.net" style="color:var(--acc);text-decoration:none">admin@linguawalk.net</a>
+          </p>
         </form>
       </div>
     </div>
