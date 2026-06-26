@@ -219,7 +219,6 @@ footer a:hover{color:var(--t)}
   .cg4{grid-template-columns:repeat(3,1fr)}
 }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -608,9 +607,6 @@ function toggleFaq(el){
   if(arr)  arr.style.transform  = isOpen ? '' : 'rotate(180deg)';
 }
 
-// ── EmailJS 초기화 ──
-emailjs.init('PlkQ_zVrwgwgOf80m');
-
 async function submitContact(e){
   e.preventDefault();
   const form = document.getElementById('contact-form');
@@ -644,7 +640,17 @@ function handleLogin(){
   alert('로그인 기능은 준비 중입니다.\nFirebase 설정 완료 후 활성화됩니다.');
 }
 
-window.addEventListener('DOMContentLoaded',()=>renderCats());
+window.addEventListener('DOMContentLoaded',()=>{
+  // EmailJS SDK 동적 로드
+  const ejsScript = document.createElement('script');
+  ejsScript.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+  ejsScript.onload = () => {
+    emailjs.init('PlkQ_zVrwgwgOf80m');
+    console.log('EmailJS 초기화 완료');
+  };
+  document.head.appendChild(ejsScript);
+  renderCats();
+});
 
 </script>
 
