@@ -223,9 +223,9 @@ footer a:hover{color:var(--t)}
     <div class="logo-m">M</div>MindArena
   </a>
   <div class="nav-r">
-    <a class="nav-btn" href="about.html">소개</a>
-    <a class="nav-btn" href="about.html#contact">문의</a>
-    <button class="nav-login" id="nav-login-btn" onclick="handleLogin()">로그인</button>
+    <a class="nav-btn" href="/about.html">소개</a>
+    <a class="nav-btn" href="/about.html#contact">문의</a>
+    <button class="nav-login" id="nav-login-btn" onclick="handleLogin()" title="준비 중">🔒 로그인</button>
   </div>
 </nav>
 
@@ -306,8 +306,8 @@ footer a:hover{color:var(--t)}
 <footer>
   <span>© 2025-2026 MindArena — 두뇌훈련 퍼즐 플랫폼 (무료)</span>
   <div style="display:flex;gap:1rem">
-    <a href="about.html">소개</a>
-    <a href="about.html#contact">문의</a>
+    <a href="/about.html">소개</a>
+    <a href="/about.html#contact">문의</a>
     <a href="mailto:hello@mind-arena.org">이메일</a>
   </div>
 </footer>
@@ -574,65 +574,13 @@ function closeGame(){
   GS={};
 }
 
-/* ── 음악·미술 오버레이 ── */
+// ── 로그인 (Firebase 설정 후 교체) ──
+function handleLogin(){
+  alert('로그인 기능은 준비 중입니다.\nFirebase 설정 완료 후 활성화됩니다.');
+}
 
-/* ── 소개 ── */
-);
 window.addEventListener('DOMContentLoaded',()=>renderCats());
 
-</script>
-
-<!-- Firebase Auth -->
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-
-// ── Firebase 설정 (Vercel 환경변수 또는 직접 입력) ──
-const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
-};
-
-const app      = initializeApp(firebaseConfig);
-const auth     = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-// 로그인 상태 감지
-onAuthStateChanged(auth, user => {
-  const btn = document.getElementById('nav-login-btn');
-  if (!btn) return;
-  if (user) {
-    btn.innerHTML = `<img class="user-avatar" src="${user.photoURL||''}" onerror="this.style.display='none'">${user.displayName||'나'} ▾`;
-    btn.className = 'nav-login out';
-    btn.title = '클릭하면 로그아웃';
-    // 로그인된 진행상황은 Firestore에 동기화 (추후 구현)
-  } else {
-    btn.innerHTML = '로그인';
-    btn.className = 'nav-login';
-    btn.title = 'Google 계정으로 로그인';
-  }
-});
-
-window.handleLogin = async function(){
-  const user = auth.currentUser;
-  if (user) {
-    if (confirm(`${user.displayName}님, 로그아웃 하시겠습니까?`)) {
-      await signOut(auth);
-    }
-  } else {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch(e) {
-      if (e.code !== 'auth/popup-closed-by-user')
-        alert('로그인 중 오류가 발생했습니다: ' + e.message);
-    }
-  }
-};
 </script>
 
 </body>
