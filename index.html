@@ -204,6 +204,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.96);backdrop-
 .fopt.ok{border-color:#4ade80;background:rgba(74,222,128,.12);color:#4ade80}
 .fopt.ng{border-color:#f87171;background:rgba(248,113,113,.12);color:#f87171;animation:shake .3s}
 
+.faq-item{background:white;border:.5px solid var(--bd);border-radius:12px;margin-bottom:.75rem;overflow:hidden;cursor:pointer}
+.faq-item > div:first-child:hover{background:var(--bg2)}
+.faq-body{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 1.25rem;font-size:13px;color:var(--t2);line-height:1.7}
+.faq-arr{transition:transform .3s;color:var(--t3);display:inline-block}
 footer{border-top:.5px solid var(--bd);padding:1.25rem 1.5rem;display:flex;align-items:center;
        justify-content:space-between;font-size:12px;color:var(--t3);flex-wrap:wrap;gap:.5rem;margin-top:2rem}
 footer a{color:var(--t3);text-decoration:none}
@@ -594,6 +598,15 @@ function showPage(page){
   }
 }
 
+function toggleFaq(el){
+  const body = el.querySelector('.faq-body');
+  const arr  = el.querySelector('.faq-arr');
+  const isOpen = el.classList.contains('faq-open');
+  el.classList.toggle('faq-open');
+  if(body) body.style.maxHeight = isOpen ? '0' : '300px';
+  if(arr)  arr.style.transform  = isOpen ? '' : 'rotate(180deg)';
+}
+
 function submitContact(e){
   e.preventDefault();
   document.getElementById('contact-form').style.display='none';
@@ -671,7 +684,7 @@ window.addEventListener('DOMContentLoaded',()=>renderCats());
         입문(1단계)부터 전문(15단계)까지 단계별로 난이도가 높아지며,
         모든 퍼즐은 힌트와 해설을 제공합니다. 서술형 문제는 정답을 직접 확인하고
         스스로 자기평가하는 방식으로 운영됩니다.<br><br>
-        광고를 제외한 모든 콘텐츠는 영구 무료입니다.
+        모든 콘텐츠는 무료로 운영됩니다.
       </p>
     </div>
 
@@ -707,25 +720,25 @@ window.addEventListener('DOMContentLoaded',()=>renderCats());
     <!-- FAQ -->
     <div style="font-size:22px;font-weight:700;margin-bottom:1.25rem">자주 묻는 <span style="color:var(--acc)">질문</span></div>
     <div id="faq-list">
-      <div class="faq-item" onclick="this.classList.toggle('faq-open')">
+      <div class="faq-item" onclick="toggleFaq(this)">
         <div style="padding:1rem 1.25rem;font-size:14px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
           정말 무료인가요? <span style="color:var(--t3);transition:transform .3s" class="faq-arr">▼</span></div>
         <div class="faq-body" style="max-height:0;overflow:hidden;transition:max-height .3s;padding:0 1.25rem;font-size:13px;color:var(--t2);line-height:1.7">
           <div style="padding-bottom:1rem">네, 모든 퍼즐과 기능은 완전 무료입니다. 광고가 일부 표시될 수 있으나 결제가 필요한 콘텐츠는 없습니다.</div></div>
       </div>
-      <div class="faq-item" onclick="this.classList.toggle('faq-open')">
+      <div class="faq-item" onclick="toggleFaq(this)">
         <div style="padding:1rem 1.25rem;font-size:14px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
           진행 상황이 저장되나요? <span style="color:var(--t3)" class="faq-arr">▼</span></div>
         <div class="faq-body" style="max-height:0;overflow:hidden;transition:max-height .3s;padding:0 1.25rem;font-size:13px;color:var(--t2);line-height:1.7">
           <div style="padding-bottom:1rem">브라우저 로컬 저장소에 자동 저장됩니다. 같은 브라우저에서는 이어서 풀 수 있습니다.</div></div>
       </div>
-      <div class="faq-item" onclick="this.classList.toggle('faq-open')">
+      <div class="faq-item" onclick="toggleFaq(this)">
         <div style="padding:1rem 1.25rem;font-size:14px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
           서술형 문제는 어떻게 채점하나요? <span style="color:var(--t3)" class="faq-arr">▼</span></div>
         <div class="faq-body" style="max-height:0;overflow:hidden;transition:max-height .3s;padding:0 1.25rem;font-size:13px;color:var(--t2);line-height:1.7">
           <div style="padding-bottom:1rem">고레벨 심화 문제는 정답이 복합 서술형이라 자동 채점이 어렵습니다. 내 답을 적어보고 정답을 확인한 후, 스스로 평가하는 방식으로 운영됩니다.</div></div>
       </div>
-      <div class="faq-item" onclick="this.classList.toggle('faq-open')">
+      <div class="faq-item" onclick="toggleFaq(this)">
         <div style="padding:1rem 1.25rem;font-size:14px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
           모바일에서도 이용할 수 있나요? <span style="color:var(--t3)" class="faq-arr">▼</span></div>
         <div class="faq-body" style="max-height:0;overflow:hidden;transition:max-height .3s;padding:0 1.25rem;font-size:13px;color:var(--t2);line-height:1.7">
