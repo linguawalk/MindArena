@@ -17,9 +17,7 @@
   --pat:#059669;--pat-l:#ecfdf5;
   --log:#b45309;--log-l:#fef3c7;
   --spa:#7c3aed;--spa-l:#f5f3ff;
-  --str:#dc2626;--str-l:#fef2f2;
-  --mus:#0f766e;--mus-l:#f0fdfa;
-  --art:#be185d;--art-l:#fdf2f8;
+  --str:#dc2626;--str-l:#fef2f2;--mus-l:#f0fdfa;--art-l:#fdf2f8;
 }
 html{scroll-behavior:smooth}
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t);font-size:14px;line-height:1.6;min-height:100vh}
@@ -66,8 +64,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.96);backdrop-
 .cat-card[data-cat="02_logic"]::before{background:var(--log)}
 .cat-card[data-cat="05_spatial"]::before{background:var(--spa)}
 .cat-card[data-cat="07_strategy"]::before{background:var(--str)}
-.cat-card[data-cat="music"]::before{background:var(--mus)}
-.cat-card[data-cat="art"]::before{background:var(--art)}
 .cat-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.9rem}
 .cat-icon{font-size:32px;line-height:1}
 .cat-badge{font-size:11px;padding:3px 9px;border-radius:8px;font-weight:600;background:var(--bg2);color:var(--t3)}
@@ -153,16 +149,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.96);backdrop-
 .result-stars{font-size:32px;letter-spacing:.1em;margin-bottom:.5rem}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-/* 음악·미술 공용 (z:400 — 최상위) */
-.dov{position:fixed;inset:0;background:#0f0f14;z-index:400;display:none;flex-direction:column;overflow-y:auto}
-.dov.open{display:flex}
-.dov-nav{height:52px;padding:0 1.25rem;border-bottom:1px solid rgba(255,255,255,.08);
-         display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.dov-title{font-size:15px;font-weight:600;color:#f0eee8}
-.dov-close{background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:8px;
-           padding:5px 14px;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px}
-
-/* 소개 (z:500) */
 .aov{position:fixed;inset:0;background:white;z-index:500;display:none;flex-direction:column;overflow-y:auto}
 .aov.open{display:flex}
 
@@ -228,13 +214,24 @@ footer a:hover{color:var(--t)}
   <div class="hero-inner">
     <div class="hero-tag">🧠 두뇌훈련 퍼즐 플랫폼</div>
     <h1>생각하는 <span>즐거움</span>을<br>게임으로</h1>
-    <p class="hero-sub">900개 퍼즐 · 8개 카테고리 · 15단계<br>매일 조금씩, 뇌를 깨우세요</p>
+    <p class="hero-sub">900개 퍼즐 · 6개 카테고리 · 15단계<br>매일 조금씩, 뇌를 깨우세요</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="hero-stat-n">900+</div><div class="hero-stat-l">퍼즐</div></div>
-      <div class="hero-stat"><div class="hero-stat-n">8</div><div class="hero-stat-l">카테고리</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">6</div><div class="hero-stat-l">카테고리</div></div>
       <div class="hero-stat"><div class="hero-stat-n">15</div><div class="hero-stat-l">레벨</div></div>
       <div class="hero-stat"><div class="hero-stat-n">무료</div><div class="hero-stat-l">전체 콘텐츠</div></div>
     </div>
+  </div>
+</div>
+
+
+<!-- 광고 배너 (상단) — AdSense 승인 후 코드 삽입 -->
+<div id="ad-top" style="max-width:1040px;margin:1rem auto 0;padding:0 1.5rem">
+  <div style="background:var(--bg2);border:.5px solid var(--bd);border-radius:10px;
+              height:90px;display:flex;align-items:center;justify-content:center;
+              font-size:12px;color:var(--t3);letter-spacing:.04em">
+    <!-- AdSense 코드 삽입 영역 (728×90) -->
+    광고 영역
   </div>
 </div>
 
@@ -274,25 +271,6 @@ footer a:hover{color:var(--t)}
 </div>
 
 <!-- 음악·미술 z:400 -->
-<!-- 음악 오버레이 -->
-<div class="dov" id="music-ov">
-  <div class="dov-nav">
-    <span class="dov-title">🎵 음악 청각 게임</span>
-    <button class="dov-close" onclick="closeDov('music-ov')">✕ 닫기</button>
-  </div>
-  <div id="music-body" style="flex:1;padding:1.25rem;max-width:680px;margin:0 auto;width:100%;color:#f0eee8"></div>
-</div>
-
-<!-- 미술 오버레이 -->
-<div class="dov" id="art-ov">
-  <div class="dov-nav">
-    <span class="dov-title">🎨 미술 시각 게임</span>
-    <button class="dov-close" onclick="closeDov('art-ov')">✕ 닫기</button>
-  </div>
-  <div id="art-body" style="flex:1;padding:1.25rem;max-width:680px;margin:0 auto;width:100%;color:#f0eee8"></div>
-</div>
-
-
 <div class="aov" id="aov">
   <div style="position:sticky;top:0;background:white;padding:.9rem 1.5rem;border-bottom:.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;z-index:1">
     <span style="font-size:15px;font-weight:700">MindArena 소개</span>
@@ -303,13 +281,13 @@ footer a:hover{color:var(--t)}
       <div style="font-size:48px;margin-bottom:1rem">🧠</div>
       <h1 style="font-size:28px;font-weight:700;margin-bottom:.75rem">두뇌훈련 퍼즐 플랫폼</h1>
       <p style="font-size:15px;color:var(--t2);line-height:1.75;max-width:460px;margin:0 auto">
-        900개 퍼즐 · 8개 카테고리 · 15단계<br>
-        수·연산·확률·패턴·논리·공간·전략에서<br>음악·미술 게임까지. 모든 콘텐츠는 무료입니다.
+        900개 퍼즐 · 6개 카테고리 · 15단계<br>
+        수·연산·확률·패턴·논리·공간·전략.<br>모든 콘텐츠는 완전 무료입니다.
       </p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2.5rem">
       <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center"><div style="font-size:22px;font-weight:700">900+</div><div style="font-size:11px;color:var(--t3);margin-top:.2rem">퍼즐</div></div>
-      <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center"><div style="font-size:22px;font-weight:700">8</div><div style="font-size:11px;color:var(--t3);margin-top:.2rem">카테고리</div></div>
+      <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center"><div style="font-size:22px;font-weight:700">6</div><div style="font-size:11px;color:var(--t3);margin-top:.2rem">카테고리</div></div>
       <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center"><div style="font-size:22px;font-weight:700">15</div><div style="font-size:11px;color:var(--t3);margin-top:.2rem">단계</div></div>
       <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center"><div style="font-size:22px;font-weight:700">무료</div><div style="font-size:11px;color:var(--t3);margin-top:.2rem">전체</div></div>
     </div>
@@ -332,6 +310,17 @@ footer a:hover{color:var(--t)}
 </div>
 
 
+<!-- 광고 배너 (하단) — AdSense 승인 후 코드 삽입 -->
+<div id="ad-bottom" style="max-width:1040px;margin:0 auto;padding:0 1.5rem 1.5rem">
+  <div style="background:var(--bg2);border:.5px solid var(--bd);border-radius:10px;
+              height:90px;display:flex;align-items:center;justify-content:center;
+              font-size:12px;color:var(--t3);letter-spacing:.04em">
+    <!-- AdSense 코드 삽입 영역 (728×90 / 모바일 320×100) -->
+    광고 영역
+  </div>
+</div>
+
+
 <footer>
   <span>© 2025-2026 MindArena — 두뇌훈련 퍼즐 플랫폼 (무료)</span>
   <div style="display:flex;gap:1rem">
@@ -350,8 +339,6 @@ const CATS = [
   {id:'02_logic',    icon:'🧠', label:'논리',    desc:'조건을 분석하고 반드시 참인 결론을 추론하세요.',       color:'var(--log)', levels:15, total:150},
   {id:'05_spatial',  icon:'🔷', label:'공간',    desc:'도형의 변환·대칭·좌표를 머릿속에서 조작하세요.',      color:'var(--spa)', levels:15, total:150},
   {id:'07_strategy', icon:'♟️', label:'전략',    desc:'게임 상황을 분석하고 최적의 선택을 찾으세요.',        color:'var(--str)', levels:15, total:150},
-  {id:'music',       icon:'🎵', label:'음악',    desc:'음이름·리듬·코드·장단조를 귀로 듣고 맞히세요.',       color:'var(--mus)', levels:null, total:5,  action:"openDov('music-ov','pitch')"},
-  {id:'art',         icon:'🎨', label:'미술',    desc:'색 혼합·명도채도·드로잉·픽셀아트를 직접 체험하세요.', color:'var(--art)', levels:null, total:4,  action:"openDov('art-ov','mix')"},
 ];
 
 let GS={};
@@ -565,16 +552,6 @@ function closeGame(){
 }
 
 /* ── 음악·미술 오버레이 ── */
-let musicInit=false,artInit=false;
-function openDov(id,tab){
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow='hidden';
-  if(id==='music-ov'&&!musicInit){musicInit=true;buildMusicGame();}
-  else if(id==='music-ov')switchMusicTab(tab);
-  if(id==='art-ov'&&!artInit){artInit=true;buildArtGame();}
-  else if(id==='art-ov')switchArtTab(tab);
-}
-function closeDov(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
 
 /* ── 소개 ── */
 function openAbout(){document.getElementById('aov').classList.add('open');document.body.style.overflow='hidden';}
@@ -591,271 +568,6 @@ document.addEventListener('keydown',e=>{
 });
 window.addEventListener('DOMContentLoaded',()=>renderCats());
 
-// ── 오디오 엔진 ──
-let _ac=null;
-const ac=()=>{if(!_ac)_ac=new(window.AudioContext||window.webkitAudioContext)();return _ac;};
-function pNote(m,d=.8,v=.4,t=null){const c=ac(),ts=t||c.currentTime,o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=440*Math.pow(2,(m-69)/12);o.type='triangle';g.gain.setValueAtTime(0,ts);g.gain.linearRampToValueAtTime(v,ts+.02);g.gain.exponentialRampToValueAtTime(.001,ts+d);o.start(ts);o.stop(ts+d+.1);}
-function pChord(ms,d=1.5){ms.forEach(m=>pNote(m,d,.3));}
-function pMelody(ms,t=.3){const c=ac();ms.forEach((m,i)=>pNote(m,t*.9,.4,c.currentTime+i*t));}
-const NM=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-const KN={C:'도','C#':'도#',D:'레','D#':'레#',E:'미',F:'파','F#':'파#',G:'솔','G#':'솔#',A:'라','A#':'라#',B:'시'};
-const WM=[60,62,64,65,67,69,71,72,74,76];
-const CD={major:{n:'장화음',iv:[0,4,7]},minor:{n:'단화음',iv:[0,3,7]},diminished:{n:'감화음',iv:[0,3,6]},augmented:{n:'증화음',iv:[0,4,8]}};
-const IV=[{n:'단2도',s:1},{n:'장2도',s:2},{n:'단3도',s:3},{n:'장3도',s:4},{n:'완전4도',s:5},{n:'완전5도',s:7},{n:'장6도',s:9},{n:'완전8도',s:12}];
-let mP=null,mPW=false,mPS=0,mPOk=0,mPT=0;
-let mRP=[],mRU=[],mRS=0,mCT=null,mCS=0,mMT=null,mMS=0,mIM1=0,mIM2=0,mIA=null,mIS=0;
-
-function buildMusicGame(){
-  document.getElementById('music-body').innerHTML=`
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem" id="mtabs">
-      ${[['pitch','🎹 음이름'],['rhythm','🥁 리듬'],['chord','🎸 코드'],['mode','🌙 장단조'],['interval','🎼 음정']].map(([id,lb])=>`
-        <button data-mt="${id}" onclick="switchMusicTab('${id}')"
-          style="padding:5px 14px;border-radius:16px;cursor:pointer;font-family:inherit;font-size:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#a09e98;transition:all .15s">${lb}</button>`).join('')}
-    </div>
-    <div id="mc"></div>`;
-  switchMusicTab('pitch');
-}
-function switchMusicTab(id){
-  document.querySelectorAll('[data-mt]').forEach(b=>{const on=b.dataset.mt===id;b.style.background=on?'rgba(124,58,237,.2)':'transparent';b.style.color=on?'#f0eee8':'#a09e98';b.style.borderColor=on?'rgba(124,58,237,.8)':'rgba(255,255,255,.1)';});
-  const c=document.getElementById('mc');
-  if(id==='pitch')buildPitch(c);
-  else if(id==='rhythm')buildRhythm(c);
-  else if(id==='chord')buildChord(c);
-  else if(id==='mode')buildMode(c);
-  else if(id==='interval')buildInterval(c);
-}
-const mCard=s=>`<div style="background:#1a1a22;border-radius:10px;padding:1.1rem;margin-bottom:1rem;border:1px solid rgba(255,255,255,.06)">${s}</div>`;
-const mBtn=(l,f,p=true)=>`<button onclick="${f}" style="padding:7px 16px;border-radius:8px;border:${p?'none':'1px solid rgba(255,255,255,.1)'};background:${p?'#c8a96e':'transparent'};color:${p?'#1a1400':'#a09e98'};cursor:pointer;font-family:inherit;font-size:13px;font-weight:${p?700:500};margin:2px">${l}</button>`;
-const mFb=id=>`<div id="${id}" style="display:none;margin-top:.75rem;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500"></div>`;
-const showMFb=(id,ok,txt)=>{const el=document.getElementById(id);if(!el)return;el.style.cssText=`display:block;margin-top:.75rem;padding:.9rem;border-radius:10px;text-align:center;font-size:14px;font-weight:500;background:rgba(${ok?'34,197,94':'239,68,68'},.15);border:1px solid rgba(${ok?'34,197,94':'239,68,68'},.3);color:${ok?'#4ade80':'#f87171'}`;el.textContent=txt;};
-
-function buildPitch(c){
-  mP=null;mPW=false;
-  c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">🎹 음이름 듣고 맞히기</div>
-    <div style="font-size:13px;color:#a09e98;margin-bottom:.75rem">재생 버튼을 누르면 음이 들립니다. 건반에서 찾아 클릭하세요.</div>
-    <div style="display:flex;gap:8px;margin-bottom:.75rem">
-      <div style="padding:5px 12px;border-radius:14px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mp-s">0</span></div>
-      <div style="padding:5px 12px;border-radius:14px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,.08)">정답: <span id="mp-ok">0</span>/<span id="mp-t">0</span></div>
-    </div>
-    ${mCard(`<div style="font-size:17px;font-weight:700;color:#c8a96e;text-align:center" id="mp-q">▶ 재생을 눌러 시작하세요</div>`)}
-    <div style="display:flex;gap:8px;margin-bottom:.75rem">${mBtn('▶ 재생','newPitch()')} ${mBtn('새 문제','newPitch()',false)}</div>
-    <div style="background:#1a1a22;border-radius:10px;padding:.75rem;border:1px solid rgba(255,255,255,.06)">
-      <div id="mp-piano" style="display:flex;gap:2px;position:relative;height:110px"></div>
-    </div>${mFb('mp-fb')}`;
-  buildPiano();newPitch();
-}
-function buildPiano(){
-  const p=document.getElementById('mp-piano');if(!p||p.children.length>0)return;
-  const we=[];
-  WM.forEach(m=>{
-    const k=document.createElement('div');
-    k.style.cssText='flex:1;background:#f5f0e8;border-radius:0 0 4px 4px;cursor:pointer;border:1px solid #ccc;position:relative;min-width:24px;transition:background .08s';
-    const lb=document.createElement('span');lb.style.cssText='position:absolute;bottom:3px;left:50%;transform:translateX(-50%);font-size:8px;color:#888';
-    lb.textContent=NM[m%12];k.appendChild(lb);k.dataset.midi=m;
-    k.addEventListener('click',()=>{pNote(m);onPiano(m,k);});p.appendChild(k);we.push(k);
-  });
-  setTimeout(()=>{
-    const kW=p.offsetWidth/WM.length;
-    [[61,0],[63,1],[66,3],[68,4],[70,5]].forEach(([m,wi])=>{
-      const bk=document.createElement('div');
-      bk.style.cssText=`position:absolute;width:${kW*.6}px;height:65px;background:#1a1a1a;border-radius:0 0 4px 4px;cursor:pointer;z-index:2;top:0;left:${we[wi].offsetLeft+kW*.65}px;transition:background .08s`;
-      bk.dataset.midi=m;bk.addEventListener('click',e=>{e.stopPropagation();pNote(m);onPiano(m,bk);});p.appendChild(bk);
-    });
-  },100);
-}
-function newPitch(){mP=WM[Math.floor(Math.random()*WM.length)];mPW=false;const q=document.getElementById('mp-q');if(q)q.textContent='▶ 재생 버튼을 누르세요';const fb=document.getElementById('mp-fb');if(fb)fb.style.display='none';}
-function playPitch(){if(!mP)newPitch();pNote(mP,1.0);const q=document.getElementById('mp-q');if(q)q.textContent='🎵 이 음의 이름은?';mPW=true;mPT++;const t=document.getElementById('mp-t');if(t)t.textContent=mPT;}
-function onPiano(midi,el){
-  if(!mPW||!mP)return;mPW=false;
-  const ok=midi===mP;
-  el.style.background=ok?'#4ade80':'#f87171';
-  if(ok){mPOk++;mPS+=10;const s=document.getElementById('mp-s'),k=document.getElementById('mp-ok');if(s)s.textContent=mPS;if(k)k.textContent=mPOk;}
-  showMFb('mp-fb',ok,ok?`✅ 정답! ${NM[mP%12]}(${KN[NM[mP%12]]}) +10점`:`❌ 정답은 ${NM[mP%12]}(${KN[NM[mP%12]]})`);
-  if(ok)pNote(mP);
-  setTimeout(()=>{el.style.background='';newPitch();playPitch();},ok?1200:2000);
-}
-
-function buildRhythm(c){
-  mRP=[];mRU=[];
-  c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">🥁 리듬 받아치기</div>
-    <div style="font-size:13px;color:#a09e98;margin-bottom:.75rem">리듬 패턴을 듣고 같은 패턴을 격자에서 클릭하세요.</div>
-    <div style="display:flex;gap:8px;margin-bottom:.75rem">
-      <div style="padding:5px 12px;border-radius:14px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mr-s">0</span></div>
-      <div style="padding:5px 12px;border-radius:14px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,.08)">정확도: <span id="mr-a">-</span></div>
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:.75rem">${mBtn('▶ 재생','playRhythm()')} ${mBtn('✓ 확인','checkRhythm()',false)} ${mBtn('새 리듬','newRhythm()',false)}</div>
-    <div id="mr-g" style="display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-bottom:.75rem"></div>
-    ${mFb('mr-fb')}`;
-  buildRhythmGrid();newRhythm();
-}
-function buildRhythmGrid(){const g=document.getElementById('mr-g');if(!g||g.children.length>0)return;for(let i=0;i<8;i++){const c=document.createElement('div');c.style.cssText='height:48px;border-radius:8px;background:#1a1a22;border:1px solid rgba(255,255,255,.08);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:#6a6860;transition:all .15s';c.textContent=i+1;c.dataset.idx=i;c.addEventListener('click',()=>{mRU[i]=mRU[i]?0:1;c.style.background=mRU[i]?'rgba(124,58,237,.8)':'#1a1a22';c.style.borderColor=mRU[i]?'rgba(124,58,237,1)':'rgba(255,255,255,.08)';});g.appendChild(c);}}
-function newRhythm(){mRU=new Array(8).fill(0);mRP=new Array(8).fill(0);let b=0;while(b<4){const p=Math.floor(Math.random()*8);if(!mRP[p]){mRP[p]=1;b++;}}document.querySelectorAll('#mr-g div').forEach(c=>{c.style.background='#1a1a22';c.style.borderColor='rgba(255,255,255,.08)';});const fb=document.getElementById('mr-fb');if(fb)fb.style.display='none';}
-function playRhythm(){const cs=document.querySelectorAll('#mr-g div');mRP.forEach((b,i)=>{setTimeout(()=>{cs[i].style.background='rgba(200,169,110,.5)';setTimeout(()=>cs[i].style.background=mRU[i]?'rgba(124,58,237,.8)':'#1a1a22',180);if(b)pNote(60,.15,.6);},i*280);});}
-function checkRhythm(){const cs=document.querySelectorAll('#mr-g div');let ok=0;mRP.forEach((b,i)=>{if(b===mRU[i]){ok++;cs[i].style.background=b?'rgba(34,197,94,.4)':'#1a1a22';}else cs[i].style.background='rgba(239,68,68,.4)';});const acc=Math.round(ok/8*100),a=document.getElementById('mr-a');if(a)a.textContent=acc+'%';if(acc>=75){mRS+=Math.round(acc/10);const s=document.getElementById('mr-s');if(s)s.textContent=mRS;showMFb('mr-fb',true,`✅ 정확도 ${acc}%! +${Math.round(acc/10)}점`);setTimeout(newRhythm,1500);}else showMFb('mr-fb',false,`❌ 정확도 ${acc}%. 다시!`);}
-
-function buildChord(c){
-  c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">🎸 코드 유형 듣고 맞히기</div>
-    <div style="font-size:13px;color:#a09e98;margin-bottom:.75rem">재생되는 화음의 종류를 맞혀보세요.</div>
-    <div style="display:flex;gap:8px;margin-bottom:.75rem"><div style="padding:5px 12px;border-radius:14px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mch-s">0</span></div></div>
-    ${mCard(`<div id="mch-q" style="font-size:16px;font-weight:700;color:#c8a96e;text-align:center">▶ 재생을 눌러 화음을 들으세요</div>`)}
-    <div style="display:flex;gap:8px;margin-bottom:.75rem">${mBtn('▶ 화음 재생','playChordQ()')} ${mBtn('새 문제','newChordQ()',false)}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem">
-      ${Object.entries(CD).map(([k,v])=>`<button onclick="ansChord('${k}')" style="height:58px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:#1a1a22;color:#f0eee8;cursor:pointer;font-family:inherit;font-size:13px">${v.n}<br><span style="font-size:11px;color:#a09e98">${k==='major'?'밝고 안정':k==='minor'?'어둡고 슬픔':k==='diminished'?'긴장':'몽환'}</span></button>`).join('')}
-    </div>
-    <div style="font-size:12px;color:#6a6860;margin-bottom:.4rem">직접 비교 청취</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">${[[[0,4,7],'C Major'],[[0,3,7],'C minor'],[[0,3,6],'C dim'],[[0,4,8],'C aug']].map(([iv,n])=>`<button onclick="pChord([${iv.map(i=>60+i)}])" style="padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">${n}</button>`).join('')}</div>
-    ${mFb('mch-fb')}`;
-  newChordQ();
-}
-function newChordQ(){const ts=Object.keys(CD);mCT=ts[Math.floor(Math.random()*ts.length)];const q=document.getElementById('mch-q');if(q)q.textContent='▶ 재생을 눌러 화음을 들으세요';const fb=document.getElementById('mch-fb');if(fb)fb.style.display='none';}
-function playChordQ(){if(!mCT)return;const r=60+Math.floor(Math.random()*5);pChord(CD[mCT].iv.map(i=>r+i));}
-function ansChord(t){if(!mCT)return;const ok=t===mCT;if(ok){mCS+=10;const s=document.getElementById('mch-s');if(s)s.textContent=mCS;}showMFb('mch-fb',ok,ok?`✅ 정답! ${CD[t].n} +10점`:`❌ 정답은 ${CD[mCT].n}`);playChordQ();setTimeout(newChordQ,ok?1500:2500);}
-
-function buildMode(c){
-  c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">🌙 장조 vs 단조</div>
-    <div style="font-size:13px;color:#a09e98;margin-bottom:.75rem">음계를 듣고 장조인지 단조인지 맞혀보세요.</div>
-    <div style="display:flex;gap:8px;margin-bottom:.75rem"><div style="padding:5px 12px;border-radius:14px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mm-s">0</span></div></div>
-    ${mCard(`<div id="mm-q" style="font-size:15px;font-weight:700;color:#c8a96e;text-align:center">아래에서 먼저 비교해보세요</div>`)}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem">
-      <button onclick="pMelody([60,62,64,65,67,69,71,72],.28)" style="height:50px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:#1a1a22;color:#f0eee8;cursor:pointer;font-family:inherit;font-size:13px">☀️ 장조로 듣기</button>
-      <button onclick="pMelody([60,62,63,65,67,68,70,72],.28)" style="height:50px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:#1a1a22;color:#f0eee8;cursor:pointer;font-family:inherit;font-size:13px">🌙 단조로 듣기</button>
-    </div>
-    <button onclick="newMode()" style="width:100%;padding:.75rem;border-radius:9px;border:none;background:#c8a96e;color:#1a1400;cursor:pointer;font-family:inherit;font-weight:700;font-size:13px;margin-bottom:.75rem">▶ 문제 시작</button>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem">
-      <button onclick="ansMode('major')" style="padding:.75rem;border-radius:9px;border:none;background:#7c3aed;color:white;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600">☀️ 장조</button>
-      <button onclick="ansMode('minor')" style="padding:.75rem;border-radius:9px;border:none;background:#4c1d95;color:white;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600">🌙 단조</button>
-    </div>${mFb('mm-fb')}`;
-}
-function newMode(){mMT=Math.random()>.5?'major':'minor';const q=document.getElementById('mm-q');if(q)q.textContent='🎵 장조인가요 단조인가요?';const fb=document.getElementById('mm-fb');if(fb)fb.style.display='none';pMelody(mMT==='major'?[60,62,64,65,67,69,71,72]:[60,62,63,65,67,68,70,72],.28);}
-function ansMode(t){if(!mMT)return;const ok=t===mMT;if(ok){mMS+=10;const s=document.getElementById('mm-s');if(s)s.textContent=mMS;}showMFb('mm-fb',ok,ok?(t==='major'?'✅ 장조! 밝고 활기찬 느낌 +10점':'✅ 단조! 어둡고 슬픈 느낌 +10점'):`❌ ${mMT==='major'?'☀️ 장조':'🌙 단조'}였습니다.`);pMelody(mMT==='major'?[60,62,64,65,67,69,71,72]:[60,62,63,65,67,68,70,72],.28);setTimeout(newMode,ok?1500:2000);}
-
-function buildInterval(c){
-  c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">🎼 음정 구별하기</div>
-    <div style="font-size:13px;color:#a09e98;margin-bottom:.75rem">두 음을 듣고 음정 종류를 맞혀보세요.</div>
-    <div style="display:flex;gap:8px;margin-bottom:.75rem"><div style="padding:5px 12px;border-radius:14px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,.08)">점수: <span style="color:#c8a96e;font-weight:600" id="mi-s">0</span></div></div>
-    <div style="display:flex;gap:8px;margin-bottom:.75rem">${mBtn('▶ 순서대로','playIv("m")')} ${mBtn('▶ 동시에','playIv("h")',false)} ${mBtn('새 문제','newIv()',false)}</div>
-    <div id="mi-c" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem"></div>
-    ${mFb('mi-fb')}`;
-  newIv();
-}
-function newIv(){const pool=IV.slice(0,Math.min(4+Math.floor(mIS/30),IV.length));mIA=pool[Math.floor(Math.random()*pool.length)];mIM1=60+Math.floor(Math.random()*7);mIM2=mIM1+mIA.s;const shuf=[mIA,...pool.filter(x=>x!==mIA).sort(()=>Math.random()-.5).slice(0,3)].sort(()=>Math.random()-.5);const c=document.getElementById('mi-c');if(!c)return;c.innerHTML='';shuf.forEach(iv=>{const d=document.createElement('div');d.style.cssText='padding:.85rem;border-radius:10px;background:#1a1a22;border:1px solid rgba(255,255,255,.08);cursor:pointer;text-align:center;transition:all .15s';d.innerHTML=`<div style="font-size:13.5px;font-weight:600;color:#f0eee8">${iv.n}</div>`;d.addEventListener('click',()=>ansIv(iv,d));c.appendChild(d);});const fb=document.getElementById('mi-fb');if(fb)fb.style.display='none';}
-function playIv(t){if(t==='m'){pNote(mIM1,.6);setTimeout(()=>pNote(mIM2,.6),700);}else pChord([mIM1,mIM2],1.5);}
-function ansIv(ch,card){document.querySelectorAll('#mi-c>div').forEach(x=>x.style.pointerEvents='none');const ok=ch.n===mIA.n;if(ok){mIS+=10;card.style.background='rgba(34,197,94,.2)';card.style.borderColor='rgba(34,197,94,.5)';const s=document.getElementById('mi-s');if(s)s.textContent=mIS;}else{card.style.background='rgba(239,68,68,.2)';card.style.borderColor='rgba(239,68,68,.5)';document.querySelectorAll('#mi-c>div').forEach(x=>{if(x.querySelector('div').textContent===mIA.n){x.style.background='rgba(34,197,94,.2)';x.style.borderColor='rgba(34,197,94,.5)';}});}showMFb('mi-fb',ok,ok?`✅ 정답! ${ch.n} +10점`:`❌ 정답은 ${mIA.n}`);playIv('m');setTimeout(newIv,ok?1500:2500);}
-
-// ── 미술 게임 ──
-const AG_PRESETS=[{r:255,g:0,b:0,n:'빨강'},{r:0,g:255,b:0,n:'초록'},{r:0,g:0,b:255,n:'파랑'},{r:255,g:255,b:0,n:'노랑'},{r:0,g:255,b:255,n:'시안'},{r:255,g:0,b:255,n:'마젠타'},{r:255,g:128,b:0,n:'주황'},{r:128,g:0,b:255,n:'보라'}];
-let agTarget={r:0,g:0,b:0},agScore=0,drawTool='pen',drawColor='#000000',drawSize=6,isDrawing=false,lastX=0,lastY=0;
-let pxColor='#000000',pxData=new Array(256).fill('#ffffff'),pxPainting=false;
-const AG_COLS=['#000000','#ffffff','#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899','#6b7280','#c8a96e'];
-const PX_COLS=['#000000','#ffffff','#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899','#6b7280','#c8a96e','#f5f5dc'];
-
-function buildArtGame(){
-  document.getElementById('art-body').innerHTML=`
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem" id="atabs">
-      ${[['mix','🧪 색혼합'],['hsl','🎚️ 명도채도'],['draw','✏️ 드로잉'],['pixel','🟦 픽셀아트']].map(([id,lb])=>`
-        <button data-at="${id}" onclick="switchArtTab('${id}')"
-          style="padding:5px 14px;border-radius:16px;cursor:pointer;font-family:inherit;font-size:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#a09e98;transition:all .15s">${lb}</button>`).join('')}
-    </div>
-    <div id="ac"></div>`;
-  switchArtTab('mix');
-}
-function switchArtTab(id){
-  document.querySelectorAll('[data-at]').forEach(b=>{const on=b.dataset.at===id;b.style.background=on?'rgba(15,118,110,.2)':'transparent';b.style.color=on?'#f0eee8':'#a09e98';b.style.borderColor=on?'rgba(15,118,110,.8)':'rgba(255,255,255,.1)';});
-  const c=document.getElementById('ac');
-  if(id==='mix')buildMix(c);else if(id==='hsl')buildHsl(c);else if(id==='draw')buildDraw(c);else if(id==='pixel')buildPixel(c);
-}
-function buildMix(c){
-  c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">🧪 색 혼합 실험실</div>
-    <div style="font-size:13px;color:#a09e98;margin-bottom:.75rem">RGB 슬라이더로 목표 색을 만들어보세요!</div>
-    <div style="display:flex;gap:8px;margin-bottom:.75rem">
-      <div style="padding:5px 12px;border-radius:14px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,.08)">점수: <span style="color:#c8a96e;font-weight:600" id="ag-ms">0</span></div>
-      <div style="padding:5px 12px;border-radius:14px;font-size:13px;background:#1a1a22;border:1px solid rgba(255,255,255,.08)">일치: <span id="ag-mm">0</span>%</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.75rem">
-      <div><div style="font-size:11px;color:#a09e98;margin-bottom:.3rem">🎯 목표</div><div id="ag-t" style="height:75px;border-radius:10px;border:1px solid rgba(255,255,255,.08)"></div><div style="font-size:11px;color:#6a6860;text-align:center;margin-top:.2rem" id="ag-tn"></div></div>
-      <div><div style="font-size:11px;color:#a09e98;margin-bottom:.3rem">🎨 내 색</div><div id="ag-my" style="height:75px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#000"></div><div style="font-size:11px;color:#c8a96e;text-align:center;margin-top:.2rem" id="ag-mh">#000000</div></div>
-    </div>
-    <div style="height:7px;border-radius:4px;background:#24242f;margin-bottom:.75rem;overflow:hidden"><div id="ag-mb" style="height:100%;background:#7c3aed;transition:width .3s;border-radius:4px;width:0%"></div></div>
-    ${['R','G','B'].map((l,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><span style="font-size:12px;color:${['#f87171','#4ade80','#60a5fa'][i]};width:14px">${l}</span><input type="range" id="ag-${l.toLowerCase()}" min="0" max="255" value="0" oninput="updMix()" style="flex:1;height:6px;border-radius:3px;appearance:none;cursor:pointer"><span style="font-size:12px;width:26px;text-align:right;color:#a09e98" id="ag-${l.toLowerCase()}v">0</span></div>`).join('')}
-    <div style="display:flex;gap:8px;margin-top:.75rem;flex-wrap:wrap">${mBtn('✓ 확인','chkMix()')} ${mBtn('새 목표','newMix()',false)}</div>
-    ${mFb('ag-mfb')}`;
-  newMix();
-}
-function updMix(){const r=+document.getElementById('ag-r')?.value||0,g=+document.getElementById('ag-g')?.value||0,b=+document.getElementById('ag-b')?.value||0;['r','g','b'].forEach((l,i)=>{const el=document.getElementById(`ag-${l}v`);if(el)el.textContent=[r,g,b][i];});const hex='#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');const my=document.getElementById('ag-my'),mh=document.getElementById('ag-mh');if(my)my.style.background=`rgb(${r},${g},${b})`;if(mh)mh.textContent=hex;const d=Math.sqrt((r-agTarget.r)**2+(g-agTarget.g)**2+(b-agTarget.b)**2);const m=Math.max(0,Math.round(100-d/4.41));const mm=document.getElementById('ag-mm'),mb=document.getElementById('ag-mb');if(mm)mm.textContent=m;if(mb)mb.style.width=m+'%';}
-function newMix(){const p=AG_PRESETS[Math.floor(Math.random()*AG_PRESETS.length)];agTarget={r:p.r,g:p.g,b:p.b};const t=document.getElementById('ag-t'),tn=document.getElementById('ag-tn');if(t)t.style.background=`rgb(${p.r},${p.g},${p.b})`;if(tn)tn.textContent=p.n;const fb=document.getElementById('ag-mfb');if(fb)fb.style.display='none';}
-function chkMix(){const r=+document.getElementById('ag-r')?.value||0,g=+document.getElementById('ag-g')?.value||0,b=+document.getElementById('ag-b')?.value||0;const d=Math.sqrt((r-agTarget.r)**2+(g-agTarget.g)**2+(b-agTarget.b)**2);const m=Math.max(0,Math.round(100-d/4.41));if(m>=90){agScore+=20;const s=document.getElementById('ag-ms');if(s)s.textContent=agScore;showMFb('ag-mfb',true,`✅ 완벽! ${m}% 일치 +20점`);setTimeout(newMix,1500);}else showMFb('ag-mfb',m>=70,`${m>=70?'🎯':'❌'} ${m}% 일치. 더 조정해보세요.`);}
-
-function buildHsl(c){
-  c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">🎚️ 명도·채도 직접 체험</div>
-    <div id="ag-hd" style="height:100px;border-radius:12px;margin-bottom:1rem;background:hsl(0,100%,50%);transition:background .2s"></div>
-    ${[['H 색상','sl-h','0','360','0','°'],['S 채도','sl-s','0','100','100','%'],['L 밝기','sl-l','0','100','50','%']].map(([nm,id,mn,mx,val,u])=>`
-    <div style="display:grid;grid-template-columns:60px 1fr 46px;gap:8px;align-items:center;margin-bottom:10px">
-      <span style="font-size:12px;color:#a09e98">${nm}</span>
-      <input type="range" id="${id}" min="${mn}" max="${mx}" value="${val}" oninput="updHsl()" style="height:8px;border-radius:4px;appearance:none;cursor:pointer;background:#444">
-      <span style="font-size:12px;color:#c8a96e;text-align:right" id="${id}-v">${val}${u}</span>
-    </div>`).join('')}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div style="padding:.75rem;background:#1a1a22;border-radius:8px;text-align:center"><div style="font-size:11px;color:#a09e98">색감</div><div style="font-size:12px;font-weight:600;color:#f0eee8" id="ag-hf">선명한 빨강</div></div>
-      <div style="padding:.75rem;background:#1a1a22;border-radius:8px;text-align:center"><div style="font-size:11px;color:#a09e98">HEX</div><div style="font-size:12px;font-weight:600;color:#f0eee8" id="ag-hx">#ff0000</div></div>
-    </div>`;
-}
-function updHsl(){const h=+document.getElementById('sl-h')?.value||0,s=+document.getElementById('sl-s')?.value||100,l=+document.getElementById('sl-l')?.value||50;const d=document.getElementById('ag-hd');if(d)d.style.background=`hsl(${h},${s}%,${l}%)`;[['sl-h',h,'°'],['sl-s',s,'%'],['sl-l',l,'%']].forEach(([id,v,u])=>{const el=document.getElementById(id+'-v');if(el)el.textContent=v+u;});const feels=['빨강','주황','노랑','황록','초록','청록','파랑','남보라','보라','분홍','빨강'];const hf=document.getElementById('ag-hf');if(hf)hf.textContent=(s<20?'회색':'선명한')+' '+feels[Math.floor(h/36)];const sv=s/100,lv=l/100,a=sv*Math.min(lv,1-lv);const f=n=>{const k=(n+h/30)%12;const cv=lv-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*cv).toString(16).padStart(2,'0')};const hx=document.getElementById('ag-hx');if(hx)hx.textContent=`#${f(0)}${f(8)}${f(4)}`;}
-
-function buildDraw(c){
-  c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">✏️ 자유 드로잉</div>
-    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.6rem" id="ag-dp"></div>
-    <div style="display:flex;gap:6px;margin-bottom:.6rem;flex-wrap:wrap;align-items:center">
-      ${[['pen','✏️ 펜'],['brush','🖌️ 브러시'],['eraser','🧹 지우개']].map(([t,l])=>`<button id="dt-${t}" onclick="setDTool('${t}')" style="padding:5px 11px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">${l}</button>`).join('')}
-      <input type="range" id="ag-bs" min="2" max="40" value="6" oninput="updBrush()" style="width:70px">
-      <span style="font-size:12px;color:#a09e98" id="ag-bv">6</span>px
-    </div>
-    <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.08);margin-bottom:.75rem">
-      <canvas id="ag-cv" style="display:block;background:#fff;cursor:crosshair;touch-action:none;width:100%;max-height:260px"></canvas>
-    </div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap">
-      ${[['🗑️ 지우기','clearDraw()'],['💾 저장','saveDraw()']].map(([l,f])=>`<button onclick="${f}" style="padding:6px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#a09e98;cursor:pointer;font-family:inherit;font-size:12px">${l}</button>`).join('')}
-    </div>`;
-  const p=document.getElementById('ag-dp');
-  AG_COLS.forEach((cl,i)=>{const sw=document.createElement('div');sw.style.cssText=`width:24px;height:24px;border-radius:4px;cursor:pointer;background:${cl};border:${i===0?'2px solid white':'2px solid transparent'}`;if(cl==='#ffffff')sw.style.border='2px solid #666';sw.addEventListener('click',()=>{document.querySelectorAll('#ag-dp>div').forEach(s=>s.style.borderColor='transparent');sw.style.borderColor='white';drawColor=cl;});p.appendChild(sw);});
-  setDTool('pen');
-  const cv=document.getElementById('ag-cv');if(!cv||cv.dataset.init)return;cv.dataset.init='1';
-  const w=cv.parentElement.clientWidth||360;cv.width=w;cv.height=Math.min(w*.6,240);
-  const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
-  const gp=(e,c)=>{const r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*(c.width/r.width),y:(e.clientY-r.top)*(c.height/r.height)};};
-  const dd=e=>{if(!isDrawing)return;const ctx=cv.getContext('2d');const pos=gp(e,cv);ctx.beginPath();ctx.moveTo(lastX,lastY);ctx.lineTo(pos.x,pos.y);ctx.strokeStyle=drawTool==='eraser'?'#fff':drawColor;ctx.lineWidth=drawTool==='brush'?drawSize*2:drawSize;ctx.lineCap='round';ctx.lineJoin='round';ctx.globalAlpha=drawTool==='brush'?.5:1;ctx.stroke();ctx.globalAlpha=1;lastX=pos.x;lastY=pos.y;};
-  cv.addEventListener('mousedown',e=>{isDrawing=true;const p=gp(e,cv);lastX=p.x;lastY=p.y;});
-  cv.addEventListener('mousemove',dd);cv.addEventListener('mouseup',()=>isDrawing=false);cv.addEventListener('mouseleave',()=>isDrawing=false);
-  cv.addEventListener('touchstart',e=>{e.preventDefault();isDrawing=true;const p=gp(e.touches[0],cv);lastX=p.x;lastY=p.y;},{passive:false});
-  cv.addEventListener('touchmove',e=>{e.preventDefault();dd(e.touches[0]);},{passive:false});
-  cv.addEventListener('touchend',()=>isDrawing=false);
-}
-function setDTool(t){drawTool=t;['pen','brush','eraser'].forEach(n=>{const b=document.getElementById('dt-'+n);if(b){b.style.background=n===t?'rgba(15,118,110,.2)':'transparent';b.style.borderColor=n===t?'rgba(15,118,110,.8)':'rgba(255,255,255,.1)';b.style.color=n===t?'#f0eee8':'#a09e98';}});}
-function updBrush(){drawSize=+document.getElementById('ag-bs').value;const v=document.getElementById('ag-bv');if(v)v.textContent=drawSize;}
-function clearDraw(){const cv=document.getElementById('ag-cv');if(!cv)return;const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);}
-function saveDraw(){const cv=document.getElementById('ag-cv');if(!cv)return;const a=document.createElement('a');a.download='drawing.png';a.href=cv.toDataURL();a.click();}
-
-function buildPixel(c){
-  c.innerHTML=`<div style="font-size:16px;font-weight:700;margin-bottom:.5rem;color:#f0eee8">🟦 픽셀 아트</div>
-    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.6rem" id="ag-pp"></div>
-    <div style="display:flex;gap:6px;margin-bottom:.6rem;flex-wrap:wrap">
-      ${[['🗑️ 지우기','clearPx()'],['❤️ 하트','drawHeart()'],['💾 저장','savePx()']].map(([l,f])=>`<button onclick="${f}" style="padding:5px 11px;border-radius:7px;border:${l==='💾 저장'?'none':'1px solid rgba(255,255,255,.1)'};background:${l==='💾 저장'?'#7c3aed':'transparent'};color:${l==='💾 저장'?'white':'#a09e98'};cursor:pointer;font-family:inherit;font-size:12px">${l}</button>`).join('')}
-    </div>
-    <div style="overflow:auto;background:#1a1a22;border-radius:10px;padding:8px;border:1px solid rgba(255,255,255,.08)">
-      <div id="ag-pg" style="display:grid;gap:1px;margin:0 auto"></div>
-    </div>`;
-  const p=document.getElementById('ag-pp');
-  PX_COLS.forEach((cl,i)=>{const sw=document.createElement('div');sw.style.cssText=`width:22px;height:22px;border-radius:3px;cursor:pointer;background:${cl};border:${i===0?'2px solid white':'2px solid transparent'}`;if(cl==='#ffffff')sw.style.border='2px solid #666';sw.addEventListener('click',()=>{document.querySelectorAll('#ag-pp>div').forEach(s=>s.style.borderColor='transparent');sw.style.borderColor='white';pxColor=cl;});p.appendChild(sw);});
-  pxData=new Array(256).fill('#ffffff');
-  const g=document.getElementById('ag-pg');
-  const cSz=Math.floor(Math.min(window.innerWidth-80,340)/16);
-  g.style.gridTemplateColumns=`repeat(16,${cSz}px)`;
-  for(let i=0;i<256;i++){const d=document.createElement('div');d.style.cssText=`width:${cSz}px;height:${cSz}px;background:#ffffff;cursor:pointer;border-radius:1px`;d.dataset.idx=i;d.addEventListener('mousedown',()=>{pxPainting=true;pxPaint(i,d);});d.addEventListener('mouseenter',()=>{if(pxPainting)pxPaint(i,d);});d.addEventListener('touchstart',e=>{e.preventDefault();pxPainting=true;pxPaint(i,d);},{passive:false});d.addEventListener('touchmove',e=>{e.preventDefault();const t=e.touches[0];const el=document.elementFromPoint(t.clientX,t.clientY);if(el&&el.dataset.idx!==undefined)pxPaint(+el.dataset.idx,el);},{passive:false});g.appendChild(d);}
-  document.addEventListener('mouseup',()=>pxPainting=false);document.addEventListener('touchend',()=>pxPainting=false);
-}
-function pxPaint(i,d){pxData[i]=pxColor;d.style.background=pxColor;}
-function clearPx(){pxData.fill('#ffffff');document.querySelectorAll('#ag-pg>div').forEach(d=>d.style.background='#ffffff');}
-function drawHeart(){clearPx();const cs=document.querySelectorAll('#ag-pg>div');[[3,4,11,12],[2,3,4,5,10,11,12,13],[1,2,3,4,5,6,7,8,9,10,11,12,13,14],[2,3,4,5,6,7,8,9,10,11,12,13],[3,4,5,6,7,8,9,10,11,12],[4,5,6,7,8,9,10,11],[5,6,7,8,9,10],[6,7,8,9],[7,8]].forEach((r,ri)=>r.forEach(ci=>{const idx=(ri+3)*16+ci;if(idx<256){pxData[idx]='#ef4444';cs[idx].style.background='#ef4444';}}));}
-function savePx(){const cv=document.createElement('canvas');cv.width=cv.height=160;const ctx=cv.getContext('2d');pxData.forEach((cl,i)=>{ctx.fillStyle=cl;ctx.fillRect((i%16)*10,Math.floor(i/16)*10,10,10);});const a=document.createElement('a');a.download='pixel.png';a.href=cv.toDataURL();a.click();}
 </script>
 </body>
 </html>
