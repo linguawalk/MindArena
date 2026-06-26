@@ -3,6 +3,7 @@
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/music_game.html", "dest": "/music_game.html" },
     { "src": "/art_game.html", "dest": "/art_game.html" },
+    { "src": "/about.html", "dest": "/about.html" },
     { "src": "/(.*\\.(html|js|css|png|jpg|ico|svg))", "dest": "/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
