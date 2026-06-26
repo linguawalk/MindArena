@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MindArena — 두뇌훈련 퍼즐 플랫폼</title>
+<meta name="description" content="900개 퍼즐 · 6개 카테고리 · 15단계. 수·연산·확률·패턴·논리·공간·전략을 게임으로 즐기는 무료 두뇌훈련 플랫폼.">
+<meta name="keywords" content="두뇌훈련,퍼즐,수학퍼즐,논리퍼즐,브레인게임,무료게임,MindArena">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mind-arena.org">
+<meta property="og:title" content="MindArena — 두뇌훈련 퍼즐 플랫폼">
+<meta property="og:description" content="900개 퍼즐 · 6개 카테고리 · 15단계. 수·연산·확률·패턴·논리·공간·전략을 게임으로 즐기는 무료 두뇌훈련 플랫폼.">
+<meta property="og:image" content="https://mind-arena.org/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MindArena — 두뇌훈련 퍼즐 플랫폼">
+<meta name="twitter:description" content="900개 퍼즐 · 6개 카테고리 · 15단계. 무료 두뇌훈련 게임.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%237c3aed'/><text y='.9em' font-size='70' x='15'>🧠</text></svg>">
+<link rel="canonical" href="https://mind-arena.org">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -26,12 +38,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t);f
 nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.96);backdrop-filter:blur(12px);
     border-bottom:.5px solid var(--bd);padding:0 1.5rem;height:52px;
     display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:16px;font-weight:700;color:var(--t);display:flex;align-items:center;gap:8px;border:none;background:none;cursor:pointer;font-family:inherit}
+.logo{font-size:16px;font-weight:700;color:var(--t);display:flex;align-items:center;gap:8px;border:none;background:none;cursor:pointer;font-family:inherit;text-decoration:none}
 .logo-m{width:28px;height:28px;background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:8px;
         color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .nav-r{display:flex;gap:.25rem}
-.nav-btn{padding:5px 12px;border-radius:8px;font-size:13px;color:var(--t2);background:none;border:none;cursor:pointer;font-family:inherit;transition:all .15s}
+.nav-btn{padding:5px 12px;border-radius:8px;font-size:13px;color:var(--t2);background:none;border:none;cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
 .nav-btn:hover{background:var(--bg2)}
+.nav-login{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600;
+           background:var(--acc);color:white;border:none;cursor:pointer;font-family:inherit;
+           transition:all .15s;display:flex;align-items:center;gap:5px}
+.nav-login:hover{background:var(--acc-d)}
+.nav-login.out{background:var(--bg2);color:var(--t2)}
+.nav-login.out:hover{background:var(--bg3)}
+.user-avatar{width:22px;height:22px;border-radius:50%;object-fit:cover}
 
 /* HERO */
 .hero{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#1e3a5f 100%);
@@ -149,8 +168,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.96);backdrop-
 .result-stars{font-size:32px;letter-spacing:.1em;margin-bottom:.5rem}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-.aov{position:fixed;inset:0;background:white;z-index:500;display:none;flex-direction:column;overflow-y:auto}
-.aov.open{display:flex}
+
 
 /* MUSIC·ART 공용 게임 UI */
 .fc{perspective:600px;cursor:pointer;height:90px}
@@ -201,12 +219,13 @@ footer a:hover{color:var(--t)}
 <body>
 
 <nav>
-  <button class="logo" onclick="openAbout()">
+  <a class="logo" href="index.html" style="text-decoration:none">
     <div class="logo-m">M</div>MindArena
-  </button>
+  </a>
   <div class="nav-r">
-    <button class="nav-btn" onclick="openAbout()">소개</button>
-    <button class="nav-btn" onclick="openAbout()">문의</button>
+    <a class="nav-btn" href="about.html">소개</a>
+    <a class="nav-btn" href="about.html#contact">문의</a>
+    <button class="nav-login" id="nav-login-btn" onclick="handleLogin()">로그인</button>
   </div>
 </nav>
 
@@ -271,43 +290,6 @@ footer a:hover{color:var(--t)}
 </div>
 
 <!-- 음악·미술 z:400 -->
-<div class="aov" id="aov">
-  <div style="position:sticky;top:0;background:white;padding:.9rem 1.5rem;border-bottom:.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;z-index:1">
-    <span style="font-size:15px;font-weight:700">MindArena 소개</span>
-    <button onclick="closeAbout()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--t3)">✕</button>
-  </div>
-  <div style="max-width:760px;margin:0 auto;padding:2.5rem 1.5rem">
-    <div style="text-align:center;margin-bottom:2.5rem">
-      <div style="font-size:48px;margin-bottom:1rem">🧠</div>
-      <h1 style="font-size:28px;font-weight:700;margin-bottom:.75rem">두뇌훈련 퍼즐 플랫폼</h1>
-      <p style="font-size:15px;color:var(--t2);line-height:1.75;max-width:460px;margin:0 auto">
-        900개 퍼즐 · 6개 카테고리 · 15단계<br>
-        수·연산·확률·패턴·논리·공간·전략.<br>모든 콘텐츠는 완전 무료입니다.
-      </p>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2.5rem">
-      <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center"><div style="font-size:22px;font-weight:700">900+</div><div style="font-size:11px;color:var(--t3);margin-top:.2rem">퍼즐</div></div>
-      <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center"><div style="font-size:22px;font-weight:700">6</div><div style="font-size:11px;color:var(--t3);margin-top:.2rem">카테고리</div></div>
-      <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center"><div style="font-size:22px;font-weight:700">15</div><div style="font-size:11px;color:var(--t3);margin-top:.2rem">단계</div></div>
-      <div style="padding:1rem;background:var(--bg2);border-radius:12px;text-align:center"><div style="font-size:22px;font-weight:700">무료</div><div style="font-size:11px;color:var(--t3);margin-top:.2rem">전체</div></div>
-    </div>
-    <div style="background:var(--bg2);border-radius:14px;padding:2rem">
-      <h2 style="font-size:18px;font-weight:700;margin-bottom:1.25rem">문의하기</h2>
-      <div id="aov-ok" style="display:none;text-align:center;padding:1.5rem;background:#f0fdf4;border-radius:10px;border:1px solid #bbf7d0">
-        <div style="font-size:28px;margin-bottom:.5rem">✅</div>
-        <div style="font-weight:600;color:#166534">접수되었습니다</div>
-      </div>
-      <form id="aov-form" onsubmit="submitForm(event)">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-          <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:4px">이름 *</div><input required type="text" placeholder="홍길동" style="width:100%;padding:.65rem .9rem;border-radius:8px;border:1.5px solid var(--bd);font-family:inherit;font-size:14px;outline:none"></div>
-          <div><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:4px">이메일 *</div><input required type="email" placeholder="hello@example.com" style="width:100%;padding:.65rem .9rem;border-radius:8px;border:1.5px solid var(--bd);font-family:inherit;font-size:14px;outline:none"></div>
-        </div>
-        <div style="margin-bottom:12px"><div style="font-size:12px;font-weight:500;color:var(--t2);margin-bottom:4px">내용 *</div><textarea required placeholder="문의 내용을 작성해 주세요." style="width:100%;padding:.65rem .9rem;border-radius:8px;border:1.5px solid var(--bd);font-family:inherit;font-size:14px;outline:none;resize:vertical;min-height:90px;line-height:1.6"></textarea></div>
-        <button type="submit" style="width:100%;padding:.8rem;border-radius:9px;border:none;background:var(--t);color:white;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer">문의 보내기</button>
-      </form>
-    </div>
-  </div>
-</div>
 
 
 <!-- 광고 배너 (하단) — AdSense 승인 후 코드 삽입 -->
@@ -324,8 +306,9 @@ footer a:hover{color:var(--t)}
 <footer>
   <span>© 2025-2026 MindArena — 두뇌훈련 퍼즐 플랫폼 (무료)</span>
   <div style="display:flex;gap:1rem">
-    <a href="#" onclick="openAbout();return false">소개</a>
-    <a href="mailto:hello@mind-arena.org">문의</a>
+    <a href="about.html">소개</a>
+    <a href="about.html#contact">문의</a>
+    <a href="mailto:hello@mind-arena.org">이메일</a>
   </div>
 </footer>
 
@@ -344,20 +327,47 @@ const CATS = [
 let GS={};
 let calcTimer=null;
 
+// ── localStorage 진행상황 ──
+function getSaved(catId){
+  try{ return JSON.parse(localStorage.getItem('ma_'+catId)||'{}'); }
+  catch(e){ return {}; }
+}
+function saveDone(catId,levelNum,correct,total){
+  const d=getSaved(catId);
+  if(!d[levelNum]||d[levelNum].correct<correct)
+    d[levelNum]={correct,total,date:new Date().toISOString().slice(0,10)};
+  try{ localStorage.setItem('ma_'+catId,JSON.stringify(d)); }catch(e){}
+}
+function clearProgress(){
+  if(!confirm('모든 진행상황을 초기화할까요?'))return;
+  Object.keys(localStorage).filter(k=>k.startsWith('ma_')).forEach(k=>localStorage.removeItem(k));
+  renderCats();
+}
+
 function renderCats(){
   const grid=document.getElementById('cat-grid');
   grid.innerHTML=CATS.map(c=>{
-    const badge=c.levels?`${c.levels}레벨 · ${c.total}문제`:`${c.total}종 게임`;
-    const cta  =c.levels?'레벨 선택 →':'바로 플레이 →';
-    const fn   =c.action||`openLov('${c.id}')`;
+    const saved=getSaved(c.id);
+    const doneCount=Object.keys(saved).length;
+    const badge=c.levels
+      ? (doneCount>0?`${doneCount}/${c.levels}단계 완료`:`${c.levels}레벨 · ${c.total}문제`)
+      : `${c.total}종 게임`;
+    const badgeColor=doneCount>0?'background:#dcfce7;color:#15803d':'';
+    const cta=c.levels?'레벨 선택 →':'바로 플레이 →';
+    const fn=c.action||`openLov('${c.id}')`;
+    const prog=c.levels&&doneCount>0
+      ?`<div style="margin-top:.75rem;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden">
+          <div style="height:100%;border-radius:2px;background:${c.color};width:${Math.round(doneCount/c.levels*100)}%;transition:width .4s"></div>
+        </div>`:'' ;
     return `<div class="cat-card" data-cat="${c.id}" onclick="${fn}">
-      <div class="cat-top"><span class="cat-icon">${c.icon}</span><span class="cat-badge">${badge}</span></div>
+      <div class="cat-top"><span class="cat-icon">${c.icon}</span><span class="cat-badge" style="${badgeColor}">${badge}</span></div>
       <div class="cat-label">${c.label}</div>
       <div class="cat-desc">${c.desc}</div>
       <div class="cat-foot">
-        <span class="cat-meta">🧩 ${c.levels?'단계별 퍼즐':'인터랙티브 게임'}</span>
+        <span class="cat-meta">🧩 단계별 퍼즐</span>
         <span class="cat-cta" style="color:${c.color}">${cta}</span>
       </div>
+      ${prog}
     </div>`;
   }).join('');
 }
@@ -371,11 +381,17 @@ function openLov(catId){
   document.getElementById('lv-info').innerHTML=
     `<strong>${meta.label}</strong> — 15단계 · 총 ${meta.total}문제<br>
      <span style="font-size:12px;color:var(--t3)">${data.levels[0].thinking||''}</span>`;
-  document.getElementById('lv-grid').innerHTML=data.levels.map(lv=>`
-    <button class="lv-btn" onclick="startLevel('${catId}',${lv.level})">
+  const saved=getSaved(catId);
+  document.getElementById('lv-grid').innerHTML=data.levels.map(lv=>{
+    const d=saved[lv.level];
+    const pct=d?Math.round(d.correct/d.total*100):null;
+    const stars=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':pct>=1?'⭐':'';
+    return `<button class="lv-btn${d?' done':''}" onclick="startLevel('${catId}',${lv.level})"
+      style="${d?'border-color:'+CATS.find(c=>c.id===catId).color+';background:'+CATS.find(c=>c.id===catId).color+'11':''}" >
       <span class="lv-n">${lv.level}</span>
-      <span class="lv-d">${DIFF[lv.level]||''}</span>
-    </button>`).join('');
+      <span class="lv-d">${d?stars:DIFF[lv.level]||''}</span>
+    </button>`;
+  }).join('');
   document.getElementById('lov').classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -520,11 +536,18 @@ function showReveal(){
 }
 function selfEval(knew){
   if(knew)GS.correct++;
+  // 마지막 문제였으면 저장
+  if(GS.idx>=GS.problems.length-1){
+    saveDone(GS.meta.id, GS.levelNum, GS.correct, GS.problems.length);
+    renderCats();
+  }
   nextPuzzle();
 }
 function nextPuzzle(){GS.idx++;renderPuzzle();}
 
 function endPuzzle(){
+  saveDone(GS.meta.id, GS.levelNum, GS.correct, GS.problems.length);
+  renderCats();
   const {correct,problems,meta,levelNum}=GS;
   const total=problems.length;
   const pct=Math.round(correct/total*100);
@@ -554,20 +577,63 @@ function closeGame(){
 /* ── 음악·미술 오버레이 ── */
 
 /* ── 소개 ── */
-function openAbout(){document.getElementById('aov').classList.add('open');document.body.style.overflow='hidden';}
-function closeAbout(){document.getElementById('aov').classList.remove('open');document.body.style.overflow='';}
-function submitForm(e){e.preventDefault();document.getElementById('aov-form').style.display='none';document.getElementById('aov-ok').style.display='block';}
-
-document.addEventListener('keydown',e=>{
-  if(e.key!=='Escape')return;
-  if(document.getElementById('gov').classList.contains('open'))closeGame();
-  else if(document.getElementById('lov').classList.contains('open'))closeLov();
-  else if(document.getElementById('music-ov').classList.contains('open'))closeDov('music-ov');
-  else if(document.getElementById('art-ov').classList.contains('open'))closeDov('art-ov');
-  else if(document.getElementById('aov').classList.contains('open'))closeAbout();
-});
+);
 window.addEventListener('DOMContentLoaded',()=>renderCats());
 
 </script>
+
+<!-- Firebase Auth -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+// ── Firebase 설정 (Vercel 환경변수 또는 직접 입력) ──
+const firebaseConfig = {
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
+};
+
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// 로그인 상태 감지
+onAuthStateChanged(auth, user => {
+  const btn = document.getElementById('nav-login-btn');
+  if (!btn) return;
+  if (user) {
+    btn.innerHTML = `<img class="user-avatar" src="${user.photoURL||''}" onerror="this.style.display='none'">${user.displayName||'나'} ▾`;
+    btn.className = 'nav-login out';
+    btn.title = '클릭하면 로그아웃';
+    // 로그인된 진행상황은 Firestore에 동기화 (추후 구현)
+  } else {
+    btn.innerHTML = '로그인';
+    btn.className = 'nav-login';
+    btn.title = 'Google 계정으로 로그인';
+  }
+});
+
+window.handleLogin = async function(){
+  const user = auth.currentUser;
+  if (user) {
+    if (confirm(`${user.displayName}님, 로그아웃 하시겠습니까?`)) {
+      await signOut(auth);
+    }
+  } else {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch(e) {
+      if (e.code !== 'auth/popup-closed-by-user')
+        alert('로그인 중 오류가 발생했습니다: ' + e.message);
+    }
+  }
+};
+</script>
+
 </body>
 </html>
