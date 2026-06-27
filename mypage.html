@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마이페이지 — MindArena</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%237c3aed'/><text y='.9em' font-size='70' x='15'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fafaf8;--bg2:#f2f1ee;--bg3:#e8e7e3;
+  --t:#1a1814;--t2:#4a4640;--t3:#9a9690;--bd:rgba(0,0,0,.07);
+  --acc:#7c3aed;--acc-l:#f5f3ff;--acc-d:#5b21b6;
+  --num:#2563eb;--prob:#0891b2;--pat:#059669;
+  --log:#b45309;--spa:#7c3aed;--str:#dc2626;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t);font-size:14px;line-height:1.6;min-height:100vh}
+nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.96);backdrop-filter:blur(12px);
+    border-bottom:.5px solid var(--bd);padding:0 1.5rem;height:52px;
+    display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:16px;font-weight:700;color:var(--t);display:flex;align-items:center;gap:8px;text-decoration:none}
+.logo-m{width:28px;height:28px;background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:8px;
+        color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.nav-r{display:flex;gap:.5rem;align-items:center}
+.nav-btn{padding:5px 12px;border-radius:8px;font-size:13px;color:var(--t2);background:none;border:none;
+         cursor:pointer;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center}
+.nav-btn:hover{background:var(--bg2)}
+.btn-logout{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:600;
+            border:1.5px solid var(--bd);background:white;color:var(--t2);cursor:pointer;font-family:inherit}
+.btn-logout:hover{background:var(--bg2)}
+
+/* 로그인 전 화면 */
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;
+              min-height:calc(100vh - 52px);padding:2rem;text-align:center}
+.login-box{background:white;border-radius:20px;border:.5px solid var(--bd);padding:3rem 2.5rem;
+           max-width:400px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+.login-icon{font-size:56px;margin-bottom:1.25rem}
+.login-title{font-size:22px;font-weight:700;margin-bottom:.5rem}
+.login-sub{font-size:14px;color:var(--t2);margin-bottom:2rem;line-height:1.7}
+.btn-google{width:100%;padding:.9rem;border-radius:12px;border:1.5px solid var(--bd);
+            background:white;cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;
+            display:flex;align-items:center;justify-content:center;gap:10px;transition:all .15s}
+.btn-google:hover{background:var(--bg2);border-color:#aaa}
+.google-icon{width:20px;height:20px}
+
+/* 로그인 후 화면 */
+#main-screen{display:none;max-width:900px;margin:0 auto;padding:2rem 1.5rem}
+
+/* 프로필 섹션 */
+.profile-card{background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:20px;
+              padding:2rem;margin-bottom:1.5rem;color:white;display:flex;align-items:center;gap:1.5rem;
+              flex-wrap:wrap}
+.profile-avatar{width:72px;height:72px;border-radius:50%;border:3px solid rgba(255,255,255,.3);
+                background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;
+                font-size:28px;flex-shrink:0;overflow:hidden}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-info .name{font-size:20px;font-weight:700;margin-bottom:.2rem}
+.profile-info .email{font-size:13px;color:rgba(255,255,255,.65);margin-bottom:.75rem}
+.profile-stats{display:flex;gap:1.5rem;flex-wrap:wrap}
+.profile-stat{text-align:center}
+.profile-stat-n{font-size:22px;font-weight:700}
+.profile-stat-l{font-size:11px;color:rgba(255,255,255,.55);margin-top:.1rem}
+
+/* 섹션 */
+.section-title{font-size:15px;font-weight:700;color:var(--t);margin-bottom:1rem;
+               display:flex;align-items:center;gap:.5rem}
+.card{background:white;border-radius:16px;border:.5px solid var(--bd);padding:1.35rem;margin-bottom:1rem}
+
+/* 카테고리 진행 */
+.cat-progress-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.5rem}
+.cat-prog-item{background:white;border-radius:14px;border:.5px solid var(--bd);padding:1.1rem}
+.cat-prog-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+.cat-prog-label{font-size:14px;font-weight:600;display:flex;align-items:center;gap:.4rem}
+.cat-prog-pct{font-size:13px;font-weight:700}
+.prog-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width .6s ease}
+.cat-prog-detail{font-size:11px;color:var(--t3);margin-top:.4rem}
+
+/* 최근 활동 */
+.activity-list{display:flex;flex-direction:column;gap:8px}
+.activity-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;
+               background:var(--bg2);border-radius:10px}
+.activity-icon{font-size:20px;flex-shrink:0}
+.activity-info{flex:1}
+.activity-title{font-size:13px;font-weight:600}
+.activity-sub{font-size:11px;color:var(--t3);margin-top:.1rem}
+.activity-score{font-size:13px;font-weight:700;color:var(--acc)}
+
+/* 성취 배지 */
+.badge-grid{display:flex;gap:10px;flex-wrap:wrap}
+.badge{padding:.5rem 1rem;border-radius:20px;font-size:12px;font-weight:600;
+       display:flex;align-items:center;gap:.35rem;border:1.5px solid}
+.badge.earned{background:var(--acc-l);border-color:var(--acc);color:var(--acc-d)}
+.badge.locked{background:var(--bg2);border-color:var(--bd);color:var(--t3)}
+
+/* 동기화 상태 */
+.sync-bar{display:flex;align-items:center;justify-content:space-between;
+          padding:.75rem 1rem;background:var(--bg2);border-radius:10px;margin-bottom:1.5rem}
+.sync-status{font-size:13px;color:var(--t2);display:flex;align-items:center;gap:.5rem}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#16a34a}
+.sync-dot.off{background:var(--t3)}
+.btn-sync{padding:5px 14px;border-radius:8px;font-size:12px;font-weight:600;
+          background:var(--acc);color:white;border:none;cursor:pointer;font-family:inherit}
+
+footer{border-top:.5px solid var(--bd);padding:1.25rem 1.5rem;display:flex;align-items:center;
+       justify-content:space-between;font-size:12px;color:var(--t3);flex-wrap:wrap;gap:.5rem;margin-top:2rem}
+footer a{color:var(--t3);text-decoration:none}
+
+@media(max-width:640px){
+  .cat-progress-grid{grid-template-columns:1fr}
+  .profile-card{flex-direction:column;text-align:center}
+  .profile-stats{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/">
+    <div class="logo-m">M</div>MindArena
+  </a>
+  <div class="nav-r">
+    <a class="nav-btn" href="/">홈</a>
+    <button class="btn-logout" id="btn-logout" style="display:none" onclick="handleLogout()">로그아웃</button>
+  </div>
+</nav>
+
+<!-- 로그인 전 -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-icon">🧠</div>
+    <div class="login-title">마이페이지</div>
+    <p class="login-sub">로그인하면 모든 기기에서<br>학습 진행상황을 이어갈 수 있습니다.</p>
+    <button class="btn-google" onclick="handleLogin()">
+      <svg class="google-icon" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Google 계정으로 로그인
+    </button>
+  </div>
+</div>
+
+<!-- 로그인 후 -->
+<div id="main-screen">
+
+  <!-- 프로필 카드 -->
+  <div class="profile-card">
+    <div class="profile-avatar" id="profile-avatar">👤</div>
+    <div class="profile-info">
+      <div class="name" id="profile-name">이름</div>
+      <div class="email" id="profile-email">이메일</div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="profile-stat-n" id="stat-total">0</div>
+          <div class="profile-stat-l">완료 레벨</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-n" id="stat-rate">0%</div>
+          <div class="profile-stat-l">평균 정답률</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-n" id="stat-streak">0일</div>
+          <div class="profile-stat-l">연속 학습</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 동기화 상태 -->
+  <div class="sync-bar">
+    <div class="sync-status">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span id="sync-text">진행상황 동기화 중...</span>
+    </div>
+    <button class="btn-sync" onclick="syncProgress()">🔄 동기화</button>
+  </div>
+
+  <!-- 카테고리별 진행 -->
+  <div class="section-title">📊 카테고리별 진행상황</div>
+  <div class="cat-progress-grid" id="cat-progress-grid"></div>
+
+  <!-- 최근 활동 -->
+  <div class="section-title">🕐 최근 활동</div>
+  <div class="card">
+    <div class="activity-list" id="activity-list">
+      <div style="text-align:center;padding:1.5rem;color:var(--t3);font-size:13px">아직 활동 내역이 없습니다</div>
+    </div>
+  </div>
+
+  <!-- 성취 배지 -->
+  <div class="section-title">🏅 성취 배지</div>
+  <div class="card">
+    <div class="badge-grid" id="badge-grid"></div>
+  </div>
+
+</div>
+
+<footer>
+  <span>© 2025-2026 MindArena</span>
+  <div style="display:flex;gap:1rem">
+    <a href="/">홈</a>
+    <a href="/index.html#contact">문의</a>
+  </div>
+</footer>
+
+<script type="module">
+// ── Firebase 설정 (나중에 실제 값으로 교체) ──
+const FIREBASE_CONFIG = {
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
+};
+
+// ── 카테고리 메타 ──
+const CATS = [
+  {id:'01_number', icon:'🔢', label:'수·연산',  color:'var(--num)', levels:15},
+  {id:'04_probability',icon:'🎲',label:'확률',  color:'var(--prob)',levels:15},
+  {id:'06_pattern', icon:'🔍', label:'패턴',    color:'var(--pat)', levels:15},
+  {id:'02_logic',   icon:'🧠', label:'논리',    color:'var(--log)', levels:15},
+  {id:'05_spatial', icon:'🔷', label:'공간',    color:'var(--spa)', levels:15},
+  {id:'07_strategy',icon:'♟️', label:'전략',    color:'var(--str)', levels:15},
+];
+
+const BADGES = [
+  {id:'first',   icon:'🎯', label:'첫 퍼즐',    desc:'첫 번째 퍼즐 완료',        check: s => s.totalDone >= 1},
+  {id:'ten',     icon:'🔥', label:'10레벨',      desc:'10개 레벨 완료',           check: s => s.totalDone >= 10},
+  {id:'fifty',   icon:'💫', label:'50레벨',      desc:'50개 레벨 완료',           check: s => s.totalDone >= 50},
+  {id:'century', icon:'🏆', label:'100레벨',     desc:'100개 레벨 완료',          check: s => s.totalDone >= 100},
+  {id:'perfect', icon:'⭐', label:'퍼펙트',      desc:'한 레벨 100% 정답',        check: s => s.hasPerfect},
+  {id:'allcat',  icon:'🌟', label:'전 카테고리', desc:'모든 카테고리 1레벨 이상', check: s => s.allCatStarted},
+];
+
+// ── localStorage에서 진행상황 로드 ──
+function loadLocalProgress(){
+  const progress = {};
+  let totalDone = 0, totalCorrect = 0, totalProblems = 0;
+  let hasPerfect = false, allCatStarted = true;
+  const recentActivity = [];
+
+  CATS.forEach(cat => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('ma_' + cat.id) || '{}');
+      const levels = Object.keys(saved).length;
+      const correct = Object.values(saved).reduce((s,v) => s + (v.correct||0), 0);
+      const total   = Object.values(saved).reduce((s,v) => s + (v.total||0), 0);
+      progress[cat.id] = {levels, correct, total, saved};
+      totalDone += levels;
+      totalCorrect += correct;
+      totalProblems += total;
+      if(levels === 0) allCatStarted = false;
+      if(Object.values(saved).some(v => v.correct === v.total && v.total > 0)) hasPerfect = true;
+      Object.entries(saved).forEach(([lv, v]) => {
+        if(v.date) recentActivity.push({cat, lv, ...v});
+      });
+    } catch(e) {}
+  });
+
+  recentActivity.sort((a,b) => (b.date||'').localeCompare(a.date||'')).slice(0,5);
+
+  return {
+    progress, totalDone, totalCorrect, totalProblems,
+    avgRate: totalProblems > 0 ? Math.round(totalCorrect/totalProblems*100) : 0,
+    hasPerfect, allCatStarted, recentActivity: recentActivity.slice(0,5)
+  };
+}
+
+// ── UI 렌더링 ──
+function renderMyPage(user){
+  // 프로필
+  document.getElementById('profile-name').textContent  = user.displayName || '사용자';
+  document.getElementById('profile-email').textContent = user.email || '';
+  const av = document.getElementById('profile-avatar');
+  if(user.photoURL) av.innerHTML = `<img src="${user.photoURL}" alt="프로필">`;
+
+  const data = loadLocalProgress();
+  document.getElementById('stat-total').textContent  = data.totalDone;
+  document.getElementById('stat-rate').textContent   = data.avgRate + '%';
+  document.getElementById('stat-streak').textContent = getStreak() + '일';
+
+  // 동기화 상태
+  document.getElementById('sync-dot').className  = 'sync-dot';
+  document.getElementById('sync-text').textContent = '로컬 저장 중 (Firebase 설정 후 클라우드 동기화)';
+
+  // 카테고리 진행
+  const grid = document.getElementById('cat-progress-grid');
+  grid.innerHTML = CATS.map(cat => {
+    const p   = data.progress[cat.id] || {levels:0,correct:0,total:0};
+    const pct = Math.round(p.levels / cat.levels * 100);
+    const rate = p.total > 0 ? Math.round(p.correct/p.total*100) : 0;
+    return `<div class="cat-prog-item">
+      <div class="cat-prog-top">
+        <div class="cat-prog-label">${cat.icon} ${cat.label}</div>
+        <div class="cat-prog-pct" style="color:${cat.color}">${pct}%</div>
+      </div>
+      <div class="prog-bar">
+        <div class="prog-fill" style="width:${pct}%;background:${cat.color}"></div>
+      </div>
+      <div class="cat-prog-detail">${p.levels}/${cat.levels}레벨 완료 · 정답률 ${rate}%</div>
+    </div>`;
+  }).join('');
+
+  // 최근 활동
+  const actList = document.getElementById('activity-list');
+  if(data.recentActivity.length > 0){
+    actList.innerHTML = data.recentActivity.map(a => {
+      const rate = a.total > 0 ? Math.round(a.correct/a.total*100) : 0;
+      const stars = rate>=90?'⭐⭐⭐':rate>=70?'⭐⭐':'⭐';
+      return `<div class="activity-item">
+        <div class="activity-icon">${a.cat.icon}</div>
+        <div class="activity-info">
+          <div class="activity-title">${a.cat.label} Lv.${a.lv}</div>
+          <div class="activity-sub">${a.date||''} ${stars}</div>
+        </div>
+        <div class="activity-score">${rate}%</div>
+      </div>`;
+    }).join('');
+  }
+
+  // 배지
+  const badgeGrid = document.getElementById('badge-grid');
+  badgeGrid.innerHTML = BADGES.map(b => {
+    const earned = b.check(data);
+    return `<div class="badge ${earned?'earned':'locked'}">
+      ${b.icon} ${b.label}
+      ${!earned?'<span style="font-size:10px;opacity:.6"> — '+b.desc+'</span>':''}
+    </div>`;
+  }).join('');
+}
+
+function getStreak(){
+  // 오늘 포함 연속 학습일 계산
+  const today = new Date().toISOString().slice(0,10);
+  const dates = new Set();
+  CATS.forEach(cat => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('ma_' + cat.id) || '{}');
+      Object.values(saved).forEach(v => { if(v.date) dates.add(v.date); });
+    } catch(e){}
+  });
+  let streak = 0, d = new Date();
+  while(true){
+    const ds = d.toISOString().slice(0,10);
+    if(dates.has(ds)) { streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+window.syncProgress = function(){
+  alert('Firebase 설정 완료 후 클라우드 동기화가 활성화됩니다.\n현재는 이 기기에 로컬 저장 중입니다.');
+};
+
+// ── Firebase Auth ──
+let auth = null;
+
+async function initFirebase(){
+  const configSet = FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY';
+
+  if(configSet){
+    // Firebase 실제 연동
+    const { initializeApp }     = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+          = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    const app      = initializeApp(FIREBASE_CONFIG);
+    auth           = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    window.handleLogin  = async () => {
+      try { await signInWithPopup(auth, provider); }
+      catch(e){ if(e.code!=='auth/popup-closed-by-user') alert('로그인 오류: '+e.message); }
+    };
+    window.handleLogout = async () => {
+      if(confirm('로그아웃 하시겠습니까?')) await signOut(auth);
+    };
+
+    onAuthStateChanged(auth, user => {
+      if(user){
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('main-screen').style.display  = 'block';
+        document.getElementById('btn-logout').style.display   = 'block';
+        renderMyPage(user);
+      } else {
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('main-screen').style.display  = 'none';
+        document.getElementById('btn-logout').style.display   = 'none';
+      }
+    });
+
+  } else {
+    // Firebase 미설정 → 데모 모드
+    window.handleLogin = () => {
+      const demoUser = {
+        displayName: '데모 사용자',
+        email: 'demo@example.com',
+        photoURL: null
+      };
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('main-screen').style.display  = 'block';
+      document.getElementById('btn-logout').style.display   = 'block';
+      renderMyPage(demoUser);
+    };
+    window.handleLogout = () => {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('main-screen').style.display  = 'none';
+      document.getElementById('btn-logout').style.display   = 'none';
+    };
+  }
+}
+
+initFirebase();
+</script>
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 — MindArena</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%237c3aed'/><text y='.9em' font-size='70' x='15'>🧠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fafaf8;--bg2:#f2f1ee;--bg3:#e8e7e3;
+  --t:#1a1814;--t2:#4a4640;--t3:#9a9690;--bd:rgba(0,0,0,.07);
+  --acc:#7c3aed;--acc-l:#f5f3ff;--acc-d:#5b21b6;
+  --green:#16a34a;--red:#dc2626;--blue:#2563eb;--amber:#d97706;
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t);font-size:14px;line-height:1.6;min-height:100vh}
+nav{position:sticky;top:0;z-index:100;background:#1e1b4b;padding:0 1.5rem;height:52px;
+    display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:15px;font-weight:700;color:white;display:flex;align-items:center;gap:8px;text-decoration:none}
+.logo-m{width:28px;height:28px;background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:8px;
+        color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.nav-badge{background:#7c3aed;color:white;font-size:10px;font-weight:700;
+           padding:2px 7px;border-radius:10px;margin-left:.4rem}
+.nav-r{display:flex;gap:.5rem;align-items:center}
+.nav-user{font-size:13px;color:rgba(255,255,255,.7)}
+.btn-logout{padding:5px 12px;border-radius:7px;font-size:12px;border:1px solid rgba(255,255,255,.2);
+            background:transparent;color:rgba(255,255,255,.8);cursor:pointer;font-family:inherit}
+.btn-logout:hover{background:rgba(255,255,255,.1)}
+
+/* 로그인 전 */
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;
+              min-height:calc(100vh - 52px);padding:2rem;text-align:center}
+.login-box{background:white;border-radius:20px;border:.5px solid var(--bd);padding:3rem 2.5rem;
+           max-width:400px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.08)}
+
+/* 접근 거부 */
+#deny-screen{display:none;flex-direction:column;align-items:center;justify-content:center;
+             min-height:calc(100vh - 52px);text-align:center;padding:2rem}
+
+/* 관리자 대시보드 */
+#admin-screen{display:none;max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+
+/* 탭 */
+.tabs{display:flex;gap:4px;background:var(--bg2);border-radius:12px;padding:4px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab-btn{padding:7px 16px;border-radius:9px;font-size:13px;font-weight:500;border:none;
+         background:transparent;cursor:pointer;font-family:inherit;color:var(--t2);transition:all .15s}
+.tab-btn.active{background:white;color:var(--t);font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+
+/* 통계 카드 */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+.stat-card{background:white;border-radius:14px;border:.5px solid var(--bd);padding:1.25rem}
+.stat-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.stat-card-icon{font-size:20px}
+.stat-card-trend{font-size:11px;padding:2px 7px;border-radius:8px;font-weight:600}
+.trend-up{background:#dcfce7;color:var(--green)}
+.trend-dn{background:#fee2e2;color:var(--red)}
+.stat-card-n{font-size:28px;font-weight:700;color:var(--t);margin-bottom:.15rem}
+.stat-card-l{font-size:12px;color:var(--t3)}
+
+/* 섹션 */
+.section-title{font-size:15px;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.card{background:white;border-radius:16px;border:.5px solid var(--bd);padding:1.35rem;margin-bottom:1.25rem}
+
+/* 테이블 */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:.6rem .75rem;font-weight:600;color:var(--t3);
+   border-bottom:1px solid var(--bd);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+td{padding:.7rem .75rem;border-bottom:.5px solid var(--bd);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+
+/* 카테고리 바 */
+.cat-bar-item{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem}
+.cat-bar-label{width:80px;font-size:13px;font-weight:500;flex-shrink:0}
+.cat-bar-track{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.cat-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.cat-bar-val{width:40px;text-align:right;font-size:12px;font-weight:600;color:var(--t2)}
+
+/* 공지사항 */
+.notice-form{display:flex;flex-direction:column;gap:10px}
+.notice-input{padding:.75rem 1rem;border-radius:10px;border:1.5px solid var(--bd);
+              font-family:inherit;font-size:14px;outline:none;transition:border-color .15s}
+.notice-input:focus{border-color:var(--acc)}
+textarea.notice-input{resize:vertical;min-height:100px;line-height:1.6}
+.btn-primary{padding:.75rem 1.5rem;border-radius:10px;border:none;background:var(--acc);
+             color:white;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.btn-primary:hover{background:var(--acc-d)}
+.btn-danger{padding:5px 12px;border-radius:7px;border:none;background:#fee2e2;
+            color:var(--red);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer}
+
+/* 배지 */
+.status-badge{padding:2px 8px;border-radius:8px;font-size:11px;font-weight:600}
+.status-ok{background:#dcfce7;color:var(--green)}
+.status-warn{background:#fef3c7;color:var(--amber)}
+
+footer{border-top:.5px solid var(--bd);padding:1.25rem 1.5rem;text-align:center;
+       font-size:12px;color:var(--t3);margin-top:2rem}
+
+@media(max-width:768px){
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .tabs{gap:2px}
+  .tab-btn{padding:6px 10px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/">
+    <div class="logo-m">M</div>MindArena <span class="nav-badge">관리자</span>
+  </a>
+  <div class="nav-r">
+    <span class="nav-user" id="nav-user"></span>
+    <button class="btn-logout" id="btn-logout" style="display:none" onclick="handleLogout()">로그아웃</button>
+  </div>
+</nav>
+
+<!-- 로그인 전 -->
+<div id="login-screen">
+  <div class="login-box">
+    <div style="font-size:48px;margin-bottom:1rem">🔐</div>
+    <div style="font-size:20px;font-weight:700;margin-bottom:.5rem">관리자 로그인</div>
+    <p style="font-size:14px;color:var(--t2);margin-bottom:2rem;line-height:1.7">
+      관리자 계정으로만 접근할 수 있습니다.
+    </p>
+    <button onclick="handleLogin()"
+      style="width:100%;padding:.9rem;border-radius:12px;border:1.5px solid var(--bd);
+             background:white;cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;
+             display:flex;align-items:center;justify-content:center;gap:10px">
+      <svg width="20" height="20" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Google 계정으로 로그인
+    </button>
+  </div>
+</div>
+
+<!-- 접근 거부 -->
+<div id="deny-screen">
+  <div style="font-size:56px;margin-bottom:1rem">🚫</div>
+  <div style="font-size:20px;font-weight:700;margin-bottom:.5rem">접근 권한 없음</div>
+  <p style="font-size:14px;color:var(--t2);margin-bottom:1.5rem">관리자 계정으로만 접근할 수 있습니다.</p>
+  <button onclick="handleLogout()"
+    style="padding:.75rem 1.5rem;border-radius:10px;border:none;background:var(--acc);
+           color:white;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer">
+    다른 계정으로 로그인
+  </button>
+</div>
+
+<!-- 관리자 대시보드 -->
+<div id="admin-screen">
+
+  <!-- 탭 -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('dashboard',this)">📊 대시보드</button>
+    <button class="tab-btn" onclick="showTab('users',this)">👥 사용자</button>
+    <button class="tab-btn" onclick="showTab('puzzles',this)">🧩 퍼즐 통계</button>
+    <button class="tab-btn" onclick="showTab('notice',this)">📢 공지사항</button>
+    <button class="tab-btn" onclick="showTab('settings',this)">⚙️ 설정</button>
+  </div>
+
+  <!-- 대시보드 탭 -->
+  <div id="tab-dashboard">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-card-icon">👥</span>
+          <span class="stat-card-trend trend-up" id="trend-users">+0</span>
+        </div>
+        <div class="stat-card-n" id="stat-users">—</div>
+        <div class="stat-card-l">전체 사용자</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-card-icon">🔥</span>
+          <span class="stat-card-trend trend-up" id="trend-active">+0</span>
+        </div>
+        <div class="stat-card-n" id="stat-active">—</div>
+        <div class="stat-card-l">오늘 활성 사용자</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-card-icon">🧩</span>
+          <span class="stat-card-trend trend-up">900</span>
+        </div>
+        <div class="stat-card-n">900</div>
+        <div class="stat-card-l">총 퍼즐 수</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-top">
+          <span class="stat-card-icon">✅</span>
+          <span class="stat-card-trend trend-up" id="trend-solved">+0</span>
+        </div>
+        <div class="stat-card-n" id="stat-solved">—</div>
+        <div class="stat-card-l">오늘 완료한 레벨</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="card">
+        <div class="section-title">📈 카테고리별 인기도</div>
+        <div id="cat-popularity">
+          <div style="text-align:center;padding:1.5rem;color:var(--t3);font-size:13px">
+            Firebase 연동 후 실시간 데이터가 표시됩니다
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">🕐 시스템 상태</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem .8rem;background:var(--bg2);border-radius:8px">
+            <span style="font-size:13px">Vercel 배포</span>
+            <span class="status-badge status-ok">정상</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem .8rem;background:var(--bg2);border-radius:8px">
+            <span style="font-size:13px">EmailJS</span>
+            <span class="status-badge status-ok">정상</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem .8rem;background:var(--bg2);border-radius:8px">
+            <span style="font-size:13px">Firebase Auth</span>
+            <span class="status-badge status-warn" id="firebase-status">설정 필요</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem .8rem;background:var(--bg2);border-radius:8px">
+            <span style="font-size:13px">AdSense</span>
+            <span class="status-badge status-warn">준비 중</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 사용자 탭 -->
+  <div id="tab-users" style="display:none">
+    <div class="card">
+      <div class="section-title">👥 사용자 목록</div>
+      <div id="user-table-wrap">
+        <div style="text-align:center;padding:2rem;color:var(--t3);font-size:13px">
+          Firebase 연동 후 사용자 목록이 표시됩니다.<br>
+          현재는 로그인 기록이 없습니다.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 퍼즐 통계 탭 -->
+  <div id="tab-puzzles" style="display:none">
+    <div class="card">
+      <div class="section-title">🧩 카테고리별 완료율</div>
+      <div id="puzzle-stats">
+        <div style="font-size:13px;color:var(--t2);margin-bottom:1rem">
+          Firebase 연동 전 — 퍼즐 구성 현황
+        </div>
+        <div id="cat-bars"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">📋 퍼즐 구성 현황</div>
+      <table>
+        <thead>
+          <tr>
+            <th>카테고리</th><th>총 레벨</th><th>총 문제</th><th>입력형</th><th>서술형</th>
+          </tr>
+        </thead>
+        <tbody id="puzzle-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 공지사항 탭 -->
+  <div id="tab-notice" style="display:none">
+    <div class="card">
+      <div class="section-title">📢 공지사항 작성</div>
+      <div class="notice-form">
+        <input class="notice-input" type="text" id="notice-title" placeholder="제목">
+        <textarea class="notice-input" id="notice-body" placeholder="내용"></textarea>
+        <select class="notice-input" id="notice-type">
+          <option>일반 공지</option>
+          <option>업데이트</option>
+          <option>점검 안내</option>
+          <option>이벤트</option>
+        </select>
+        <button class="btn-primary" onclick="postNotice()">공지사항 등록</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">📋 등록된 공지사항</div>
+      <div id="notice-list">
+        <div style="text-align:center;padding:1.5rem;color:var(--t3);font-size:13px">
+          등록된 공지사항이 없습니다
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 설정 탭 -->
+  <div id="tab-settings" style="display:none">
+    <div class="card">
+      <div class="section-title">🔥 Firebase 설정</div>
+      <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:1rem;margin-bottom:1rem;font-size:13px;color:#92400e;line-height:1.7">
+        ⚠️ 아래 설정값을 입력하면 Firebase 연동이 활성화됩니다.<br>
+        설정값은 Firebase 콘솔 → 프로젝트 설정 → 내 앱에서 확인할 수 있습니다.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:4px">API Key</div>
+          <input class="notice-input" type="text" id="cfg-apikey" placeholder="AIzaSy...">
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:4px">Auth Domain</div>
+          <input class="notice-input" type="text" id="cfg-domain" placeholder="yourproject.firebaseapp.com">
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:4px">Project ID</div>
+          <input class="notice-input" type="text" id="cfg-project" placeholder="yourproject">
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:4px">App ID</div>
+          <input class="notice-input" type="text" id="cfg-appid" placeholder="1:123456:web:abc...">
+        </div>
+        <button class="btn-primary" onclick="saveFirebaseConfig()">설정 저장</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">👤 관리자 이메일</div>
+      <div style="padding:.75rem 1rem;background:var(--bg2);border-radius:10px;font-size:13px;color:var(--t2)">
+        현재 관리자: <strong>admin@linguawalk.net</strong>
+      </div>
+      <div style="font-size:12px;color:var(--t3);margin-top:.75rem">
+        관리자 이메일 변경은 admin.html 파일의 ADMIN_EMAIL 값을 수정하세요.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2025-2026 MindArena 관리자 페이지 — 외부 공개 금지</footer>
+
+<script type="module">
+// ── 관리자 이메일 (변경 가능) ──
+const ADMIN_EMAIL = 'admin@linguawalk.net';
+
+// ── Firebase 설정 ──
+const FIREBASE_CONFIG = {
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
+};
+
+// ── 카테고리 ──
+const CATS = [
+  {id:'01_number', icon:'🔢', label:'수·연산',  color:'#2563eb', levels:15, problems:150},
+  {id:'04_probability',icon:'🎲',label:'확률',  color:'#0891b2', levels:15, problems:150},
+  {id:'06_pattern', icon:'🔍', label:'패턴',    color:'#059669', levels:15, problems:150},
+  {id:'02_logic',   icon:'🧠', label:'논리',    color:'#b45309', levels:15, problems:150},
+  {id:'05_spatial', icon:'🔷', label:'공간',    color:'#7c3aed', levels:15, problems:150},
+  {id:'07_strategy',icon:'♟️', label:'전략',    color:'#dc2626', levels:15, problems:150},
+];
+
+// ── 탭 전환 ──
+window.showTab = function(name, btn){
+  document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display='none');
+  document.getElementById('tab-'+name).style.display = 'block';
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+};
+
+// ── 퍼즐 통계 렌더링 ──
+function renderPuzzleStats(){
+  // 카테고리 바
+  const bars = document.getElementById('cat-bars');
+  if(bars){
+    bars.innerHTML = CATS.map(c => `
+      <div class="cat-bar-item">
+        <div class="cat-bar-label">${c.icon} ${c.label}</div>
+        <div class="cat-bar-track">
+          <div class="cat-bar-fill" style="width:100%;background:${c.color}"></div>
+        </div>
+        <div class="cat-bar-val">${c.problems}</div>
+      </div>`).join('');
+  }
+  // 테이블
+  const tbody = document.getElementById('puzzle-table');
+  if(tbody){
+    tbody.innerHTML = CATS.map(c => `
+      <tr>
+        <td>${c.icon} ${c.label}</td>
+        <td>${c.levels}</td>
+        <td>${c.problems}</td>
+        <td>약 ${Math.round(c.problems*0.45)}개</td>
+        <td>약 ${Math.round(c.problems*0.55)}개</td>
+      </tr>`).join('');
+  }
+}
+
+// ── 공지사항 ──
+let notices = JSON.parse(localStorage.getItem('ma_admin_notices') || '[]');
+function renderNotices(){
+  const el = document.getElementById('notice-list');
+  if(!el) return;
+  if(notices.length === 0){
+    el.innerHTML = '<div style="text-align:center;padding:1.5rem;color:var(--t3);font-size:13px">등록된 공지사항이 없습니다</div>';
+    return;
+  }
+  el.innerHTML = `<table>
+    <thead><tr><th>유형</th><th>제목</th><th>날짜</th><th>삭제</th></tr></thead>
+    <tbody>${notices.map((n,i) => `
+      <tr>
+        <td><span class="status-badge status-ok">${n.type}</span></td>
+        <td>${n.title}</td>
+        <td>${n.date}</td>
+        <td><button class="btn-danger" onclick="deleteNotice(${i})">삭제</button></td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+window.postNotice = function(){
+  const title = document.getElementById('notice-title').value.trim();
+  const body  = document.getElementById('notice-body').value.trim();
+  const type  = document.getElementById('notice-type').value;
+  if(!title || !body){ alert('제목과 내용을 입력해주세요.'); return; }
+  notices.unshift({title, body, type, date: new Date().toISOString().slice(0,10)});
+  localStorage.setItem('ma_admin_notices', JSON.stringify(notices));
+  document.getElementById('notice-title').value = '';
+  document.getElementById('notice-body').value  = '';
+  renderNotices();
+  alert('공지사항이 등록되었습니다.');
+};
+window.deleteNotice = function(i){
+  if(!confirm('삭제하시겠습니까?')) return;
+  notices.splice(i,1);
+  localStorage.setItem('ma_admin_notices', JSON.stringify(notices));
+  renderNotices();
+};
+
+// ── Firebase 설정 저장 ──
+window.saveFirebaseConfig = function(){
+  const cfg = {
+    apiKey:    document.getElementById('cfg-apikey').value.trim(),
+    authDomain:document.getElementById('cfg-domain').value.trim(),
+    projectId: document.getElementById('cfg-project').value.trim(),
+    appId:     document.getElementById('cfg-appid').value.trim(),
+  };
+  if(!cfg.apiKey){ alert('API Key를 입력해주세요.'); return; }
+  localStorage.setItem('ma_firebase_config', JSON.stringify(cfg));
+  alert('설정이 저장되었습니다.\n페이지를 새로고침하면 Firebase가 연동됩니다.');
+  location.reload();
+};
+
+// ── Firebase Auth ──
+async function initFirebase(){
+  const configSet = FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY';
+
+  if(configSet){
+    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+          = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    const app  = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+    const prov = new GoogleAuthProvider();
+
+    window.handleLogin  = async () => {
+      try { await signInWithPopup(auth, prov); }
+      catch(e){ if(e.code!=='auth/popup-closed-by-user') alert('로그인 오류: '+e.message); }
+    };
+    window.handleLogout = async () => {
+      if(confirm('로그아웃 하시겠습니까?')) await signOut(auth);
+    };
+
+    onAuthStateChanged(auth, user => {
+      if(!user){
+        document.getElementById('login-screen').style.display  = 'flex';
+        document.getElementById('admin-screen').style.display  = 'none';
+        document.getElementById('deny-screen').style.display   = 'none';
+        document.getElementById('btn-logout').style.display    = 'none';
+        return;
+      }
+      document.getElementById('btn-logout').style.display  = 'block';
+      document.getElementById('nav-user').textContent      = user.email;
+      document.getElementById('firebase-status').textContent = '정상';
+      document.getElementById('firebase-status').className   = 'status-badge status-ok';
+
+      if(user.email === ADMIN_EMAIL){
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('deny-screen').style.display  = 'none';
+        document.getElementById('admin-screen').style.display = 'block';
+        renderPuzzleStats();
+        renderNotices();
+      } else {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-screen').style.display = 'none';
+        document.getElementById('deny-screen').style.display  = 'flex';
+      }
+    });
+
+  } else {
+    // Firebase 미설정 → 데모 모드 (관리자 이메일 없이 접근)
+    window.handleLogin = () => {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-screen').style.display = 'block';
+      document.getElementById('btn-logout').style.display   = 'block';
+      document.getElementById('nav-user').textContent       = ADMIN_EMAIL + ' (데모)';
+      renderPuzzleStats();
+      renderNotices();
+    };
+    window.handleLogout = () => {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('admin-screen').style.display = 'none';
+      document.getElementById('btn-logout').style.display   = 'none';
+    };
+  }
+}
+
+initFirebase();
+</script>
+</body>
+</html>
