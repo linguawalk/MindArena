@@ -636,9 +636,9 @@ async function submitContact(e){
   }
 }
 
-// ── 로그인 (Firebase 설정 후 교체) ──
+// ── 로그인 (Firebase - 추후 onAuthStateChanged로 덮어씀) ──
 function handleLogin(){
-  alert('로그인 기능은 준비 중입니다.\nFirebase 설정 완료 후 활성화됩니다.');
+  alert('로그인 기능을 초기화 중입니다. 잠시 후 다시 시도해 주세요.');
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
@@ -839,5 +839,63 @@ window.addEventListener('DOMContentLoaded',()=>{
   </footer>
 </div>
 
+
+<script type="module">
+// ── Firebase Auth 연동 (index.html) ──
+import { initializeApp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyAkBo9vv-RFMOz-9r40KrRj7khiwPahsjA",
+  authDomain:        "mind-arena-2c240.firebaseapp.com",
+  projectId:         "mind-arena-2c240",
+  storageBucket:     "mind-arena-2c240.firebasestorage.app",
+  messagingSenderId: "630476042181",
+  appId:             "1:630476042181:web:78401cffcfebcb25f625ac"
+};
+
+const app      = initializeApp(FIREBASE_CONFIG);
+const auth     = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+onAuthStateChanged(auth, user => {
+  const btn    = document.getElementById('nav-login-btn');
+  const mypage = document.getElementById('nav-mypage');
+  if(!btn) return;
+  if(user){
+    btn.innerHTML = user.photoURL
+      ? `<img src="${user.photoURL}" onerror="this.style.display='none'"
+           style="width:20px;height:20px;border-radius:50%;margin-right:4px">${user.displayName||'나'} ▾`
+      : `👤 ${user.displayName||'나'} ▾`;
+    btn.style.background = 'var(--bg2)';
+    btn.style.color      = 'var(--t)';
+    btn.title            = '클릭하면 로그아웃';
+    if(mypage) mypage.style.display = 'inline-flex';
+  } else {
+    btn.innerHTML        = '🔒 로그인';
+    btn.style.background = 'var(--acc)';
+    btn.style.color      = 'white';
+    btn.title            = 'Google 계정으로 로그인';
+    if(mypage) mypage.style.display = 'none';
+  }
+});
+
+window.handleLogin = async function(){
+  const user = auth.currentUser;
+  if(user){
+    if(confirm(`${user.displayName}님, 로그아웃 하시겠습니까?`))
+      await signOut(auth);
+  } else {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch(e){
+      if(e.code !== 'auth/popup-closed-by-user')
+        alert('로그인 오류: ' + e.message);
+    }
+  }
+};
+</script>
 </body>
 </html>
