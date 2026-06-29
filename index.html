@@ -230,6 +230,8 @@ footer a:hover{color:var(--t)}
     <button class="nav-btn" onclick="showPage('about')">소개</button>
     <button class="nav-btn" onclick="showPage('contact')">문의</button>
     <a class="nav-btn" href="/mypage.html" id="nav-mypage" style="display:none">👤 마이페이지</a>
+    <a class="nav-btn" href="/admin.html" id="nav-admin"
+       style="display:none;color:var(--acc);font-weight:600">⚙️ 관리자</a>
     <button class="nav-login" id="nav-login-btn" onclick="handleLogin()" title="준비 중">🔒 로그인</button>
   </div>
 </nav>
@@ -873,12 +875,17 @@ onAuthStateChanged(auth, user => {
     btn.style.color      = 'var(--t)';
     btn.title            = '클릭하면 로그아웃';
     if(mypage) mypage.style.display = 'inline-flex';
+    const adminLink = document.getElementById('nav-admin');
+    if(adminLink) adminLink.style.display =
+      user.email === 'kysbrest@gmail.com' ? 'inline-flex' : 'none';
   } else {
     btn.innerHTML        = '🔒 로그인';
     btn.style.background = 'var(--acc)';
     btn.style.color      = 'white';
     btn.title            = 'Google 계정으로 로그인';
     if(mypage) mypage.style.display = 'none';
+    const adminLink = document.getElementById('nav-admin');
+    if(adminLink) adminLink.style.display = 'none';
   }
 });
 
