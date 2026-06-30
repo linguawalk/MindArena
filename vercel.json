@@ -1,12 +1,4 @@
 {
-  "cleanUrls": false,
-  "trailingSlash": false,
-  "rewrites": [
-    {
-      "source": "/((?!.*\\.html$)(?!.*\\.js$)(?!.*\\.css$)(?!.*\\.png$)(?!.*\\.jpg$)(?!.*\\.ico$)(?!.*\\.svg$).*)",
-      "destination": "/index.html"
-    }
-  ],
   "headers": [
     {
       "source": "/api/(.*)",
