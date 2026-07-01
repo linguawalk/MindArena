@@ -669,6 +669,29 @@ function saveDone(catId,levelNum,correct,total){
 // ── 레벨 선택 오버레이 ──
 
 
+
+function showResult(){
+  const {meta,correct,problems,levelNum,unlimited,total} = GS;
+  const done = total||problems.length;
+  const pct = done>0 ? Math.round(correct/done*100) : 0;
+  const stars = pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':'⭐';
+  document.getElementById('gov-body').innerHTML=`
+    <div class="result-box">
+      <div class="result-stars">${stars}</div>
+      <div class="result-score" style="color:${meta.color}">${correct}/${done}</div>
+      <div style="font-size:13px;color:var(--t3);margin-bottom:.25rem">정답률 ${pct}%</div>
+      <div style="font-size:12px;color:var(--t3);margin-bottom:1.5rem">
+        ${unlimited?'언제든 종료하거나 계속 풀 수 있습니다':''}
+      </div>
+      <div class="gbtns" style="justify-content:center;flex-wrap:wrap">
+        ${unlimited?`<button class="gbp" style="background:${meta.color}" onclick="startLevel('${meta.id||GS.catId}',${levelNum})">🔄 계속하기</button>`:''}
+        <button class="gbp" style="background:${meta.color}" onclick="openLov('${GS.catId}')">다른 레벨</button>
+        <button class="gbs" onclick="closeGame()">나가기</button>
+      </div>
+    </div>`;
+  saveDone(GS.catId, GS.levelNum, correct, done);
+}
+
 function closeLov(){
   document.getElementById('lov').classList.remove('open');
   document.body.style.overflow='';
@@ -678,29 +701,36 @@ function startLevel(catId,levelNum){
   closeLov();
   const meta=CATS.find(c=>c.id===catId);
   if(!meta) return;
-  let problems=[];
 
+  // 초기 문제 배치 (MD 기반 있으면 포함, 없으면 자동생성)
+  let initProblems=[];
   if(meta.autoGen){
-    problems=autoGenProblems(catId,levelNum,20);
     const data=PUZZLE_DATA[catId];
     if(data){
       const lv=data.levels&&data.levels.find(l=>l.level===levelNum);
-      if(lv&&lv.problems&&lv.problems.length>0){
-        const mdProbs=lv.problems.slice(0,Math.min(5,lv.problems.length));
-        problems=[...mdProbs,...problems.slice(0,15)].sort(()=>Math.random()-.5);
-      }
+      if(lv&&lv.problems&&lv.problems.length>0)
+        initProblems=[...lv.problems].sort(()=>Math.random()-.5);
     }
+    // 자동생성으로 채워서 시작 (10개)
+    while(initProblems.length<10)
+      initProblems.push(autoGenProblems(catId,levelNum,1)[0]);
   } else {
     const data=PUZZLE_DATA[catId];
     if(!data)return;
     const lv=data.levels&&data.levels.find(l=>l.level===levelNum);
     if(!lv)return;
-    problems=[...lv.problems];
+    initProblems=[...lv.problems];
   }
 
-  GS={catId,levelNum,meta,problems,idx:0,correct:0,answered:false,start:Date.now()};
+  // 무제한 세션 모드
+  GS={catId,levelNum,meta,
+      problems:initProblems,
+      idx:0,correct:0,total:0,answered:false,
+      start:Date.now(),
+      unlimited:meta.autoGen  // 자동생성 카테고리는 무제한
+  };
   document.getElementById('gov-title').textContent=`${meta.icon} ${meta.label} Lv.${levelNum}`;
-  document.getElementById('gov-prog').textContent=`0 / ${problems.length}`;
+  document.getElementById('gov-prog').textContent='0문제 완료';
   document.getElementById('gov').classList.add('open');
   document.body.style.overflow='hidden';
   renderPuzzle();
@@ -1561,6 +1591,7 @@ function renderSudokuGame(){
     `:`
       <div class="fb-box ok">🎉 완성!</div>
       <div class="gbtns" style="justify-content:center">
+        <button class="gbp" style="background:#2563eb" onclick="startSudokuLevel(${BG.level})">🔄 같은 레벨 새 퍼즐</button>
         <button class="gbp" style="background:#2563eb" onclick="openIndieLov('sudoku')">다른 레벨</button>
         <button class="gbs" onclick="closeGame()">나가기</button>
       </div>`}`;
@@ -1627,21 +1658,21 @@ function nextAbacusGame(){BG.idx++;renderAbacusGame();}
 
 // 퍼블릭 도메인 명화 15개 (Wikimedia Commons)
 const MASTERPIECES = [
-  {id:1,  name:'별이 빛나는 밤',    artist:'반 고흐',    url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'},
-  {id:2,  name:'해바라기',          artist:'반 고흐',    url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Vincent_van_Gogh_-_Field_with_Irises_near_Arles.jpg/1280px-Vincent_van_Gogh_-_Field_with_Irises_near_Arles.jpg'},
-  {id:3,  name:'진주 귀걸이를 한 소녀', artist:'페르메이르', url:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg'},
-  {id:4,  name:'모나리자',          artist:'다 빈치',    url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg'},
-  {id:5,  name:'절규',             artist:'뭉크',       url:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/800px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg'},
-  {id:6,  name:'수련',             artist:'모네',       url:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg/1280px-Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg'},
-  {id:7,  name:'인상, 해돋이',      artist:'모네',       url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Monet_-_Impression%2C_Sunrise.jpg/1280px-Monet_-_Impression%2C_Sunrise.jpg'},
-  {id:8,  name:'아테네 학당',       artist:'라파엘로',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/1280px-%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg'},
-  {id:9,  name:'자유의 여신',       artist:'들라크루아',  url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg/1280px-Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg'},
-  {id:10, name:'야경',             artist:'렘브란트',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Rembrandt_van_Rijn_-_De_Nachtwacht_-_Google_Art_Project.jpg/1280px-Rembrandt_van_Rijn_-_De_Nachtwacht_-_Google_Art_Project.jpg'},
-  {id:11, name:'진주 목걸이',       artist:'페르메이르', url:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Vermeer_-_Woman_with_a_Pearl_Necklace.jpg/800px-Vermeer_-_Woman_with_a_Pearl_Necklace.jpg'},
-  {id:12, name:'봄',               artist:'보티첼리',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/1280px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg'},
-  {id:13, name:'그랑드 자트',       artist:'쇠라',       url:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884-86.jpg/1280px-A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884-86.jpg'},
-  {id:14, name:'최후의 만찬',       artist:'다 빈치',    url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/%C3%9Altima_Cena_-_Da_Vinci_5.jpg/1280px-%C3%9Altima_Cena_-_Da_Vinci_5.jpg'},
-  {id:15, name:'아르놀피니 결혼',    artist:'얀 반 에이크', url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Van_Eyck_-_Arnolfini_Portrait.jpg/800px-Van_Eyck_-_Arnolfini_Portrait.jpg'},
+  {id:1,  name:'별이 빛나는 밤',      artist:'반 고흐',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'},
+  {id:2,  name:'아이리스',            artist:'반 고흐',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Irises-Vincent_van_Gogh.jpg/640px-Irises-Vincent_van_Gogh.jpg'},
+  {id:3,  name:'진주 귀걸이를 한 소녀',artist:'페르메이르',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/480px-1665_Girl_with_a_Pearl_Earring.jpg'},
+  {id:4,  name:'모나리자',            artist:'다 빈치',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/480px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg'},
+  {id:5,  name:'절규',               artist:'뭉크',         url:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/471px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg'},
+  {id:6,  name:'수련',               artist:'모네',         url:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg/640px-Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg'},
+  {id:7,  name:'인상, 해돋이',        artist:'모네',         url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Monet_-_Impression%2C_Sunrise.jpg/640px-Monet_-_Impression%2C_Sunrise.jpg'},
+  {id:8,  name:'아테네 학당',         artist:'라파엘로',     url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/640px-%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg'},
+  {id:9,  name:'자유의 여신',         artist:'들라크루아',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg/547px-Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg'},
+  {id:10, name:'야경',               artist:'렘브란트',     url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Rembrandt_van_Rijn_-_De_Nachtwacht_-_Google_Art_Project.jpg/640px-Rembrandt_van_Rijn_-_De_Nachtwacht_-_Google_Art_Project.jpg'},
+  {id:11, name:'비너스의 탄생',       artist:'보티첼리',     url:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/640px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg'},
+  {id:12, name:'그랑드 자트의 일요일', artist:'쇠라',         url:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884-86.jpg/640px-A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884-86.jpg'},
+  {id:13, name:'진주 목걸이',         artist:'페르메이르',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Vermeer_-_Woman_with_a_Pearl_Necklace.jpg/447px-Vermeer_-_Woman_with_a_Pearl_Necklace.jpg'},
+  {id:14, name:'씨 뿌리는 사람',      artist:'반 고흐',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/The_Sower.jpg/640px-The_Sower.jpg'},
+  {id:15, name:'붓꽃',               artist:'반 고흐',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Irises-Vincent_van_Gogh.jpg/640px-Irises-Vincent_van_Gogh.jpg'},
 ];
 
 // ── 퍼즐 조각 SVG 클립패스 생성 ──
@@ -1880,10 +1911,16 @@ function dragJigsawPiece(e,pieceId){
 
 function renderPuzzle(){
   const {problems,idx,meta}=GS;
-  if(idx>=problems.length){endPuzzle();return;}
+  // 무제한 모드: 문제 소진 시 자동 생성
+  if(GS.unlimited && idx>=problems.length){
+    const newP=autoGenProblems(GS.catId,GS.levelNum,5);
+    GS.problems=[...GS.problems,...newP];
+  }
+  if(idx>=problems.length){showResult();return;}
   const p=problems[idx];
   GS.hintShown=0; GS.answered=false;
-  document.getElementById('gov-prog').textContent=`${idx+1} / ${problems.length}`;
+  document.getElementById('gov-prog').textContent=
+    GS.unlimited?`${GS.total||0}완료 · 정답${GS.correct||0}`:`${idx+1} / ${problems.length}`;
   if(p.game_type==='spatial_choice'){renderSpatialChoice(p);return;}
   const col=meta.color;
   const pct=(idx/problems.length)*100;
@@ -2008,29 +2045,13 @@ function selfEval(knew){
   }
   nextPuzzle();
 }
-function nextPuzzle(){GS.idx++;renderPuzzle();}
-
-function endPuzzle(){
-  saveDone(GS.meta.id, GS.levelNum, GS.correct, GS.problems.length);
-  renderCats();
-  const {correct,problems,meta,levelNum}=GS;
-  const total=problems.length;
-  const pct=Math.round(correct/total*100);
-  const stars=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':'⭐';
-  const msg=pct>=90?'완벽합니다! 🎉':pct>=70?'잘 했습니다! 👍':'다시 도전해보세요! 💪';
-  const secs=Math.round((Date.now()-GS.start)/1000);
-  document.getElementById('gov-body').innerHTML=`
-    <div class="result-box">
-      <div class="result-stars">${stars}</div>
-      <div class="result-score" style="color:${meta.color}">${correct}<span style="font-size:24px;font-weight:400;color:var(--t3)"> / ${total}</span></div>
-      <div style="font-size:13px;color:var(--t3);margin-bottom:.25rem">정답률 ${pct}% · ${secs}초</div>
-      <div style="font-size:15px;color:var(--t2);margin-bottom:1.5rem">${msg}</div>
-      <div class="gbtns" style="justify-content:center">
-        <button class="gbp" style="background:${meta.color}" onclick="startLevel('${meta.id}',${levelNum})">🔄 다시 풀기</button>
-        <button class="gbp" style="background:${meta.color}" onclick="closeGame();openLov('${meta.id}')">다른 레벨</button>
-        <button class="gbs" onclick="closeGame()">나가기</button>
-      </div>
-    </div>`;
+function nextPuzzle(){
+  if(GS.answered){
+    GS.total=(GS.total||0)+1;
+  }
+  GS.idx++;
+  GS.answered=false;
+  renderPuzzle();
 }
 function closeGame(){
   if(calcTimer){clearInterval(calcTimer);calcTimer=null;}
