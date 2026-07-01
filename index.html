@@ -668,6 +668,12 @@ function saveDone(catId,levelNum,correct,total){
 
 // ── 레벨 선택 오버레이 ──
 
+
+function closeLov(){
+  document.getElementById('lov').classList.remove('open');
+  document.body.style.overflow='';
+}
+
 function startLevel(catId,levelNum){
   closeLov();
   const meta=CATS.find(c=>c.id===catId);
