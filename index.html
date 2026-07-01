@@ -665,6 +665,128 @@ function saveDone(catId,levelNum,correct,total){
     d[levelNum]={correct,total,date:new Date().toISOString().slice(0,10)};
   try{ localStorage.setItem('ma_'+catId,JSON.stringify(d)); }catch(e){}
 }
+
+// ── 레벨 선택 오버레이 ──
+
+function startLevel(catId,levelNum){
+  closeLov();
+  const meta=CATS.find(c=>c.id===catId);
+  if(!meta) return;
+  let problems=[];
+
+  if(meta.autoGen){
+    problems=autoGenProblems(catId,levelNum,20);
+    const data=PUZZLE_DATA[catId];
+    if(data){
+      const lv=data.levels&&data.levels.find(l=>l.level===levelNum);
+      if(lv&&lv.problems&&lv.problems.length>0){
+        const mdProbs=lv.problems.slice(0,Math.min(5,lv.problems.length));
+        problems=[...mdProbs,...problems.slice(0,15)].sort(()=>Math.random()-.5);
+      }
+    }
+  } else {
+    const data=PUZZLE_DATA[catId];
+    if(!data)return;
+    const lv=data.levels&&data.levels.find(l=>l.level===levelNum);
+    if(!lv)return;
+    problems=[...lv.problems];
+  }
+
+  GS={catId,levelNum,meta,problems,idx:0,correct:0,answered:false,start:Date.now()};
+  document.getElementById('gov-title').textContent=`${meta.icon} ${meta.label} Lv.${levelNum}`;
+  document.getElementById('gov-prog').textContent=`0 / ${problems.length}`;
+  document.getElementById('gov').classList.add('open');
+  document.body.style.overflow='hidden';
+  renderPuzzle();
+}
+
+
+function renderCats(){
+  const grid=document.getElementById('cat-grid');
+  if(!grid) return;
+  grid.innerHTML=CATS.map(c=>{
+    const saved=getSaved(c.id);
+    const doneCount=Object.keys(saved).length;
+    const isIndie=c.id&&c.id.startsWith('indie_');
+    const levels=c.levels||15;
+    const badge=isIndie
+      ?`${levels}단계`
+      :(doneCount>0?`${doneCount}/${levels}단계 완료`:`${levels}단계`);
+    const badgeStyle=doneCount>0&&!isIndie?'background:#dcfce7;color:#15803d':'';
+    const cta=isIndie?'바로 플레이 →':'레벨 선택 →';
+    const fn=c.action||`openLov('${c.id}')`;
+    const meta=isIndie?'🎮 인터랙티브':'🧩 단계별 퍼즐';
+    const prog=(!isIndie&&levels&&doneCount>0)
+      ?`<div style="margin-top:.75rem;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden">
+          <div style="height:100%;border-radius:2px;background:${c.color};width:${Math.round(doneCount/levels*100)}%;transition:width .4s"></div>
+        </div>`:'' ;
+    return `<div class="cat-card" onclick="${fn}">
+      <div class="cat-top"><span class="cat-icon">${c.icon}</span><span class="cat-badge" style="${badgeStyle}">${badge}</span></div>
+      <div class="cat-label">${c.label}</div>
+      <div class="cat-desc">${c.desc}</div>
+      <div class="cat-foot">
+        <span class="cat-meta">${meta}</span>
+        <span class="cat-cta" style="color:${c.color}">${cta}</span>
+      </div>
+      ${prog}
+    </div>`;
+  }).join('');
+}
+
+function openLov(catId){
+  const meta=CATS.find(c=>c.id===catId);
+  if(!meta) return;
+  if(catId.startsWith('indie_')){
+    openIndieLov(catId.replace('indie_','')); return;
+  }
+  const levels=meta.levels||15;
+  const DIFF=['','입문','입문','초급','초급','초급','중급','중급','중급','고급','고급','고급','심화','심화','심화','전문'];
+  document.getElementById('lov-title').textContent=`${meta.icon} ${meta.label}`;
+  document.getElementById('lv-info').innerHTML=`<strong>${meta.label}</strong> — ${levels}단계${meta.autoGen?' (자동생성)':''}`;
+  document.getElementById('lv-grid').innerHTML=Array.from({length:levels},(_,i)=>i+1).map(lv=>`
+    <button class="lv-btn" onclick="startLevel('${catId}',${lv})">
+      <span class="lv-n">${lv}</span>
+      <span class="lv-d">${DIFF[lv]||''}</span>
+    </button>`).join('');
+  document.getElementById('lov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+// ── 독립 게임 레벨 선택 ──
+function openIndieLov(gameId){
+  const titles={sudoku:'🔢 스도쿠',wordle:'🔤 워들',abacus:'🧮 주산연습',jigsaw:'🧩 직소퍼즐'};
+  const descs={
+    sudoku:'Lv1~5: 4×4 · Lv6~10: 6×6 · Lv11~15: 9×9',
+    wordle:'Lv1~5: 4글자 · Lv6~10: 5글자 · Lv11~15: 6글자',
+    abacus:'단계별 암산 훈련 · 자동 생성 무제한',
+    jigsaw:'명화 직소퍼즐 · Lv1~5: 3×3 · Lv6~10: 4×4 · Lv11~15: 5×5',
+  };
+  const DIFF=['','입문','입문','초급','초급','초급','중급','중급','중급','고급','고급','고급','심화','심화','심화','전문'];
+  document.getElementById('lov-title').textContent=titles[gameId]||gameId;
+  document.getElementById('lv-info').innerHTML=`<strong>${titles[gameId]}</strong><br><span style="font-size:12px;color:var(--t3)">${descs[gameId]||''}</span>`;
+  document.getElementById('lv-grid').innerHTML=Array.from({length:15},(_,i)=>i+1).map(lv=>`
+    <button class="lv-btn" onclick="openIndieGame('${gameId}',${lv})">
+      <span class="lv-n">${lv}</span>
+      <span class="lv-d">${DIFF[lv]||''}</span>
+    </button>`).join('');
+  document.getElementById('lov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openIndieGame(gameId,level){
+  closeLov();
+  const titles={sudoku:'🔢 스도쿠',wordle:'🔤 워들',abacus:'🧮 주산연습',jigsaw:'🧩 직소퍼즐'};
+  document.getElementById('gov-title').textContent=titles[gameId]||gameId;
+  document.getElementById('gov-prog').textContent=`Lv.${level}`;
+  document.getElementById('gov').classList.add('open');
+  document.body.style.overflow='hidden';
+  if(gameId==='sudoku') startSudokuLevel(level);
+  else if(gameId==='wordle') startWordleLevel(level);
+  else if(gameId==='abacus') startAbacusSession(level);
+  else if(gameId==='jigsaw') startJigsawLevel(level);
+}
+
+
 function clearProgress(){
   if(!confirm('모든 진행상황을 초기화할까요?'))return;
   Object.keys(localStorage).filter(k=>k.startsWith('ma_')).forEach(k=>localStorage.removeItem(k));
@@ -1257,44 +1379,48 @@ function shuffle_arr(arr){ return [...arr].sort(()=>Math.random()-.5); }
 
 // ── 공간 게임 (spatial_choice 타입 처리) ──
 function renderSpatialChoice(p){
-  const {meta} = GS;
-  const col = meta.color;
-  document.getElementById('gov-body').innerHTML = `
-    <div class="pbar"><div class="pfill" style="width:${GS.idx/GS.problems.length*100}%;background:${col}"></div></div>
-    <div class="q-meta">
-      <span style="background:${col}22;color:${col};padding:2px 9px;border-radius:6px;font-weight:600">Q${GS.idx+1}</span>
-      <span>도형 선택형</span>
-    </div>
-    <div style="font-size:15px;font-weight:600;margin-bottom:.75rem">${p.question}</div>
-    ${p.questionImage ? `<div style="display:flex;justify-content:center;margin-bottom:1rem">${p.questionImage}</div>` : ''}
-    <div style="font-size:13px;color:var(--t3);margin-bottom:.75rem">보기 중 정답을 고르세요:</div>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1rem" id="sp-opts">
-      ${p.options.map((opt,i)=>`
-        <button onclick="submitSpatial(${i+1},${p.answer})"
-          style="border:2px solid var(--bd);border-radius:12px;padding:.5rem;background:white;cursor:pointer;
-                 display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .15s"
-          onmouseover="this.style.borderColor='${col}'"
-          onmouseout="this.style.borderColor='var(--bd)'">
-          ${typeof opt === 'string' && opt.startsWith('<svg') ? opt : `<span style="font-size:18px;font-weight:700">${opt}</span>`}
-          <span style="font-size:12px;color:var(--t3)">${['①','②','③','④'][i]}</span>
-        </button>`).join('')}
-    </div>
-    <div class="fb-box" id="sp-fb"></div>
-    <div class="exp-box" id="sp-exp"></div>
+  const {meta}=GS;
+  const col=meta?meta.color:'var(--acc)';
+  const pct=GS.idx/GS.problems.length*100;
+
+  // SVG가 문자열로 왔을 때 안전하게 처리
+  const safeSvg = s => typeof s==='string' && s.trim().startsWith('<svg') ? s : `<span style="font-size:24px;font-weight:700">${s}</span>`;
+
+  const qImg = p.questionImage ? `<div style="display:flex;justify-content:center;margin-bottom:1rem">${p.questionImage}</div>` : '';
+
+  document.getElementById('gov-body').innerHTML=`
+    <div class="pbar"><div class="pfill" style="width:${pct}%;background:${col}"></div></div>
+    <div class="q-meta"><span style="background:${col}22;color:${col};padding:2px 9px;border-radius:6px;font-weight:600">Q${GS.idx+1}</span></div>
+    <div style="font-size:15px;font-weight:600;margin-bottom:.75rem;line-height:1.5">${p.question}</div>
+    ${qImg}
+    <div style="font-size:12px;color:var(--t3);margin-bottom:.75rem">보기 중 정답을 고르세요</div>
+    <div id="sp-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:1rem"></div>
+    <div class="fb-box" id="sp-fb" style="display:none"></div>
+    <div id="sp-hint"></div>
     <div class="gbtns" id="sp-nav" style="display:none">
-      <button class="gbp" id="sp-next" style="background:${col}" onclick="nextPuzzle()">다음 →</button>
+      <button class="gbp" style="background:${col}" onclick="nextPuzzle()">다음 →</button>
       <button class="gbs" onclick="closeGame()">나가기</button>
     </div>`;
 
-  const hint = p.hints && p.hints[0];
-  if(hint){
-    const hintArea = document.createElement('div');
-    hintArea.className = 'hint-area';
-    hintArea.innerHTML = `<button class="hint-btn" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">💡 힌트</button>
-      <div class="hint-box" style="display:none">${hint}</div>`;
-    document.getElementById('sp-opts').after(hintArea);
+  // 선택지 버튼을 개별로 삽입 (innerHTML 충돌 방지)
+  const grid = document.getElementById('sp-grid');
+  p.options.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.style.cssText='border:2px solid var(--bd);border-radius:12px;padding:.5rem;background:white;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .15s;min-height:80px';
+    btn.onclick=()=>submitSpatial(i+1, p.answer);
+    btn.onmouseover=()=>btn.style.borderColor=col;
+    btn.onmouseout=()=>btn.style.borderColor='var(--bd)';
+    btn.innerHTML=`${safeSvg(opt)}<span style="font-size:12px;color:var(--t3)">보기 ${i+1}</span>`;
+    grid.appendChild(btn);
+  });
+
+  if(p.hints && p.hints[0]){
+    const hint=document.getElementById('sp-hint');
+    hint.innerHTML=`<button class="hint-btn" onclick="this.nextElementSibling.style.display='block';this.style.display='none'">💡 힌트 보기</button>
+      <div class="hint-box" style="display:none">${p.hints[0]}</div>`;
   }
 }
+
 
 function submitSpatial(chosen, correct){
   const ok = String(chosen) === String(correct);
@@ -1316,40 +1442,10 @@ function submitSpatial(chosen, correct){
 }
 
 // ── 독립 게임 오픈 ──
-function openIndieGame(gameId, level){
-  closeLov();
-  GS={gameId, level};
-  const titles={sudoku:'🔢 스도쿠', wordle:'🔤 워들', abacus:'🧮 주산연습', jigsaw:'🧩 직소퍼즐'};
-  document.getElementById('gov-title').textContent = titles[gameId]||gameId;
-  document.getElementById('gov-prog').textContent = `Lv.${level}`;
-  document.getElementById('gov').classList.add('open');
-  document.body.style.overflow='hidden';
-  if(gameId==='wordle') startWordleLevel(level);
-  else if(gameId==='sudoku') startSudokuLevel(level);
-  else if(gameId==='abacus') startAbacusSession(level);
-  else if(gameId==='jigsaw') startJigsawLevel(level);
-}
+
 
 // ── 레벨 선택 메뉴 (독립 게임용) ──
-function openIndieLov(gameId){
-  const titles={sudoku:'🔢 스도쿠', wordle:'🔤 워들', abacus:'🧮 주산연습', jigsaw:'🧩 직소퍼즐'};
-  const descs={
-    sudoku:'Lv1~5: 4×4 · Lv6~10: 6×6 · Lv11~15: 9×9',
-    wordle:'Lv1~5: 4글자 · Lv6~10: 5글자 · Lv11~15: 6글자',
-    abacus:'단계별 암산 훈련 · 자동 생성 무제한',
-    jigsaw:'Lv1~5: 3×3 · Lv6~10: 4×4 · Lv11~15: 5×5 (명화 준비 중)',
-  };
-  const DIFF=['','입문','입문','초급','초급','초급','중급','중급','중급','고급','고급','고급','심화','심화','심화','전문'];
-  document.getElementById('lov-title').textContent = titles[gameId];
-  document.getElementById('lv-info').innerHTML = `<strong>${titles[gameId]}</strong><br><span style="font-size:12px;color:var(--t3)">${descs[gameId]}</span>`;
-  document.getElementById('lv-grid').innerHTML = Array.from({length:15},(_,i)=>i+1).map(lv=>`
-    <button class="lv-btn" onclick="openIndieGame('${gameId}',${lv})">
-      <span class="lv-n">${lv}</span>
-      <span class="lv-d">${DIFF[lv]}</span>
-    </button>`).join('');
-  document.getElementById('lov').classList.add('open');
-  document.body.style.overflow='hidden';
-}
+
 
 // ── 워들 (레벨별) ──
 function startWordleLevel(level){
@@ -1519,191 +1615,262 @@ function submitAbacusGame(){
 }
 function nextAbacusGame(){BG.idx++;renderAbacusGame();}
 
-// ── 직소퍼즐 (레벨별) ──
+// ═══════════════════════════════════
+// 직소퍼즐 v2 — 명화 + 퍼즐 조각 모양
+// ═══════════════════════════════════
+
+// 퍼블릭 도메인 명화 15개 (Wikimedia Commons)
+const MASTERPIECES = [
+  {id:1,  name:'별이 빛나는 밤',    artist:'반 고흐',    url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'},
+  {id:2,  name:'해바라기',          artist:'반 고흐',    url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Vincent_van_Gogh_-_Field_with_Irises_near_Arles.jpg/1280px-Vincent_van_Gogh_-_Field_with_Irises_near_Arles.jpg'},
+  {id:3,  name:'진주 귀걸이를 한 소녀', artist:'페르메이르', url:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg'},
+  {id:4,  name:'모나리자',          artist:'다 빈치',    url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg'},
+  {id:5,  name:'절규',             artist:'뭉크',       url:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/800px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg'},
+  {id:6,  name:'수련',             artist:'모네',       url:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg/1280px-Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg'},
+  {id:7,  name:'인상, 해돋이',      artist:'모네',       url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Monet_-_Impression%2C_Sunrise.jpg/1280px-Monet_-_Impression%2C_Sunrise.jpg'},
+  {id:8,  name:'아테네 학당',       artist:'라파엘로',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/1280px-%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg'},
+  {id:9,  name:'자유의 여신',       artist:'들라크루아',  url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg/1280px-Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg'},
+  {id:10, name:'야경',             artist:'렘브란트',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Rembrandt_van_Rijn_-_De_Nachtwacht_-_Google_Art_Project.jpg/1280px-Rembrandt_van_Rijn_-_De_Nachtwacht_-_Google_Art_Project.jpg'},
+  {id:11, name:'진주 목걸이',       artist:'페르메이르', url:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Vermeer_-_Woman_with_a_Pearl_Necklace.jpg/800px-Vermeer_-_Woman_with_a_Pearl_Necklace.jpg'},
+  {id:12, name:'봄',               artist:'보티첼리',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/1280px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg'},
+  {id:13, name:'그랑드 자트',       artist:'쇠라',       url:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884-86.jpg/1280px-A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884-86.jpg'},
+  {id:14, name:'최후의 만찬',       artist:'다 빈치',    url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/%C3%9Altima_Cena_-_Da_Vinci_5.jpg/1280px-%C3%9Altima_Cena_-_Da_Vinci_5.jpg'},
+  {id:15, name:'아르놀피니 결혼',    artist:'얀 반 에이크', url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Van_Eyck_-_Arnolfini_Portrait.jpg/800px-Van_Eyck_-_Arnolfini_Portrait.jpg'},
+];
+
+// ── 퍼즐 조각 SVG 클립패스 생성 ──
+// 각 조각은 "탭(볼록)"과 "슬롯(오목)" 연결부를 가짐
+function generatePuzzlePath(col, row, cols, rows, cellW, cellH, tabs){
+  // tabs: {top, right, bottom, left} 각 1=볼록, -1=오목, 0=직선(가장자리)
+  const x=0, y=0, w=cellW, h=cellH;
+  const tab=0.3; // 탭 크기 비율
+  const curve=0.2;
+  const cx=w/2, cy=h/2;
+
+  let path=`M ${x},${y} `;
+
+  // 위쪽
+  if(tabs.top===0){
+    path+=`L ${x+w},${y} `;
+  } else {
+    const d=tabs.top;
+    path+=`L ${cx-w*0.2},${y} `;
+    path+=`C ${cx-w*0.2},${y+d*h*tab*-0.5} ${cx+w*0.2},${y+d*h*tab*-0.5} ${cx+w*0.2},${y} `;
+    path+=`L ${x+w},${y} `;
+  }
+
+  // 오른쪽
+  if(tabs.right===0){
+    path+=`L ${x+w},${y+h} `;
+  } else {
+    const d=tabs.right;
+    path+=`L ${x+w},${cy-h*0.2} `;
+    path+=`C ${x+w+d*w*tab*0.5},${cy-h*0.2} ${x+w+d*w*tab*0.5},${cy+h*0.2} ${x+w},${cy+h*0.2} `;
+    path+=`L ${x+w},${y+h} `;
+  }
+
+  // 아래쪽 (역방향)
+  if(tabs.bottom===0){
+    path+=`L ${x},${y+h} `;
+  } else {
+    const d=tabs.bottom;
+    path+=`L ${cx+w*0.2},${y+h} `;
+    path+=`C ${cx+w*0.2},${y+h+d*h*tab*0.5} ${cx-w*0.2},${y+h+d*h*tab*0.5} ${cx-w*0.2},${y+h} `;
+    path+=`L ${x},${y+h} `;
+  }
+
+  // 왼쪽 (역방향)
+  if(tabs.left===0){
+    path+=`L ${x},${y} `;
+  } else {
+    const d=tabs.left;
+    path+=`L ${x},${cy+h*0.2} `;
+    path+=`C ${x-d*w*tab*0.5},${cy+h*0.2} ${x-d*w*tab*0.5},${cy-h*0.2} ${x},${cy-h*0.2} `;
+    path+=`L ${x},${y} `;
+  }
+
+  path+='Z';
+  return path;
+}
+
+// 퍼즐 탭 구조 생성
+function generatePuzzleTabs(n){
+  // n×n 그리드의 각 조각 탭 방향 결정
+  // 인접한 조각끼리 반대 방향
+  const hTabs=Array.from({length:n},()=>Array(n-1).fill(0));
+  const vTabs=Array.from({length:n-1},()=>Array(n).fill(0));
+
+  for(let r=0;r<n;r++)
+    for(let c=0;c<n-1;c++)
+      hTabs[r][c]=(Math.random()>0.5?1:-1);
+
+  for(let r=0;r<n-1;r++)
+    for(let c=0;c<n;c++)
+      vTabs[r][c]=(Math.random()>0.5?1:-1);
+
+  // 각 조각의 탭 {top,right,bottom,left}
+  const tabs=[];
+  for(let r=0;r<n;r++){
+    for(let c=0;c<n;c++){
+      tabs.push({
+        top:    r===0?0:vTabs[r-1][c]*-1,  // 위 조각의 아래탭 반대
+        right:  c===n-1?0:hTabs[r][c],
+        bottom: r===n-1?0:vTabs[r][c],
+        left:   c===0?0:hTabs[r][c-1]*-1,  // 왼 조각의 오른탭 반대
+      });
+    }
+  }
+  return tabs;
+}
+
+// ── 직소퍼즐 게임 함수 ──
 function startJigsawLevel(level){
-  const n=level<=5?3:level<=10?4:5;
-  const pattern=JIGSAW_PATTERNS[(level-1)%JIGSAW_PATTERNS.length];
-  const pieces=[];
-  for(let r=0;r<n;r++) for(let c=0;c<n;c++) pieces.push({r,c,id:r*n+c});
-  const shuffled=[...pieces].sort(()=>Math.random()-.5);
-  BG={gameId:'jigsaw',level,n,pattern,pieces,shuffled,placed:Array(n*n).fill(null),dragId:null};
+  const painting = MASTERPIECES[level-1] || MASTERPIECES[0];
+  const n = level<=5?3 : level<=10?4 : 5;
+  const totalPieces = n*n;
+  const tabs = generatePuzzleTabs(n);
+
+  // 조각 배열 (r,c 좌표 + 탭 정보)
+  const pieces = [];
+  for(let r=0;r<n;r++)
+    for(let c=0;c<n;c++)
+      pieces.push({id:r*n+c, r, c, tabs:tabs[r*n+c]});
+
+  const shuffled = [...pieces].sort(()=>Math.random()-.5);
+  BG = {gameId:'jigsaw', level, painting, n, pieces, shuffled,
+        placed:Array(n*n).fill(null), dragId:null, start:Date.now()};
   renderJigsawGame();
 }
+
 function renderJigsawGame(){
-  const {pattern,n,placed}=BG;
-  const grad=pattern.type==='radial'
-    ?`radial-gradient(circle,${pattern.colors.join(',')})`
-    :`linear-gradient(135deg,${pattern.colors.join(',')})`;
-  const cellPx=n===3?80:n===4?60:48;
-  const totalPx=cellPx*n;
+  const {painting, n, placed, shuffled} = BG;
+  const boardSize = Math.min(280, Math.floor((window.innerWidth||800)*0.7));
+  const cellW = Math.floor(boardSize/n);
+  const cellH = cellW;
+  const totalW = cellW*n, totalH = cellH*n;
+  const isComplete = placed.every((p,i)=>p&&p.id===i);
 
-  let board=`<div id="jig-board" style="display:grid;grid-template-columns:repeat(${n},${cellPx}px);
-             gap:2px;width:${totalPx+n*2}px;margin:0 auto .75rem;background:var(--bg3);padding:2px;border-radius:8px">`;
-  for(let i=0;i<n*n;i++){
-    const piece=placed[i];
-    board+=`<div ondrop="dropJigsawGame(event,${i})" ondragover="event.preventDefault()"
-              style="width:${cellPx}px;height:${cellPx}px;${piece?`background:${grad};background-size:${totalPx}px ${totalPx}px;background-position:-${piece.c*cellPx}px -${piece.r*cellPx}px`:'background:var(--bg2)'};
-              border:1px dashed var(--bd)"></div>`;
-  }
-  board+='</div>';
+  // 보드 SVG (클립패스로 조각 모양 표현)
+  let boardSvg = `<svg width="${totalW}" height="${totalH}" viewBox="0 0 ${totalW} ${totalH}"
+    xmlns="http://www.w3.org/2000/svg" style="border:2px solid var(--bd);border-radius:8px;background:#f0f0f0"
+    id="jig-board-svg">
+    <defs>`;
 
-  let tray=`<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;
-            padding:.5rem;background:var(--bg2);border-radius:8px;min-height:50px">`;
-  BG.shuffled.forEach(p=>{
-    if(placed.some(x=>x&&x.id===p.id))return;
-    tray+=`<div draggable="true" ondragstart="dragJigsawGame(event,${p.id})"
-            style="width:${cellPx*.65}px;height:${cellPx*.65}px;background:${grad};
-            background-size:${totalPx*.65}px ${totalPx*.65}px;
-            background-position:-${p.c*cellPx*.65}px -${p.r*cellPx*.65}px;
-            border-radius:4px;cursor:grab;border:2px solid white;box-shadow:0 2px 4px rgba(0,0,0,.15)"></div>`;
+  // 클립패스 정의
+  BG.pieces.forEach(piece=>{
+    const px=piece.c*cellW, py=piece.r*cellH;
+    const path=generatePuzzlePath(piece.c,piece.r,n,n,cellW,cellH,piece.tabs);
+    boardSvg+=`<clipPath id="clip-${piece.id}">
+      <path d="${path}" transform="translate(${px},${py})"/>
+    </clipPath>`;
   });
-  tray+='</div>';
+  boardSvg+='</defs>';
 
-  const isComplete=placed.every((p,i)=>p&&p.id===i);
+  // 배치된 조각들
+  placed.forEach((piece,slotIdx)=>{
+    if(!piece) return;
+    const slotR=Math.floor(slotIdx/n), slotC=slotIdx%n;
+    const px=slotC*cellW, py=slotR*cellH;
+    const srcX=(piece.c/n)*100, srcY=(piece.r/n)*100;
+    boardSvg+=`
+      <image href="${painting.url}"
+        x="${px-piece.c*cellW}" y="${py-piece.r*cellH}"
+        width="${totalW}" height="${totalH}"
+        clip-path="url(#clip-${piece.id})"
+        preserveAspectRatio="xMidYMid slice"/>
+      <path d="${generatePuzzlePath(piece.c,piece.r,n,n,cellW,cellH,piece.tabs)}"
+        transform="translate(${px},${py})"
+        fill="none" stroke="white" stroke-width="1.5" opacity="0.6"/>`;
+  });
+
+  // 빈 슬롯 표시
+  placed.forEach((piece,slotIdx)=>{
+    if(piece) return;
+    const slotR=Math.floor(slotIdx/n), slotC=slotIdx%n;
+    const px=slotC*cellW, py=slotR*cellH;
+    boardSvg+=`<rect x="${px+1}" y="${py+1}" width="${cellW-2}" height="${cellH-2}"
+      fill="rgba(200,200,200,0.3)" stroke="#bbb" stroke-dasharray="4,2" stroke-width="1"
+      rx="2" data-slot="${slotIdx}" style="cursor:pointer" onclick="dropJigsawSlot(${slotIdx})"/>`;
+  });
+
+  boardSvg+='</svg>';
+
+  // 트레이: 남은 조각들 (작은 SVG로 표시)
+  const trayPieceSize = Math.min(60, Math.floor(boardSize*0.22));
+  let trayHtml = `<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
+    padding:.75rem;background:var(--bg2);border-radius:12px;min-height:70px;margin-top:.75rem" id="jig-tray">`;
+
+  shuffled.forEach(piece=>{
+    if(placed.some(p=>p&&p.id===piece.id)) return;
+    const scale = trayPieceSize/cellW;
+    const tw = Math.ceil(cellW*scale), th = Math.ceil(cellH*scale);
+    const path = generatePuzzlePath(piece.c,piece.r,n,n,cellW,cellH,piece.tabs);
+    trayHtml+=`
+      <div draggable="true" ondragstart="dragJigsawPiece(event,${piece.id})"
+        onclick="selectJigsawPiece(${piece.id})"
+        data-piece="${piece.id}"
+        style="cursor:grab;border-radius:4px;overflow:visible;
+               ${BG.selectedPiece===piece.id?'outline:3px solid var(--acc);outline-offset:2px':''}">
+        <svg width="${tw+10}" height="${th+10}" viewBox="-5 -5 ${cellW+10} ${cellH+10}"
+          xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="tclip-${piece.id}">
+              <path d="${path}"/>
+            </clipPath>
+          </defs>
+          <image href="${painting.url}"
+            x="${-piece.c*cellW}" y="${-piece.r*cellH}"
+            width="${totalW}" height="${totalH}"
+            clip-path="url(#tclip-${piece.id})"
+            preserveAspectRatio="xMidYMid slice"
+            transform="scale(${scale})"/>
+          <path d="${path}" transform="scale(${scale})"
+            fill="none" stroke="white" stroke-width="1" opacity="0.7"/>
+        </svg>
+      </div>`;
+  });
+  trayHtml+='</div>';
+
   document.getElementById('gov-body').innerHTML=`
-    <div style="text-align:center;font-size:12px;color:var(--t3);margin-bottom:.5rem">${pattern.name} · ${n}×${n} · Lv.${BG.level}</div>
-    ${board}
-    ${!isComplete?tray:`
-      <div class="fb-box ok">🎉 완성!</div>
+    <div style="text-align:center;margin-bottom:.5rem">
+      <div style="font-size:14px;font-weight:700">${painting.name}</div>
+      <div style="font-size:11px;color:var(--t3)">${painting.artist} · ${n}×${n} · Lv.${BG.level}</div>
+    </div>
+    <div style="display:flex;justify-content:center">${boardSvg}</div>
+    ${!isComplete ? trayHtml : `
+      <div class="fb-box ok">🎉 완성했습니다!</div>
+      <div style="display:flex;justify-content:center;margin:.75rem 0">
+        <img src="${painting.url}" style="max-width:200px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.2)">
+      </div>
       <div class="gbtns" style="justify-content:center">
-        <button class="gbp" style="background:var(--art)" onclick="openIndieLov('jigsaw')">다른 레벨</button>
+        <button class="gbp" style="background:var(--acc)" onclick="openIndieLov('jigsaw')">다른 레벨</button>
         <button class="gbs" onclick="closeGame()">나가기</button>
       </div>`}`;
 }
-function dragJigsawGame(e,id){BG.dragId=id;}
-function dropJigsawGame(e,slotIdx){
-  e.preventDefault();
-  if(BG.dragId===null||BG.dragId===undefined)return;
-  const piece=BG.pieces.find(p=>p.id===BG.dragId);
-  BG.placed=BG.placed.map(p=>p&&p.id===BG.dragId?null:p);
+
+// 모바일/클릭용: 조각 선택 후 슬롯 클릭
+function selectJigsawPiece(pieceId){
+  BG.selectedPiece = BG.selectedPiece===pieceId ? null : pieceId;
+  renderJigsawGame();
+}
+function dropJigsawSlot(slotIdx){
+  const pid = BG.selectedPiece;
+  if(pid===null||pid===undefined) return;
+  const piece=BG.pieces.find(p=>p.id===pid);
+  if(!piece) return;
+  BG.placed=BG.placed.map(p=>p&&p.id===pid?null:p);
   BG.placed[slotIdx]=piece;
-  BG.dragId=null;
+  BG.selectedPiece=null;
   renderJigsawGame();
 }
 
-
-function renderCats(){
-  const grid=document.getElementById('cat-grid');
-  grid.innerHTML=CATS.map(c=>{
-    const saved=getSaved(c.id);
-    const doneCount=Object.keys(saved).length;
-    const isIndie = c.action && c.id.startsWith('indie_');
-    const badge = isIndie
-      ? `${c.levels}단계`
-      : (doneCount>0 ? `${doneCount}/${c.levels}단계 완료` : `${c.levels}단계`);
-    const badgeColor=doneCount>0&&!isIndie?'background:#dcfce7;color:#15803d':'';
-    const cta=isIndie?'바로 플레이 →':'레벨 선택 →';
-    const fn=c.action||`openLov('${c.id}')`;
-    const meta=isIndie?'🎮 인터랙티브':'🧩 단계별 퍼즐';
-    const prog=!isIndie&&c.levels&&doneCount>0
-      ?`<div style="margin-top:.75rem;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden">
-          <div style="height:100%;border-radius:2px;background:${c.color};width:${Math.round(doneCount/c.levels*100)}%;transition:width .4s"></div>
-        </div>`:'' ;
-    return `<div class="cat-card" data-cat="${c.id}" onclick="${fn}">
-      <div class="cat-top"><span class="cat-icon">${c.icon}</span><span class="cat-badge" style="${badgeColor}">${badge}</span></div>
-      <div class="cat-label">${c.label}</div>
-      <div class="cat-desc">${c.desc}</div>
-      <div class="cat-foot">
-        <span class="cat-meta">${meta}</span>
-        <span class="cat-cta" style="color:${c.color}">${cta}</span>
-      </div>
-      ${prog}
-    </div>`;
-  }).join('');
+// 드래그앤드롭
+function dragJigsawPiece(e,pieceId){
+  BG.dragId=pieceId;
+  e.dataTransfer.setData('text/plain',String(pieceId));
 }
+// (보드 슬롯 drop은 onclick=dropJigsawSlot으로 통일)
 
-/* ── 레벨 오버레이 ── */
-const DIFF=['','입문','입문','초급','초급','초급','중급','중급','중급','고급','고급','고급','심화','심화','심화','전문'];
-function openLov(catId){
-  const meta=CATS.find(c=>c.id===catId);
-  if(catId==='brain_games'){
-    document.getElementById('lov-title').textContent=`⚡ 두뇌 게임`;
-    document.getElementById('lv-info').innerHTML=`<strong>두뇌 게임</strong> — 인터랙티브 미니게임 4종`;
-    document.getElementById('lv-grid').innerHTML=`
-      <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
-        <button class="lv-btn" style="aspect-ratio:auto;padding:1.25rem;flex-direction:row;gap:.75rem;justify-content:flex-start"
-          onclick="openBrainGame('wordle')">
-          <span style="font-size:28px">🔤</span>
-          <span style="text-align:left"><div style="font-size:14px;font-weight:700">워들</div><div style="font-size:11px;color:var(--t3);font-weight:400">4글자 단어 맞히기</div></span>
-        </button>
-        <button class="lv-btn" style="aspect-ratio:auto;padding:1.25rem;flex-direction:row;gap:.75rem;justify-content:flex-start"
-          onclick="openBrainGame('sudoku')">
-          <span style="font-size:28px">🔢</span>
-          <span style="text-align:left"><div style="font-size:14px;font-weight:700">미니 스도쿠</div><div style="font-size:11px;color:var(--t3);font-weight:400">4×4 · 6×6, 30단계</div></span>
-        </button>
-        <button class="lv-btn" style="aspect-ratio:auto;padding:1.25rem;flex-direction:row;gap:.75rem;justify-content:flex-start"
-          onclick="openBrainGame('abacus')">
-          <span style="font-size:28px">🧮</span>
-          <span style="text-align:left"><div style="font-size:14px;font-weight:700">주산학습</div><div style="font-size:11px;color:var(--t3);font-weight:400">암산 훈련, 15단계</div></span>
-        </button>
-        <button class="lv-btn" style="aspect-ratio:auto;padding:1.25rem;flex-direction:row;gap:.75rem;justify-content:flex-start"
-          onclick="openBrainGame('jigsaw')">
-          <span style="font-size:28px">🧩</span>
-          <span style="text-align:left"><div style="font-size:14px;font-weight:700">직소퍼즐</div><div style="font-size:11px;color:var(--t3);font-weight:400">12패턴 × 3난이도</div></span>
-        </button>
-      </div>`;
-    document.getElementById('lov').classList.add('open');
-    document.body.style.overflow='hidden';
-    return;
-  }
-  const data=PUZZLE_DATA[catId];
-  document.getElementById('lov-title').textContent=`${meta.icon} ${meta.label}`;
-  document.getElementById('lv-info').innerHTML=
-    `<strong>${meta.label}</strong> — 15단계 · 총 ${meta.total}문제<br>
-     <span style="font-size:12px;color:var(--t3)">${data.levels[0].thinking||''}</span>`;
-  const saved=getSaved(catId);
-  document.getElementById('lv-grid').innerHTML=data.levels.map(lv=>{
-    const d=saved[lv.level];
-    const pct=d?Math.round(d.correct/d.total*100):null;
-    const stars=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':pct>=1?'⭐':'';
-    return `<button class="lv-btn${d?' done':''}" onclick="startLevel('${catId}',${lv.level})"
-      style="${d?'border-color:'+CATS.find(c=>c.id===catId).color+';background:'+CATS.find(c=>c.id===catId).color+'11':''}" >
-      <span class="lv-n">${lv.level}</span>
-      <span class="lv-d">${d?stars:DIFF[lv.level]||''}</span>
-    </button>`;
-  }).join('');
-  document.getElementById('lov').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeLov(){
-  document.getElementById('lov').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-/* ── 퍼즐 게임 ── */
-function startLevel(catId,levelNum){
-  closeLov();
-  const meta=CATS.find(c=>c.id===catId);
-  if(!meta) return;
-  let problems=[];
-
-  if(meta.autoGen){
-    // 자동생성 20문제
-    problems = autoGenProblems(catId, levelNum, 20);
-    // MD 기반 문제가 있으면 일부 혼합
-    const data=PUZZLE_DATA[catId];
-    if(data){
-      const lv=data.levels.find(l=>l.level===levelNum);
-      if(lv&&lv.problems.length>0){
-        const mdProbs=lv.problems.slice(0,Math.min(5,lv.problems.length));
-        problems=[...mdProbs,...problems.slice(0,15)].sort(()=>Math.random()-.5);
-      }
-    }
-  } else {
-    const data=PUZZLE_DATA[catId];
-    if(!data)return;
-    const lv=data.levels.find(l=>l.level===levelNum);
-    if(!lv)return;
-    problems=[...lv.problems];
-  }
-
-  GS={catId,levelNum,meta,problems,idx:0,correct:0,answered:false,start:Date.now()};
-  document.getElementById('gov-title').textContent=`${meta.icon} ${meta.label} Lv.${levelNum}`;
-  document.getElementById('gov-prog').textContent=`0 / ${problems.length}`;
-  document.getElementById('gov').classList.add('open');
-  document.body.style.overflow='hidden';
-  renderPuzzle();
-}
 
 function renderPuzzle(){
   const {problems,idx,meta}=GS;
@@ -1711,6 +1878,7 @@ function renderPuzzle(){
   const p=problems[idx];
   GS.hintShown=0; GS.answered=false;
   document.getElementById('gov-prog').textContent=`${idx+1} / ${problems.length}`;
+  if(p.game_type==='spatial_choice'){renderSpatialChoice(p);return;}
   const col=meta.color;
   const pct=(idx/problems.length)*100;
   const isReveal=p.game_type==='reveal';
