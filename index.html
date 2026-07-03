@@ -231,6 +231,12 @@ nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.96);backdrop-
 .jig-piece{touch-action:none}
 .cat-card[data-cat="brain_games"]::before{background:#f59e0b}
 
+.cat-group-header{
+  grid-column:1/-1;font-size:14px;font-weight:700;color:var(--t2);
+  padding:.75rem .25rem .4rem;margin-top:.5rem;
+  border-bottom:2px solid var(--bd);display:flex;align-items:center;gap:.5rem;
+}
+.cat-group-header:first-child{margin-top:0}
 footer{border-top:.5px solid var(--bd);padding:1.25rem 1.5rem;display:flex;align-items:center;
        justify-content:space-between;font-size:12px;color:var(--t3);flex-wrap:wrap;gap:.5rem;margin-top:2rem}
 footer a{color:var(--t3);text-decoration:none}
@@ -640,25 +646,39 @@ function genAbacusProblem(level){
 
 
 const CATS = [
-  {id:'01_number',      icon:'🔢', label:'수·연산',  desc:'수열·연산·방정식 패턴을 찾아 빈칸을 채우세요.',      color:'var(--num)', levels:15, autoGen:true},
-  {id:'04_probability', icon:'🎲', label:'확률',      desc:'경우의 수와 확률을 논리적으로 계산하세요.',            color:'var(--prob)',levels:15, autoGen:true},
-  {id:'06_pattern',     icon:'🔍', label:'패턴',      desc:'숫자·기호·색의 숨겨진 규칙을 발견하세요.',            color:'var(--pat)', levels:15, autoGen:true},
-  {id:'02_logic',       icon:'🧠', label:'논리',      desc:'조건을 분석하고 반드시 참인 결론을 추론하세요.',      color:'var(--log)', levels:15, autoGen:true},
-  {id:'05_spatial',     icon:'🔷', label:'공간',      desc:'도형 회전·대칭·블록 세기를 SVG로 풀어보세요.',       color:'var(--spa)', levels:15, autoGen:true},
-  {id:'indie_sudoku',   icon:'🔢', label:'스도쿠',    desc:'4×4→6×6→9×9 단계별 스도쿠를 완성하세요.',           color:'#0891b2',    levels:15, action:"openIndieLov('sudoku')"},
-  {id:'indie_wordle',   icon:'🔤', label:'워들',      desc:'4→5→6글자 한국어 단어를 6번 안에 맞혀보세요.',       color:'#16a34a',    levels:15, action:"openIndieLov('wordle')"},
-  {id:'indie_jigsaw',   icon:'🧩', label:'직소퍼즐',  desc:'명화 이미지를 조각으로 맞추어 완성하세요.',            color:'#d97706',    levels:15, action:"openIndieLov('jigsaw')"},
-  {id:'indie_abacus',   icon:'🧮', label:'주산연습',  desc:'단계별 암산 훈련으로 계산 속도를 높이세요.',           color:'#7c3aed',    levels:15, action:"openIndieLov('abacus')"},
-  {id:'indie_baseball', icon:'⚾', label:'숫자 야구',    desc:'3~5자리 숫자를 스트라이크·볼로 맞혀보세요.',        color:'#dc2626',    levels:15, action:"openIndieLov('baseball')"},
-  {id:'indie_sliding',  icon:'🔲', label:'슬라이딩 퍼즐', desc:'숫자 타일을 밀어 순서대로 정렬하세요.',               color:'#0891b2',    levels:15, action:"openIndieLov('sliding')"},
-  {id:'indie_hanoi',    icon:'🗼', label:'하노이의 탑',    desc:'원판을 규칙에 따라 다른 기둥으로 옮기세요.',           color:'#7c3aed',    levels:15, action:"openIndieLov('hanoi')"},
-  {id:'indie_euler',    icon:'✏️', label:'한붓그리기',     desc:'모든 선을 한 번씩만 지나는 경로를 찾으세요.',          color:'#059669',    levels:15, action:"openIndieLov('euler')"},
-  {id:'indie_magic',    icon:'🔮', label:'마방진',         desc:'모든 행·열·대각선 합이 같아지도록 채우세요.',          color:'#d97706',    levels:15, action:"openIndieLov('magic')"},
-  {id:'indie_monty',    icon:'🚗', label:'몬티홀',         desc:'확률적 직관을 실험으로 검증하는 시뮬레이션.',           color:'#16a34a',    levels:15, action:"openIndieLov('monty')"},
-  {id:'indie_cipher',   icon:'🔐', label:'암호 해독',      desc:'암호화된 한글 문장을 해독하세요.',                     color:'#6366f1',    levels:15, action:"openIndieLov('cipher')"},
-  {id:'indie_nono',     icon:'📋', label:'네모네모로직',   desc:'숫자 힌트를 보고 칸을 채우는 노노그램.',               color:'#0891b2',    levels:15, action:"openIndieLov('nono')"},
-  {id:'indie_kenken',   icon:'🧮', label:'켄켄',           desc:'계산 퍼즐로 수감각과 논리력을 키우세요.',              color:'#dc2626',    levels:15, action:"openIndieLov('kenken')"},
-  {id:'indie_kakuro',   icon:'➕', label:'카쿠로',          desc:'가로·세로 합을 맞추는 숫자 크로스워드.',              color:'#7c3aed',    levels:15, action:"openIndieLov('kakuro')"},
+  // ── 두뇌 퍼즐 (자동생성) ──
+  {id:'01_number',      icon:'🔢', label:'수·연산',    desc:'수열·연산·방정식 패턴을 찾아 빈칸을 채우세요.',   color:'var(--num)', levels:15, autoGen:true,  group:'두뇌 퍼즐'},
+  {id:'04_probability', icon:'🎲', label:'확률',        desc:'경우의 수와 확률을 논리적으로 계산하세요.',         color:'var(--prob)',levels:15, autoGen:true,  group:'두뇌 퍼즐'},
+  {id:'06_pattern',     icon:'🔍', label:'패턴',        desc:'숫자·기호·색의 숨겨진 규칙을 발견하세요.',         color:'var(--pat)', levels:15, autoGen:true,  group:'두뇌 퍼즐'},
+  {id:'02_logic',       icon:'🧠', label:'논리',        desc:'조건을 분석하고 반드시 참인 결론을 추론하세요.',   color:'var(--log)', levels:15, autoGen:true,  group:'두뇌 퍼즐'},
+  {id:'05_spatial',     icon:'🔷', label:'공간',        desc:'도형 회전·대칭·블록 세기를 SVG로 풀어보세요.',    color:'var(--spa)', levels:15, autoGen:true,  group:'두뇌 퍼즐'},
+  // ── 추리 게임 ──
+  {id:'indie_wordle',   icon:'🔤', label:'워들',        desc:'4→5→6글자 단어를 6번 안에 맞혀보세요.',           color:'#16a34a',    levels:15, action:"openIndieLov('wordle')",   group:'추리 게임'},
+  {id:'indie_baseball', icon:'⚾', label:'숫자 야구',   desc:'스트라이크·볼로 숫자를 추리하세요.',               color:'#dc2626',    levels:15, action:"openIndieLov('baseball')", group:'추리 게임'},
+  {id:'indie_cipher',   icon:'🔐', label:'암호 해독',   desc:'암호화된 문장을 해독하세요.',                      color:'#6366f1',    levels:15, action:"openIndieLov('cipher')",   group:'추리 게임'},
+  {id:'indie_mine',     icon:'💣', label:'지뢰 찾기',   desc:'숫자 단서로 지뢰를 피하며 모든 칸을 여세요.',      color:'#374151',    levels:15, action:"openIndieLov('mine')",     group:'추리 게임'},
+  // ── 숫자 격자 게임 ──
+  {id:'indie_sudoku',   icon:'🔢', label:'스도쿠',      desc:'4×4→6×6→9×9 단계별 스도쿠를 완성하세요.',        color:'#0891b2',    levels:15, action:"openIndieLov('sudoku')",   group:'숫자 격자'},
+  {id:'indie_diagsudo', icon:'✳️', label:'대각선 스도쿠',desc:'대각선도 1~N이 한 번씩 등장하는 스도쿠.',         color:'#0891b2',    levels:15, action:"openIndieLov('diagsudo')", group:'숫자 격자'},
+  {id:'indie_kenken',   icon:'🧮', label:'켄켄',        desc:'계산 퍼즐로 수감각과 논리력을 키우세요.',           color:'#dc2626',    levels:15, action:"openIndieLov('kenken')",   group:'숫자 격자'},
+  {id:'indie_kakuro',   icon:'➕', label:'카쿠로',      desc:'가로·세로 합을 맞추는 숫자 크로스워드.',            color:'#7c3aed',    levels:15, action:"openIndieLov('kakuro')",   group:'숫자 격자'},
+  {id:'indie_nono',     icon:'📋', label:'네모네모로직', desc:'숫자 힌트를 보고 칸을 채우는 노노그램.',           color:'#0891b2',    levels:15, action:"openIndieLov('nono')",     group:'숫자 격자'},
+  {id:'indie_magic',    icon:'🔮', label:'마방진',      desc:'모든 행·열·대각선 합이 같아지도록 채우세요.',       color:'#d97706',    levels:15, action:"openIndieLov('magic')",    group:'숫자 격자'},
+  {id:'indie_binary',   icon:'01', label:'바이너리',    desc:'0과 1을 규칙에 맞게 배열하는 논리 퍼즐.',           color:'#374151',    levels:15, action:"openIndieLov('binary')",   group:'숫자 격자'},
+  {id:'indie_2048',     icon:'🔢', label:'2048',        desc:'타일을 합쳐 2048을 만들어 보세요.',                color:'#d97706',    levels:15, action:"openIndieLov('2048')",     group:'숫자 격자'},
+  // ── 클릭/액션 퍼즐 ──
+  {id:'indie_sliding',  icon:'🔲', label:'슬라이딩 퍼즐',desc:'숫자 타일을 밀어 순서대로 정렬하세요.',           color:'#0891b2',    levels:15, action:"openIndieLov('sliding')",  group:'액션 퍼즐'},
+  {id:'indie_hanoi',    icon:'🗼', label:'하노이의 탑', desc:'원판을 규칙에 따라 다른 기둥으로 옮기세요.',        color:'#7c3aed',    levels:15, action:"openIndieLov('hanoi')",    group:'액션 퍼즐'},
+  {id:'indie_euler',    icon:'✏️', label:'한붓그리기',  desc:'모든 선을 한 번씩만 지나는 경로를 찾으세요.',       color:'#059669',    levels:15, action:"openIndieLov('euler')",    group:'액션 퍼즐'},
+  {id:'indie_lights',   icon:'💡', label:'라이트 끄기', desc:'클릭으로 인접 칸을 전환해 모든 불을 끄세요.',       color:'#d97706',    levels:15, action:"openIndieLov('lights')",   group:'액션 퍼즐'},
+  {id:'indie_coloring', icon:'🎨', label:'색칠하기',    desc:'인접 영역이 같은 색이 되지 않도록 색칠하세요.',     color:'#ec4899',    levels:15, action:"openIndieLov('coloring')", group:'액션 퍼즐'},
+  // ── 논리/공간 퍼즐 ──
+  {id:'indie_tecto',    icon:'🧩', label:'텍투오닉',    desc:'영역별 1~N 숫자를 인접 규칙에 맞게 배치하세요.',   color:'#059669',    levels:15, action:"openIndieLov('tecto')",    group:'논리 퍼즐'},
+  {id:'indie_aqua',     icon:'🐠', label:'아쿠아리움',  desc:'수족관 물 높이를 힌트에 맞게 채우세요.',            color:'#0891b2',    levels:15, action:"openIndieLov('aqua')",     group:'논리 퍼즐'},
+  // ── 시각/창작 ──
+  {id:'indie_jigsaw',   icon:'🖼️', label:'직소퍼즐',   desc:'명화를 조각으로 맞추어 완성하세요.',                color:'#d97706',    levels:15, action:"openIndieLov('jigsaw')",   group:'시각 게임'},
+  {id:'indie_abacus',   icon:'🧮', label:'주산연습',    desc:'단계별 암산 훈련으로 계산 속도를 높이세요.',        color:'#7c3aed',    levels:15, action:"openIndieLov('abacus')",   group:'시각 게임'},
+  {id:'indie_monty',    icon:'🚗', label:'몬티홀',      desc:'확률적 직관을 실험으로 검증하는 시뮬레이션.',        color:'#16a34a',    levels:15, action:"openIndieLov('monty')",    group:'시각 게임'},
 ];
 
 let GS={};
@@ -1487,6 +1507,812 @@ const INDIE_GAME_MAP={
 };
 
 
+// ═══════════════════════════════════
+// 신규 게임 5종: 지뢰찾기, 2048, 라이트끄기, 바이너리퍼즐, 색칠하기
+// ═══════════════════════════════════
+
+// ── 1. 지뢰 찾기 ──
+function startMinesweeper(level){
+  const configs = [
+    {r:6,c:6,m:5},{r:6,c:6,m:6},{r:7,c:7,m:8},{r:7,c:7,m:10},{r:8,c:8,m:12},
+    {r:8,c:8,m:14},{r:9,c:9,m:16},{r:9,c:9,m:18},{r:9,c:9,m:20},{r:10,c:10,m:20},
+    {r:10,c:10,m:22},{r:10,c:10,m:25},{r:10,c:10,m:28},{r:10,c:10,m:30},{r:10,c:10,m:32},
+  ];
+  const cfg = configs[level-1];
+  const {r,c,m} = cfg;
+  const total = r*c;
+  // 지뢰 배치
+  const mineSet = new Set();
+  while(mineSet.size < m) mineSet.add(Math.floor(Math.random()*total));
+  // 인접 지뢰 수 계산
+  const board = Array.from({length:r}, (_,ri)=>
+    Array.from({length:c}, (_,ci)=>{
+      if(mineSet.has(ri*c+ci)) return -1;
+      let cnt=0;
+      for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
+        const nr=ri+dr, nc=ci+dc;
+        if(nr>=0&&nr<r&&nc>=0&&nc<c&&mineSet.has(nr*c+nc)) cnt++;
+      }
+      return cnt;
+    })
+  );
+  BG={gameId:'mine',level,r,c,m,board,
+      revealed:Array.from({length:r},()=>Array(c).fill(false)),
+      flagged:Array.from({length:r},()=>Array(c).fill(false)),
+      flagMode:false,gameOver:false,won:false,start:Date.now()};
+  renderMinesweeper();
+}
+function revealMine(ri,ci){
+  const {board,revealed,flagged,r,c,gameOver} = BG;
+  if(gameOver||revealed[ri][ci]||flagged[ri][ci]) return;
+  revealed[ri][ci]=true;
+  if(board[ri][ci]===-1){ BG.gameOver=true; renderMinesweeper(); return; }
+  if(board[ri][ci]===0){
+    for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
+      const nr=ri+dr,nc=ci+dc;
+      if(nr>=0&&nr<r&&nc>=0&&nc<c&&!revealed[nr][nc]) revealMine(nr,nc);
+    }
+  }
+  // 승리 확인
+  const safeLeft=BG.revealed.flat().filter(v=>!v).length;
+  if(safeLeft===BG.m) BG.won=true;
+  renderMinesweeper();
+}
+function flagMine(ri,ci,e){
+  e.preventDefault();
+  if(BG.gameOver||BG.revealed[ri][ci]) return;
+  BG.flagged[ri][ci]=!BG.flagged[ri][ci];
+  renderMinesweeper();
+}
+function renderMinesweeper(){
+  const {board,revealed,flagged,r,c,m,gameOver,won,flagMode} = BG;
+  const cellPx=Math.min(32,Math.floor(Math.min(280,window.innerWidth*0.8)/c));
+  const COLORS=['','#2563eb','#16a34a','#dc2626','#7c3aed','#92400e','#0891b2','#000','#666'];
+  const flagCount=flagged.flat().filter(Boolean).length;
+
+  let grid=`<div style="display:grid;grid-template-columns:repeat(${c},${cellPx}px);gap:1px;
+             margin:0 auto .75rem;background:#ccc;padding:1px;border-radius:4px;width:fit-content">`;
+  for(let ri=0;ri<r;ri++){
+    for(let ci=0;ci<c;ci++){
+      const rv=revealed[ri][ci], fl=flagged[ri][ci], v=board[ri][ci];
+      const isGameOverMine=gameOver&&v===-1&&!fl;
+      let bg=rv?'white':'#9ca3af', content='', color='', fw='700';
+      if(fl&&!rv){ content='🚩'; }
+      else if(isGameOverMine){ bg='#dc2626'; content='💣'; }
+      else if(rv&&v===-1){ bg='#dc2626'; content='💣'; }
+      else if(rv&&v>0){ content=v; color=COLORS[v]||'#000'; }
+      else if(rv){ bg='#e5e7eb'; }
+
+      grid+=`<div
+        onclick="${gameOver||won?'':flagMode?`flagMine(${ri},${ci},event)`:`revealMine(${ri},${ci})`}"
+        oncontextmenu="flagMine(${ri},${ci},event);return false"
+        style="width:${cellPx}px;height:${cellPx}px;background:${bg};
+               display:flex;align-items:center;justify-content:center;
+               font-size:${cellPx*0.55}px;font-weight:${fw};color:${color};
+               cursor:${gameOver||won?'default':'pointer'};
+               border-radius:2px;user-select:none">${content}</div>`;
+    }
+  }
+  grid+='</div>';
+
+  document.getElementById('gov-body').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;padding:0 .25rem">
+      <span style="font-size:13px">💣 ${m-flagCount}</span>
+      <div style="display:flex;gap:6px">
+        <button onclick="BG.flagMode=false;renderMinesweeper()"
+          style="padding:4px 10px;border-radius:7px;border:2px solid ${!flagMode?'var(--acc)':'var(--bd)'};
+                 background:${!flagMode?'var(--acc-l)':'white'};font-size:12px;cursor:pointer">⛏ 열기</button>
+        <button onclick="BG.flagMode=true;renderMinesweeper()"
+          style="padding:4px 10px;border-radius:7px;border:2px solid ${flagMode?'var(--acc)':'var(--bd)'};
+                 background:${flagMode?'var(--acc-l)':'white'};font-size:12px;cursor:pointer">🚩 깃발</button>
+      </div>
+      <span style="font-size:12px;color:var(--t3)">Lv.${BG.level}</span>
+    </div>
+    ${grid}
+    ${won?`<div class="fb-box ok">🎉 클리어! ${Math.round((Date.now()-BG.start)/1000)}초</div>
+      <div class="gbtns"><button class="gbp" style="background:var(--acc)" onclick="startMinesweeper(${BG.level})">🔄 새 게임</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}
+    ${gameOver&&!won?`<div class="fb-box ng">💥 지뢰 밟음!</div>
+      <div class="gbtns"><button class="gbp" style="background:var(--acc)" onclick="startMinesweeper(${BG.level})">🔄 다시</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}`;
+}
+
+// ── 2. 2048 ──
+function start2048(level){
+  const size=level<=5?4:level<=10?5:6;
+  const grid=Array.from({length:size},()=>Array(size).fill(0));
+  BG={gameId:'2048',level,size,grid,score:0,best:0,
+      target:level<=5?2048:level<=10?4096:8192};
+  add2048Tile(); add2048Tile();
+  render2048();
+}
+function add2048Tile(){
+  const {grid,size}=BG;
+  const empty=[];
+  for(let r=0;r<size;r++) for(let c=0;c<size;c++) if(!grid[r][c]) empty.push([r,c]);
+  if(!empty.length) return;
+  const [r,c]=empty[Math.floor(Math.random()*empty.length)];
+  grid[r][c]=Math.random()<0.9?2:4;
+}
+function move2048(dir){
+  const {grid,size}=BG; let moved=false;
+  const slide=row=>{
+    let arr=row.filter(v=>v);
+    for(let i=0;i<arr.length-1;i++){
+      if(arr[i]===arr[i+1]){arr[i]*=2;BG.score+=arr[i];arr.splice(i+1,1);moved=true;}
+    }
+    while(arr.length<size) arr.push(0);
+    return arr;
+  };
+  if(dir==='l'||dir==='r'){
+    for(let r=0;r<size;r++){
+      const row=dir==='r'?[...grid[r]].reverse():grid[r];
+      const slid=slide(row);
+      const res=dir==='r'?slid.reverse():slid;
+      if(res.join()!==grid[r].join()) moved=true;
+      grid[r]=res;
+    }
+  } else {
+    for(let c=0;c<size;c++){
+      const col=Array.from({length:size},(_,r)=>grid[r][c]);
+      const arr=dir==='d'?[...col].reverse():col;
+      const slid=slide(arr);
+      const res=dir==='d'?slid.reverse():slid;
+      res.forEach((v,r)=>{if(grid[r][c]!==v)moved=true;grid[r][c]=v;});
+    }
+  }
+  if(moved){add2048Tile();render2048();}
+}
+function render2048(){
+  const {grid,size,score,target}=BG;
+  const cellPx=Math.min(60,Math.floor(260/size));
+  const COLORS={0:'#cdc1b4',2:'#eee4da',4:'#ede0c8',8:'#f2b179',16:'#f59563',
+    32:'#f67c5f',64:'#f65e3b',128:'#edcf72',256:'#edcc61',512:'#edc850',
+    1024:'#edc53f',2048:'#edc22e',4096:'#3c3a32',8192:'#121212'};
+  const TCOL={0:'#776e65',2:'#776e65',4:'#776e65',8:'#f9f6f2',16:'#f9f6f2',
+    32:'#f9f6f2',64:'#f9f6f2',128:'#f9f6f2',256:'#f9f6f2',512:'#f9f6f2',
+    1024:'#f9f6f2',2048:'#f9f6f2',4096:'#f9f6f2',8192:'#f9f6f2'};
+
+  let g=`<div style="display:grid;grid-template-columns:repeat(${size},${cellPx}px);
+           gap:4px;background:#bbada0;padding:4px;border-radius:8px;margin:0 auto .75rem;
+           width:fit-content" id="g2048"
+           onkeydown="handle2048Key(event)" tabindex="0">`;
+  grid.flat().forEach(v=>{
+    g+=`<div style="width:${cellPx}px;height:${cellPx}px;background:${COLORS[v]||'#3c3a32'};
+         color:${TCOL[v]||'#f9f6f2'};border-radius:4px;display:flex;align-items:center;
+         justify-content:center;font-size:${v>=1000?cellPx*0.28:cellPx*0.38}px;font-weight:700">
+         ${v||''}</div>`;
+  });
+  g+='</div>';
+
+  const won=grid.flat().some(v=>v>=target);
+  const lost=!grid.flat().some(v=>!v)&&
+    !grid.some((row,r)=>row.some((v,c)=>
+      (c<size-1&&v===row[c+1])||(r<BG.size-1&&v===grid[r+1][c])));
+
+  document.getElementById('gov-body').innerHTML=`
+    <div style="display:flex;justify-content:space-between;margin-bottom:.5rem">
+      <div style="font-size:13px;font-weight:700">점수: ${score}</div>
+      <div style="font-size:12px;color:var(--t3)">목표: ${target}</div>
+    </div>
+    ${g}
+    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:.5rem">
+      <button onclick="move2048('l')" style="padding:8px 14px;border-radius:8px;border:1.5px solid var(--bd);background:white;cursor:pointer;font-size:18px">←</button>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <button onclick="move2048('u')" style="padding:4px 14px;border-radius:8px;border:1.5px solid var(--bd);background:white;cursor:pointer;font-size:18px">↑</button>
+        <button onclick="move2048('d')" style="padding:4px 14px;border-radius:8px;border:1.5px solid var(--bd);background:white;cursor:pointer;font-size:18px">↓</button>
+      </div>
+      <button onclick="move2048('r')" style="padding:8px 14px;border-radius:8px;border:1.5px solid var(--bd);background:white;cursor:pointer;font-size:18px">→</button>
+    </div>
+    <div style="font-size:11px;color:var(--t3);text-align:center">키보드 방향키도 사용 가능</div>
+    ${won?`<div class="fb-box ok">🎉 ${target} 달성!</div>
+      <div class="gbtns"><button class="gbp" style="background:var(--acc)" onclick="start2048(${BG.level})">🔄 새 게임</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}
+    ${lost&&!won?`<div class="fb-box ng">게임 오버! 점수: ${score}</div>
+      <div class="gbtns"><button class="gbp" style="background:var(--acc)" onclick="start2048(${BG.level})">🔄 다시</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}`;
+
+  setTimeout(()=>document.getElementById('g2048')?.focus(),50);
+}
+function handle2048Key(e){
+  const map={ArrowLeft:'l',ArrowRight:'r',ArrowUp:'u',ArrowDown:'d'};
+  if(map[e.key]){e.preventDefault();move2048(map[e.key]);}
+}
+// 터치 스와이프
+let t2048Start=null;
+document.addEventListener('touchstart',e=>{if(BG.gameId==='2048')t2048Start=e.touches[0];});
+document.addEventListener('touchend',e=>{
+  if(BG.gameId!=='2048'||!t2048Start)return;
+  const dx=e.changedTouches[0].clientX-t2048Start.clientX;
+  const dy=e.changedTouches[0].clientY-t2048Start.clientY;
+  if(Math.abs(dx)>Math.abs(dy)) move2048(dx>0?'r':'l');
+  else move2048(dy>0?'d':'u');
+  t2048Start=null;
+});
+
+// ── 3. 라이트 끄기 (Lights Out) ──
+function startLightsOut(level){
+  const size=level<=5?3:level<=10?4:5;
+  // 랜덤 초기 상태 (항상 풀 수 있도록 랜덤 클릭으로 생성)
+  const grid=Array.from({length:size},()=>Array(size).fill(0));
+  const clicks=3+Math.floor(level*0.8);
+  for(let k=0;k<clicks;k++){
+    const r=Math.floor(Math.random()*size), c=Math.floor(Math.random()*size);
+    toggleLights(grid,r,c,size);
+  }
+  BG={gameId:'lights',level,size,grid,moves:0};
+  renderLightsOut();
+}
+function toggleLights(grid,r,c,size){
+  [[r,c],[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([nr,nc])=>{
+    if(nr>=0&&nr<size&&nc>=0&&nc<size) grid[nr][nc]^=1;
+  });
+}
+function clickLight(r,c){
+  if(BG.gameOver) return;
+  toggleLights(BG.grid,r,c,BG.size);
+  BG.moves++;
+  renderLightsOut();
+}
+function renderLightsOut(){
+  const {grid,size,moves}=BG;
+  const cellPx=Math.min(70,Math.floor(260/size));
+  const won=grid.every(row=>row.every(v=>!v));
+
+  let g=`<div style="display:grid;grid-template-columns:repeat(${size},${cellPx}px);
+           gap:6px;margin:0 auto 1rem;width:fit-content">`;
+  for(let r=0;r<size;r++) for(let c=0;c<size;c++){
+    g+=`<div onclick="clickLight(${r},${c})"
+      style="width:${cellPx}px;height:${cellPx}px;border-radius:10px;cursor:pointer;
+             background:${grid[r][c]?'#fbbf24':'#374151'};
+             box-shadow:${grid[r][c]?'0 0 15px #fbbf24':'none'};
+             transition:all .15s"></div>`;
+  }
+  g+='</div>';
+
+  document.getElementById('gov-body').innerHTML=`
+    <div style="text-align:center;font-size:13px;color:var(--t2);margin-bottom:.75rem">
+      모든 불을 끄세요 · 클릭하면 인접 칸도 함께 전환됩니다 (${moves}번 클릭)
+    </div>
+    ${g}
+    ${won?`<div class="fb-box ok">🎉 완성! ${moves}번 클릭</div>
+      <div class="gbtns"><button class="gbp" style="background:var(--acc)" onclick="startLightsOut(${BG.level})">🔄 새 퍼즐</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}`;
+}
+
+// ── 4. 바이너리 퍼즐 ──
+const BINARY_PUZZLES=[
+  // 6×6
+  {size:6,puzzle:[
+    [1,null,null,0,null,null],[null,0,null,null,1,null],
+    [null,null,1,null,null,0],[0,null,null,1,null,null],
+    [null,1,null,null,0,null],[null,null,0,null,null,1]
+  ],solution:[
+    [1,1,0,0,1,0],[0,0,1,1,0,1],[1,0,1,0,1,0],[0,1,0,1,0,1],[1,1,0,0,1,0],[0,0,1,1,0,1]
+  ]},
+  {size:6,puzzle:[
+    [null,0,null,null,0,null],[1,null,null,1,null,null],
+    [null,null,0,null,null,1],[null,1,null,null,1,null],
+    [0,null,null,0,null,null],[null,null,1,null,null,0]
+  ],solution:[
+    [1,0,1,0,0,1],[1,0,0,1,1,0],[0,1,0,1,0,1],[0,1,1,0,1,0],[0,0,1,0,1,1],[1,1,0,1,0,0]
+  ]},
+];
+function startBinary(level){
+  const pIdx=Math.min(Math.floor((level-1)/8),BINARY_PUZZLES.length-1);
+  const p=BINARY_PUZZLES[pIdx];
+  BG={gameId:'binary',level,size:p.size,
+      puzzle:p.puzzle.map(r=>[...r]),
+      solution:p.solution,
+      userGrid:p.puzzle.map(r=>r.map(v=>v))};
+  renderBinary();
+}
+function clickBinary(r,c){
+  if(BG.puzzle[r][c]!==null) return;
+  const v=BG.userGrid[r][c];
+  BG.userGrid[r][c]=v===null?1:v===1?0:null;
+  renderBinary();
+}
+function renderBinary(){
+  const {size,puzzle,userGrid,solution}=BG;
+  const cellPx=Math.min(44,Math.floor(260/size));
+
+  let errors=new Set();
+  // 행 검사: 연속 3개, 각 행 0과 1 동수
+  for(let r=0;r<size;r++){
+    const row=userGrid[r];
+    for(let c=0;c<size-2;c++){
+      if(row[c]!==null&&row[c]===row[c+1]&&row[c]===row[c+2])
+        [c,c+1,c+2].forEach(ci=>errors.add(`${r},${ci}`));
+    }
+  }
+
+  let g=`<div style="display:grid;grid-template-columns:repeat(${size},${cellPx}px);
+           gap:3px;margin:0 auto 1rem;width:fit-content">`;
+  for(let r=0;r<size;r++) for(let c=0;c<size;c++){
+    const fixed=puzzle[r][c]!==null, v=userGrid[r][c];
+    const hasErr=errors.has(`${r},${c}`);
+    g+=`<div onclick="${fixed?'':(`clickBinary(${r},${c})`)}"
+      style="width:${cellPx}px;height:${cellPx}px;border-radius:8px;
+             background:${v===1?'#1e40af':v===0?'#e5e7eb':'white'};
+             border:2px solid ${hasErr?'#dc2626':fixed?'#6b7280':'var(--bd)'};
+             display:flex;align-items:center;justify-content:center;
+             font-size:${cellPx*0.45}px;font-weight:700;
+             color:${v===1?'white':'#374151'};cursor:${fixed?'default':'pointer'}">
+      ${v!==null?v:''}</div>`;
+  }
+  g+='</div>';
+
+  const isWin=userGrid.every((row,r)=>row.every((v,c)=>v===solution[r][c]));
+  document.getElementById('gov-body').innerHTML=`
+    <div style="font-size:12px;color:var(--t3);text-align:center;margin-bottom:.75rem">
+      각 행·열에 0과 1을 같은 수만큼 · 같은 숫자 3개 연속 불가 · 클릭으로 0/1 전환
+    </div>
+    ${g}
+    ${isWin?`<div class="fb-box ok">🎉 완성!</div>
+      <div class="gbtns"><button class="gbp" style="background:var(--acc)" onclick="startBinary(${BG.level})">🔄 새 퍼즐</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}`;
+}
+
+// ── 5. 색칠하기 (Map Coloring) ──
+function startColoring(level){
+  // 맵 그래프 (노드 좌표 + 인접 관계)
+  const maps=[
+    {nodes:[{x:80,y:80,label:'A'},{x:200,y:80,label:'B'},{x:140,y:160,label:'C'},
+             {x:80,y:240,label:'D'},{x:200,y:240,label:'E'}],
+     edges:[[0,1],[0,2],[1,2],[0,3],[2,3],[2,4],[1,4],[3,4]]},
+    {nodes:[{x:70,y:70,label:'A'},{x:200,y:70,label:'B'},{x:270,y:160,label:'C'},
+             {x:200,y:250,label:'D'},{x:70,y:250,label:'E'},{x:0,y:160,label:'F'},{x:140,y:160,label:'G'}],
+     edges:[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[0,6],[1,6],[2,6],[3,6],[4,6],[5,6]]},
+    {nodes:[{x:140,y:40,label:'A'},{x:240,y:120,label:'B'},{x:200,y:240,label:'C'},
+             {x:80,y:240,label:'D'},{x:40,y:120,label:'E'},{x:140,y:160,label:'F'}],
+     edges:[[0,1],[1,2],[2,3],[3,4],[4,0],[0,5],[1,5],[2,5],[3,5],[4,5]]},
+  ];
+  const mIdx=Math.min(Math.floor((level-1)/5),maps.length-1);
+  const COLORS_LIST=['#ef4444','#3b82f6','#22c55e','#f59e0b','#8b5cf6'];
+  const maxColors=3+Math.floor((level-1)/5);
+  BG={gameId:'color',level,map:maps[mIdx],
+      nodeColors:Array(maps[mIdx].nodes.length).fill(-1),
+      colors:COLORS_LIST.slice(0,maxColors),selected:0};
+  renderColoring();
+}
+function renderColoring(){
+  const {map,nodeColors,colors,selected}=BG;
+  const {nodes,edges}=map;
+
+  // 충돌 검사
+  const conflicts=new Set();
+  edges.forEach(([a,b])=>{
+    if(nodeColors[a]>=0&&nodeColors[a]===nodeColors[b]){
+      conflicts.add(a);conflicts.add(b);
+    }
+  });
+
+  let svg=`<svg viewBox="-20 -20 320 320" width="280" height="280"
+    xmlns="http://www.w3.org/2000/svg" style="border:1px solid var(--bd);border-radius:10px;background:white">`;
+  edges.forEach(([a,b])=>{
+    svg+=`<line x1="${nodes[a].x}" y1="${nodes[a].y}" x2="${nodes[b].x}" y2="${nodes[b].y}"
+      stroke="#ddd" stroke-width="2"/>`;
+  });
+  nodes.forEach((n,i)=>{
+    const col=nodeColors[i]>=0?colors[nodeColors[i]]:'#e5e7eb';
+    const hasConflict=conflicts.has(i);
+    svg+=`<circle cx="${n.x}" cy="${n.y}" r="22" fill="${col}"
+      stroke="${hasConflict?'#dc2626':'#9ca3af'}" stroke-width="${hasConflict?3:1.5}"
+      onclick="colorNode(${i})" style="cursor:pointer"/>
+    <text x="${n.x}" y="${n.y+5}" text-anchor="middle" font-size="13" font-weight="700"
+      fill="${nodeColors[i]>=0?'white':'#374151'}" pointer-events="none">${n.label}</text>`;
+  });
+  svg+='</svg>';
+
+  const isWin=nodeColors.every(v=>v>=0)&&conflicts.size===0;
+  document.getElementById('gov-body').innerHTML=`
+    <div style="font-size:12px;color:var(--t3);text-align:center;margin-bottom:.5rem">
+      인접한 영역이 같은 색이 되지 않도록 색칠하세요
+    </div>
+    <div style="display:flex;justify-content:center;margin-bottom:.75rem">${svg}</div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:.5rem">
+      ${colors.map((c,i)=>`
+        <div onclick="BG.selected=${i};renderColoring()"
+          style="width:32px;height:32px;border-radius:50%;background:${c};cursor:pointer;
+                 border:3px solid ${selected===i?'#1e40af':'transparent'};
+                 box-shadow:${selected===i?'0 0 0 2px white, 0 0 0 4px #1e40af':'none'}"></div>`).join('')}
+    </div>
+    <div style="font-size:11px;color:var(--t3);text-align:center">색상 선택 후 노드를 클릭하세요</div>
+    ${isWin?`<div class="fb-box ok">🎉 완성! ${colors.length}가지 색으로 칠했습니다</div>
+      <div class="gbtns"><button class="gbp" style="background:var(--acc)" onclick="startColoring(${BG.level})">🔄 새 맵</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}`;
+}
+function colorNode(i){BG.nodeColors[i]=BG.selected;renderColoring();}
+
+// ── INDIE_GAME_MAP 업데이트 ──
+// 기존 맵에 추가
+if(typeof INDIE_GAME_MAP!=='undefined'){
+  INDIE_GAME_MAP.mine=startMinesweeper;
+  INDIE_GAME_MAP['2048']=start2048;
+  INDIE_GAME_MAP.lights=startLightsOut;
+  INDIE_GAME_MAP.binary=startBinary;
+  INDIE_GAME_MAP.coloring=startColoring;
+}
+
+
+// ═══════════════════════════════════
+// 추가 게임 3종: 대각선 스도쿠, 텍투오닉, 아쿠아리움
+// ═══════════════════════════════════
+
+// ── 1. 대각선 스도쿠 ──
+function startDiagSudoku(level){
+  // 검증된 대각선 스도쿠 퍼즐 (4×4 또는 9×9)
+  const puzzles = [
+    // 4×4 대각선 스도쿠 Lv1~5
+    {size:4,puzzle:[[1,0,0,4],[0,4,0,0],[0,0,3,0],[2,0,0,1]],
+     solution:[[1,3,2,4],[2,4,1,3],[4,1,3,2],[3,2,4,1]],diag:true},
+    {size:4,puzzle:[[0,2,0,0],[0,0,0,3],[4,0,0,0],[0,0,1,0]],
+     solution:[[3,2,4,1],[1,4,2,3],[4,3,1,2],[2,1,3,4]],diag:true},
+    {size:4,puzzle:[[0,0,2,0],[4,0,0,0],[0,0,0,1],[0,3,0,0]],
+     solution:[[1,4,2,3],[4,2,3,1],[3,1,4,2],[2,3,1,4]],diag:true},
+    // 9×9 대각선 스도쿠 Lv6~15
+    {size:9,puzzle:[
+      [0,0,0,0,0,6,0,0,0],[0,0,2,0,4,0,0,0,1],[0,9,0,8,0,0,0,5,0],
+      [0,0,8,0,0,0,3,0,0],[0,4,0,0,7,0,0,6,0],[0,0,3,0,0,0,8,0,0],
+      [0,6,0,0,0,3,0,1,0],[9,0,0,0,5,0,7,0,0],[0,0,0,2,0,0,0,0,0]],
+     solution:[
+      [4,8,1,5,3,6,2,9,7],[5,3,2,7,4,9,6,8,1],[6,9,7,8,1,2,4,5,3],
+      [7,1,8,6,9,5,3,4,2],[2,4,5,3,7,8,9,6,1],[1,5,3,4,2,7,8,0,6],
+      [8,6,4,9,2,3,5,1,0],[9,2,6,1,5,4,7,3,8],[3,7,9,2,6,1,1,2,4]],diag:true},
+  ];
+  const pIdx = level<=3?level-1 : level<=5?2 : 3;
+  const p = puzzles[Math.min(pIdx, puzzles.length-1)];
+  const n = p.size;
+  BG = {gameId:'diagsudo', level, size:n, puzzle:p.puzzle,
+        solution:p.solution, fixed:p.puzzle.map(r=>r.map(v=>v!==0)),
+        userGrid:p.puzzle.map(r=>[...r]), selected:null};
+  renderDiagSudoku();
+}
+
+function renderDiagSudoku(){
+  const {size:n, userGrid, fixed, solution, selected} = BG;
+  const cellPx = Math.min(40, Math.floor(260/n));
+  const boxSize = n===4?2:3;
+
+  // 대각선 강조
+  const onMainDiag = (r,c) => r===c;
+  const onAntiDiag = (r,c) => r+c===n-1;
+
+  let grid = `<div style="display:grid;grid-template-columns:repeat(${n},${cellPx}px);
+    gap:1px;background:var(--t);padding:2px;border-radius:6px;margin:0 auto .75rem;width:fit-content">`;
+
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++){
+    const v = userGrid[r][c];
+    const isFixed = fixed[r][c];
+    const isSel = selected&&selected[0]===r&&selected[1]===c;
+    const isDiag = onMainDiag(r,c)||onAntiDiag(r,c);
+    const bR = (c+1)%boxSize===0&&c<n-1?'2px solid var(--t)':'none';
+    const bB = (r+1)%boxSize===0&&r<n-1?'2px solid var(--t)':'none';
+    const isCorrect = v&&v===solution[r][c];
+    const isWrong = v&&v!==solution[r][c];
+
+    grid += `<div onclick="${isFixed?'':(`selectDiagSudo(${r},${c})`)}"
+      style="width:${cellPx}px;height:${cellPx}px;
+             background:${isSel?'var(--acc-l)':isDiag?'#fef9c3':isFixed?'var(--bg2)':'white'};
+             border-right:${bR};border-bottom:${bB};
+             display:flex;align-items:center;justify-content:center;
+             font-size:${cellPx*0.45}px;font-weight:${isFixed?700:500};
+             color:${isWrong?'#dc2626':isFixed?'var(--t)':'#2563eb'};
+             cursor:${isFixed?'default':'pointer'}">${v||''}</div>`;
+  }
+  grid += '</div>';
+
+  const isComplete = userGrid.every((row,r)=>row.every((v,c)=>v===solution[r][c]));
+
+  document.getElementById('gov-body').innerHTML = `
+    <div style="font-size:12px;color:var(--t3);text-align:center;margin-bottom:.5rem">
+      🟡 노란 대각선도 1~${n}이 한 번씩 등장해야 합니다
+    </div>
+    ${grid}
+    <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-bottom:.5rem">
+      ${Array.from({length:n},(_,i)=>i+1).map(num=>
+        `<button onclick="inputDiagSudo(${num})"
+          style="width:${Math.min(40,cellPx)}px;height:${Math.min(40,cellPx)}px;
+                 border-radius:7px;border:1.5px solid var(--bd);background:white;
+                 font-size:${Math.min(16,cellPx*0.4)}px;font-weight:700;cursor:pointer">${num}</button>`
+      ).join('')}
+      <button onclick="inputDiagSudo(0)"
+        style="width:${Math.min(40,cellPx)}px;height:${Math.min(40,cellPx)}px;
+               border-radius:7px;border:1.5px solid var(--bd);background:var(--bg2);
+               font-size:12px;cursor:pointer">✕</button>
+    </div>
+    ${isComplete?`<div class="fb-box ok">🎉 완성!</div>
+      <div class="gbtns"><button class="gbp" style="background:#0891b2" onclick="startDiagSudoku(${BG.level})">🔄 새 퍼즐</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}`;
+}
+function selectDiagSudo(r,c){BG.selected=[r,c];renderDiagSudoku();}
+function inputDiagSudo(n){
+  if(!BG.selected)return;
+  const [r,c]=BG.selected;
+  BG.userGrid[r][c]=n;
+  renderDiagSudoku();
+}
+
+// ── 2. 텍투오닉 (Tectonic) ──
+// 불규칙 격자에 영역별로 1~영역크기 숫자 배치
+function startTectonic(level){
+  // 미리 정의된 텍투오닉 퍼즐 (5×5 격자, 영역 정의)
+  const puzzles = [
+    {
+      size:5,
+      // 각 셀의 영역 ID (0~4)
+      regions:[
+        [0,0,1,1,1],
+        [0,2,2,1,3],
+        [0,2,4,3,3],
+        [0,2,4,4,3],
+        [0,2,2,4,4],
+      ],
+      // 영역별 셀 수: 영역0=5, 1=4, 2=5, 3=4, 4=5
+      solution:[
+        [1,2,1,2,3],
+        [3,1,2,4,1],
+        [4,3,1,2,3],
+        [5,4,2,3,4],
+        [2,5,4,1,2],
+      ],
+      given:[[0,0],[0,2],[1,1],[2,4],[3,0],[4,3]],
+    },
+    {
+      size:4,
+      regions:[
+        [0,0,1,1],
+        [0,2,2,1],
+        [3,3,2,4],
+        [3,5,5,4],
+      ],
+      solution:[
+        [1,2,1,2],
+        [3,1,2,3],
+        [1,2,3,1],
+        [2,1,2,2],
+      ],
+      given:[[0,0],[0,3],[1,2],[2,1],[3,0]],
+    },
+  ];
+  const pIdx = Math.min(Math.floor((level-1)/8), puzzles.length-1);
+  const p = puzzles[pIdx];
+  const n = p.size;
+  const fixedSet = new Set(p.given.map(([r,c])=>`${r},${c}`));
+  const userGrid = p.solution.map((row,r)=>row.map((v,c)=>fixedSet.has(`${r},${c}`)?v:0));
+
+  BG = {gameId:'tecto', level, size:n, puzzle:p,
+        userGrid, selected:null};
+  renderTectonic();
+}
+
+function renderTectonic(){
+  const {size:n, puzzle, userGrid, selected} = BG;
+  const {regions, solution, given} = puzzle;
+  const cellPx = Math.min(56, Math.floor(260/n));
+  const fixedSet = new Set(given.map(([r,c])=>`${r},${c}`));
+
+  // 영역별 최대 숫자 계산
+  const regionSizes = {};
+  regions.flat().forEach(id=>{regionSizes[id]=(regionSizes[id]||0)+1;});
+
+  let grid = `<div style="position:relative;display:grid;
+    grid-template-columns:repeat(${n},${cellPx}px);
+    gap:0px;margin:0 auto .75rem;border:2px solid var(--t);
+    border-radius:4px;width:fit-content">`;
+
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++){
+    const regionId = regions[r][c];
+    const maxVal = regionSizes[regionId];
+    const v = userGrid[r][c];
+    const isFixed = fixedSet.has(`${r},${c}`);
+    const isSel = selected&&selected[0]===r&&selected[1]===c;
+    const isWrong = v&&v!==solution[r][c];
+
+    // 굵은 테두리로 영역 구분
+    const bT = r===0||regions[r-1][c]!==regionId ? '2px solid #333' : '1px solid #ddd';
+    const bB = r===n-1||regions[r+1][c]!==regionId ? '2px solid #333' : '1px solid #ddd';
+    const bL = c===0||regions[r][c-1]!==regionId ? '2px solid #333' : '1px solid #ddd';
+    const bR = c===n-1||regions[r][c+1]!==regionId ? '2px solid #333' : '1px solid #ddd';
+
+    grid += `<div onclick="${isFixed?'':(`selectTecto(${r},${c})`)}"
+      style="width:${cellPx}px;height:${cellPx}px;
+             background:${isSel?'var(--acc-l)':isFixed?'#f0f9ff':'white'};
+             border-top:${bT};border-bottom:${bB};border-left:${bL};border-right:${bR};
+             display:flex;align-items:center;justify-content:center;position:relative;
+             font-size:${cellPx*0.45}px;font-weight:${isFixed?700:500};
+             color:${isWrong?'#dc2626':isFixed?'var(--t)':'#2563eb'};
+             cursor:${isFixed?'default':'pointer'}">
+      <span style="position:absolute;top:2px;right:3px;font-size:9px;color:#9ca3af">${maxVal}</span>
+      ${v||''}
+    </div>`;
+  }
+  grid += '</div>';
+
+  const isComplete = userGrid.every((row,r)=>row.every((v,c)=>v===solution[r][c]));
+
+  // 입력 버튼 (현재 선택된 셀의 영역 최대값까지만)
+  let maxInput = 5;
+  if(BG.selected){
+    const [sr,sc] = BG.selected;
+    maxInput = regionSizes[regions[sr][sc]];
+  }
+
+  document.getElementById('gov-body').innerHTML = `
+    <div style="font-size:12px;color:var(--t3);text-align:center;margin-bottom:.5rem">
+      각 영역에 1~영역크기 숫자를 한 번씩 · 인접한 칸에 같은 숫자 불가
+    </div>
+    ${grid}
+    <div style="display:flex;gap:5px;justify-content:center;margin-bottom:.5rem">
+      ${Array.from({length:maxInput},(_,i)=>i+1).map(num=>
+        `<button onclick="inputTecto(${num})"
+          style="width:40px;height:40px;border-radius:8px;border:1.5px solid var(--bd);
+                 background:white;font-size:16px;font-weight:700;cursor:pointer">${num}</button>`
+      ).join('')}
+      <button onclick="inputTecto(0)"
+        style="width:40px;height:40px;border-radius:8px;border:1.5px solid var(--bd);
+               background:var(--bg2);font-size:12px;cursor:pointer">✕</button>
+    </div>
+    ${isComplete?`<div class="fb-box ok">🎉 완성!</div>
+      <div class="gbtns"><button class="gbp" style="background:#059669" onclick="startTectonic(${BG.level})">🔄 새 퍼즐</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}`;
+}
+function selectTecto(r,c){BG.selected=[r,c];renderTectonic();}
+function inputTecto(n){
+  if(!BG.selected)return;
+  const [r,c]=BG.selected;
+  BG.userGrid[r][c]=n;
+  renderTectonic();
+}
+
+// ── 3. 아쿠아리움 ──
+function startAquarium(level){
+  // 아쿠아리움: 격자에 수족관(영역) 정의, 물을 채우면 각 영역 내 물 높이 동일
+  // 행 힌트(각 행의 물 칸 수)와 열 힌트(각 열의 물 칸 수)로 결정
+  const puzzles = [
+    // 5×5
+    {size:5,
+     tanks:[ // 각 셀의 수족관 ID
+       [0,0,1,1,1],
+       [0,2,2,1,1],
+       [0,2,3,3,1],
+       [4,4,3,3,1],
+       [4,4,3,3,1],
+     ],
+     rowHints:[3,2,2,4,4],
+     colHints:[3,2,3,4,3],
+     solution:[
+       [1,0,1,1,0],
+       [1,0,1,0,0],
+       [1,0,0,1,0],
+       [0,1,0,1,1],
+       [0,1,0,1,1],
+     ],
+    },
+    {size:5,
+     tanks:[
+       [0,0,0,1,1],
+       [2,0,0,1,1],
+       [2,3,3,1,1],
+       [2,3,4,4,1],
+       [2,3,4,4,1],
+     ],
+     rowHints:[2,3,3,2,2],
+     colHints:[4,2,2,3,1],
+     solution:[
+       [0,1,1,0,0],
+       [1,1,1,0,0],
+       [1,0,1,0,1],
+       [1,0,0,1,0],
+       [1,0,0,1,0],
+     ],
+    },
+  ];
+
+  const pIdx = Math.min(Math.floor((level-1)/8), puzzles.length-1);
+  const p = puzzles[pIdx];
+  BG = {gameId:'aqua', level, puzzle:p, size:p.size,
+        userGrid:Array.from({length:p.size},()=>Array(p.size).fill(0)),
+        selected:null};
+  renderAquarium();
+}
+
+function renderAquarium(){
+  const {puzzle, userGrid, size:n} = BG;
+  const {tanks, rowHints, colHints, solution} = puzzle;
+  const cellPx = Math.min(44, Math.floor(220/n));
+  const hintW = 24;
+
+  // 유효성 검사
+  const rowOk = rowHints.map((h,r)=>userGrid[r].reduce((s,v)=>s+v,0)===h);
+  const colOk = colHints.map((h,c)=>userGrid.reduce((s,row)=>s+row[c],0)===h);
+
+  // 아쿠아리움 물 높이 규칙 검사 (같은 수족관 내 물은 아래부터 연속)
+  const tankErrors = new Set();
+  const tankCells = {};
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++){
+    const tid = tanks[r][c];
+    if(!tankCells[tid]) tankCells[tid]=[];
+    tankCells[tid].push([r,c,userGrid[r][c]]);
+  }
+  // 각 수족관: 물이 있으면 같은 행의 같은 수족관 내 물 높이 동일해야 함
+  Object.entries(tankCells).forEach(([tid,cells])=>{
+    const cols = [...new Set(cells.map(([r,c])=>c))];
+    cols.forEach(col=>{
+      const colCells = cells.filter(([r,c])=>c===col).sort((a,b)=>a[0]-b[0]);
+      // 물은 아래부터 연속해야 함
+      let filledStart = -1;
+      for(let i=colCells.length-1;i>=0;i--){
+        if(colCells[i][2]===1){
+          if(filledStart===-1) filledStart=i;
+        } else if(filledStart!==-1){
+          // 빈 칸이 물 아래에 있음 → 오류
+          colCells.slice(i+1).forEach(([r,c])=>tankErrors.add(`${r},${c}`));
+        }
+      }
+    });
+  });
+
+  // 힌트 헤더 (열)
+  let grid = `<div style="margin-left:${hintW}px;display:flex">`;
+  colHints.forEach((h,c)=>{
+    grid+=`<div style="width:${cellPx}px;text-align:center;font-size:12px;font-weight:700;
+               color:${colOk[c]?'#16a34a':'var(--t2)'}">${h}</div>`;
+  });
+  grid+='</div><div style="display:flex">';
+  // 행 힌트 열
+  grid+=`<div style="display:flex;flex-direction:column">`;
+  rowHints.forEach((h,r)=>{
+    grid+=`<div style="width:${hintW}px;height:${cellPx}px;display:flex;align-items:center;
+               justify-content:center;font-size:12px;font-weight:700;
+               color:${rowOk[r]?'#16a34a':'var(--t2)'}">${h}</div>`;
+  });
+  grid+='</div>';
+  // 격자
+  grid+=`<div style="display:grid;grid-template-columns:repeat(${n},${cellPx}px);
+    gap:0;border:2px solid var(--t);border-radius:4px">`;
+
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++){
+    const v=userGrid[r][c];
+    const tid=tanks[r][c];
+    const hasErr=tankErrors.has(`${r},${c}`);
+    const bR=c===n-1||tanks[r][c+1]!==tid?'2px solid #555':'1px solid #ddd';
+    const bB=r===n-1||tanks[r+1][c]!==tid?'2px solid #555':'1px solid #ddd';
+
+    grid+=`<div onclick="clickAqua(${r},${c})"
+      style="width:${cellPx}px;height:${cellPx}px;cursor:pointer;
+             background:${v?'#bfdbfe':hasErr?'#fee2e2':'white'};
+             border-right:${bR};border-bottom:${bB};
+             display:flex;align-items:center;justify-content:center;font-size:16px">
+      ${v?'💧':''}</div>`;
+  }
+  grid+='</div></div>';
+
+  const isWin=userGrid.every((row,r)=>row.every((v,c)=>v===solution[r][c]));
+
+  document.getElementById('gov-body').innerHTML=`
+    <div style="font-size:12px;color:var(--t3);text-align:center;margin-bottom:.5rem">
+      수족관을 물로 채우세요 · 같은 수족관 내 물은 아래부터 채워집니다
+    </div>
+    <div style="display:flex;justify-content:center">${grid}</div>
+    ${isWin?`<div class="fb-box ok" style="margin-top:.75rem">🎉 완성!</div>
+      <div class="gbtns"><button class="gbp" style="background:#0891b2" onclick="startAquarium(${BG.level})">🔄 새 퍼즐</button>
+      <button class="gbs" onclick="closeGame()">나가기</button></div>`:''}`;
+}
+function clickAqua(r,c){
+  BG.userGrid[r][c]=BG.userGrid[r][c]?0:1;
+  renderAquarium();
+}
+
+// MAP 등록
+if(typeof INDIE_GAME_MAP!=='undefined'){
+  INDIE_GAME_MAP.diagsudo=startDiagSudoku;
+  INDIE_GAME_MAP.tecto=startTectonic;
+  INDIE_GAME_MAP.aqua=startAquarium;
+}
+
+
 function closeLov(){
   document.getElementById('lov').classList.remove('open');
   document.body.style.overflow='';
@@ -1535,33 +2361,50 @@ function startLevel(catId,levelNum){
 function renderCats(){
   const grid=document.getElementById('cat-grid');
   if(!grid) return;
-  grid.innerHTML=CATS.map(c=>{
-    const saved=getSaved(c.id);
-    const doneCount=Object.keys(saved).length;
-    const isIndie=c.id&&c.id.startsWith('indie_');
-    const levels=c.levels||15;
-    const badge=isIndie
-      ?`${levels}단계`
-      :(doneCount>0?`${doneCount}/${levels}단계 완료`:`${levels}단계`);
-    const badgeStyle=doneCount>0&&!isIndie?'background:#dcfce7;color:#15803d':'';
-    const cta=isIndie?'바로 플레이 →':'레벨 선택 →';
-    const fn=c.action||`openLov('${c.id}')`;
-    const meta=isIndie?'🎮 인터랙티브':'🧩 단계별 퍼즐';
-    const prog=(!isIndie&&levels&&doneCount>0)
-      ?`<div style="margin-top:.75rem;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden">
+
+  // 그룹별로 묶기
+  const groups={};
+  CATS.forEach(c=>{
+    const g=c.group||'기타';
+    if(!groups[g]) groups[g]=[];
+    groups[g].push(c);
+  });
+
+  const groupOrder=['두뇌 퍼즐','추리 게임','숫자 격자','액션 퍼즐','논리 퍼즐','시각 게임'];
+  const groupIcons={'두뇌 퍼즐':'📚','추리 게임':'🎯','숫자 격자':'🔢','액션 퍼즐':'🎮','논리 퍼즐':'🧩','시각 게임':'🖼️'};
+
+  let html='';
+  groupOrder.forEach(gName=>{
+    const cats=groups[gName];
+    if(!cats||!cats.length) return;
+    html+=`<div class="cat-group-header">${groupIcons[gName]||''} ${gName}</div>`;
+    html+=cats.map(c=>{
+      const saved=getSaved(c.id);
+      const doneCount=Object.keys(saved).length;
+      const isIndie=c.id&&c.id.startsWith('indie_');
+      const levels=c.levels||15;
+      const badge=isIndie?`${levels}단계`:(doneCount>0?`${doneCount}/${levels}단계 완료`:`${levels}단계`);
+      const badgeStyle=doneCount>0&&!isIndie?'background:#dcfce7;color:#15803d':'';
+      const cta=isIndie?'플레이 →':'레벨 선택 →';
+      const fn=c.action||`openLov('${c.id}')`;
+      const meta=isIndie?'🎮 인터랙티브':'🧩 자동생성';
+      const prog=(!isIndie&&levels&&doneCount>0)?
+        `<div style="margin-top:.75rem;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden">
           <div style="height:100%;border-radius:2px;background:${c.color};width:${Math.round(doneCount/levels*100)}%;transition:width .4s"></div>
-        </div>`:'' ;
-    return `<div class="cat-card" onclick="${fn}">
-      <div class="cat-top"><span class="cat-icon">${c.icon}</span><span class="cat-badge" style="${badgeStyle}">${badge}</span></div>
-      <div class="cat-label">${c.label}</div>
-      <div class="cat-desc">${c.desc}</div>
-      <div class="cat-foot">
-        <span class="cat-meta">${meta}</span>
-        <span class="cat-cta" style="color:${c.color}">${cta}</span>
-      </div>
-      ${prog}
-    </div>`;
-  }).join('');
+        </div>`:'';
+      return `<div class="cat-card" onclick="${fn}">
+        <div class="cat-top"><span class="cat-icon">${c.icon}</span><span class="cat-badge" style="${badgeStyle}">${badge}</span></div>
+        <div class="cat-label">${c.label}</div>
+        <div class="cat-desc">${c.desc}</div>
+        <div class="cat-foot">
+          <span class="cat-meta">${meta}</span>
+          <span class="cat-cta" style="color:${c.color}">${cta}</span>
+        </div>
+        ${prog}
+      </div>`;
+    }).join('');
+  });
+  grid.innerHTML=html;
 }
 
 function openLov(catId){
@@ -1586,10 +2429,13 @@ function openLov(catId){
 // ── 독립 게임 레벨 선택 ──
 function openIndieLov(gameId){
   const titles={
-    sudoku:'🔢 스도쿠',wordle:'🔤 워들',abacus:'🧮 주산연습',jigsaw:'🧩 직소퍼즐',
+    sudoku:'🔢 스도쿠',wordle:'🔤 워들',abacus:'🧮 주산연습',jigsaw:'🖼️ 직소퍼즐',
     baseball:'⚾ 숫자 야구',sliding:'🔲 슬라이딩 퍼즐',hanoi:'🗼 하노이의 탑',
     euler:'✏️ 한붓그리기',magic:'🔮 마방진',monty:'🚗 몬티홀',
     cipher:'🔐 암호 해독',nono:'📋 네모네모로직',kenken:'🧮 켄켄',kakuro:'➕ 카쿠로',
+    mine:'💣 지뢰 찾기','2048':'🔢 2048',lights:'💡 라이트 끄기',
+    binary:'01 바이너리',coloring:'🎨 색칠하기',
+    diagsudo:'✳️ 대각선 스도쿠',tecto:'🧩 텍투오닉',aqua:'🐠 아쿠아리움',
   };
   const descs={
     sudoku:'Lv1~5: 4×4 · Lv6~10: 6×6 · Lv11~15: 9×9',
@@ -1598,14 +2444,22 @@ function openIndieLov(gameId){
     jigsaw:'명화 직소퍼즐 · Lv1~5: 3×3 · Lv6~10: 4×4 · Lv11~15: 5×5',
     baseball:'Lv1~5: 3자리 · Lv6~10: 4자리 · Lv11~15: 5자리',
     sliding:'Lv1~5: 3×3 · Lv6~10: 4×4 · Lv11~15: 5×5',
-    hanoi:'Lv1~15: 원판 3~7개',
+    hanoi:'원판 3~7개 · 최소 이동 횟수 도전',
     euler:'단계별 그래프 난이도 증가',
-    magic:'Lv1~5: 3×3 · Lv6~10: 4×4 · Lv11~15: 5×5',
-    monty:'확률 수렴 시뮬레이션',
-    cipher:'Lv1~15: 암호 복잡도 증가',
+    magic:'Lv1~5: 3×3 · Lv6~10: 4×4',
+    monty:'바꾸기 vs 유지하기 확률 실험',
+    cipher:'단계별 암호 복잡도 증가',
     nono:'Lv1~5: 5×5 · Lv6~10: 6×6 · Lv11~15: 7×7',
     kenken:'Lv1~5: 3×3 · Lv6~10: 4×4 · Lv11~15: 5×5',
-    kakuro:'단계별 격자 크기 증가',
+    kakuro:'가로·세로 합을 맞추는 숫자 크로스워드',
+    mine:'Lv1~5: 6×6 · Lv6~10: 9×9 · Lv11~15: 10×10',
+    '2048':'Lv1~5: 목표 2048 · Lv6~10: 4096 · Lv11~15: 8192',
+    lights:'Lv1~5: 3×3 · Lv6~10: 4×4 · Lv11~15: 5×5',
+    binary:'0과 1의 논리 배열 퍼즐',
+    coloring:'최소 색상으로 지도 색칠하기',
+    diagsudo:'일반 스도쿠 + 대각선 조건 추가',
+    tecto:'영역별 숫자 배치 · 인접 불가',
+    aqua:'수족관 물 채우기 논리 퍼즐',
   };
   const DIFF=['','입문','입문','초급','초급','초급','중급','중급','중급','고급','고급','고급','심화','심화','심화','전문'];
   document.getElementById('lov-title').textContent=titles[gameId]||gameId;
@@ -1630,7 +2484,7 @@ function openIndieGame(gameId,level){
   else if(gameId==='wordle') startWordleLevel(level);
   else if(gameId==='abacus') startAbacusSession(level);
   else if(gameId==='jigsaw') startJigsawLevel(level);
-  else if(INDIE_GAME_MAP[gameId]) INDIE_GAME_MAP[gameId](level);
+  else if(typeof INDIE_GAME_MAP!=='undefined'&&INDIE_GAME_MAP[gameId]) INDIE_GAME_MAP[gameId](level);
 }
 
 
