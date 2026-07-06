@@ -1072,7 +1072,7 @@ function startMagicSquare(level){
 function renderMagicSquare(){
   const {size,grid,magic,blanks,userGrid,selected} = BG;
   const cellPx=Math.min(65,Math.floor(260/size));
-  let g=`<div style="display:grid;grid-template-columns:repeat(${size},${cellPx}px);gap:3px;margin:0 auto 1rem;width:fit-content">`;
+  let g=`<div id="magic-grid" style="display:grid;grid-template-columns:repeat(${size},${cellPx}px);gap:3px;margin:0 auto 1rem;width:fit-content">`;
   grid.flat().forEach((v,i)=>{
     const isBlank=blanks.includes(i);
     const userV=userGrid[Math.floor(i/size)][i%size];
@@ -1106,8 +1106,8 @@ function renderMagicSquare(){
         style="flex:1;padding:.6rem .75rem;border-radius:8px;border:2px solid var(--acc);
                font-family:inherit;font-size:18px;font-weight:700;text-align:center;
                outline:none;color:var(--acc)"
-        onkeydown="if(event.key==='Enter')confirmMagic()"
-        oninput="confirmMagic()">
+        onkeydown="if(event.key==='Enter'){confirmMagic();this.select();}"
+        onblur="confirmMagic()">
       <button onclick="clearMagic()"
         style="padding:.6rem .9rem;border-radius:8px;border:1.5px solid var(--bd);
                background:var(--bg2);font-size:14px;cursor:pointer">✕</button>
@@ -1137,9 +1137,41 @@ function confirmMagic(){
   if(!inp)return;
   const n=parseInt(inp.value)||0;
   BG.userGrid[Math.floor(BG.selected/BG.size)][BG.selected%BG.size]=n;
-  renderMagicSquare();
-  setTimeout(()=>inp&&inp.focus(),20);
+  // 입력창은 유지하고, 격자만 업데이트
+  const grid=document.getElementById('magic-grid');
+  if(grid){
+    // 선택된 칸의 표시만 업데이트
+    const cells=grid.querySelectorAll('.magic-cell');
+    if(cells[BG.selected]){
+      cells[BG.selected].textContent=n||'?';
+    }
+  } else {
+    renderMagicSquare();
+  }
+  // 완성 체크
+  checkMagicWin();
 }
+
+function checkMagicWin(){
+  const {size, userGrid, magic, blanks} = BG;
+  if(!blanks.every(i=>userGrid[Math.floor(i/size)][i%size]>0)) return;
+  let allCorrect=true;
+  for(let r=0;r<size;r++){
+    if(userGrid[r].reduce((s,v)=>s+v,0)!==magic){allCorrect=false;break;}
+    if(Array.from({length:size},(_,i)=>userGrid[i][r]).reduce((s,v)=>s+v,0)!==magic){allCorrect=false;break;}
+  }
+  if(allCorrect){
+    // 대각선 체크
+    const d1=Array.from({length:size},(_,i)=>userGrid[i][i]).reduce((s,v)=>s+v,0);
+    const d2=Array.from({length:size},(_,i)=>userGrid[i][size-1-i]).reduce((s,v)=>s+v,0);
+    if(d1!==magic||d2!==magic) allCorrect=false;
+  }
+  if(allCorrect){
+    // 완성 화면 표시
+    renderMagicSquare();
+  }
+}
+
 function clearMagic(){
   if(BG.selected===null)return;
   BG.userGrid[Math.floor(BG.selected/BG.size)][BG.selected%BG.size]=0;
