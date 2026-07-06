@@ -105,13 +105,24 @@ nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,.96);backdrop-
 .lov-x:hover{background:var(--bg2)}
 .lov-body{padding:1.25rem 1.5rem}
 .lv-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.lv-btn{aspect-ratio:1;border-radius:12px;border:1.5px solid var(--bd);background:white;
-        cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--t2);
-        transition:all .15s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
-.lv-btn:hover{border-color:var(--acc);background:var(--acc-l);color:var(--acc)}
-.lv-btn .lv-n{font-size:18px;font-weight:700}
-.lv-btn .lv-d{font-size:10px;font-weight:400}
-.lv-info{margin-bottom:1rem;padding:.75rem 1rem;background:var(--bg2);border-radius:10px;font-size:13px;color:var(--t2)}
+.lv-btn{aspect-ratio:1;border-radius:16px;border:none;
+        background:white;
+        cursor:pointer;font-family:inherit;
+        transition:all .18s cubic-bezier(.34,1.56,.64,1);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+        box-shadow:0 2px 8px rgba(0,0,0,.07);position:relative;overflow:hidden}
+.lv-btn:hover{transform:translateY(-3px) scale(1.04);
+              box-shadow:0 8px 24px rgba(124,58,237,.22)}
+.lv-btn:active{transform:scale(.96)}
+.lv-n{font-size:22px;font-weight:800;color:var(--t);line-height:1;
+       background:linear-gradient(135deg,var(--acc),#2563eb);
+       -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.lv-d{font-size:10px;font-weight:600;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
+.lv-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.lv-info{margin-bottom:1rem;padding:1rem 1.25rem;
+         background:linear-gradient(135deg,var(--acc-l),#eff6ff);
+         border-radius:12px;font-size:13px;color:var(--t2);
+         border-left:3px solid var(--acc)}
 
 /* PUZZLE GAME OVERLAY (z:300) */
 .gov{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:1rem}
@@ -1089,7 +1100,7 @@ function renderMagicSquare(){
         style="width:36px;height:36px;border-radius:7px;border:1.5px solid var(--bd);
                background:var(--bg2);font-size:12px;cursor:pointer">✕</button>
     </div>
-    ${allCorrect&&!blanks.some(i=>!userGrid[Math.floor(i/size)][i%size])?`
+    ${allCorrect&&blanks.every(i=>userGrid[Math.floor(i/size)][i%size]>0)?`
       <div class="fb-box ok">🎉 완성!</div>
       <div class="gbtns">
         <button class="gbp" style="background:var(--acc)" onclick="startMagicSquare(${BG.level})">🔄 새 문제</button>
@@ -2349,6 +2360,16 @@ if(typeof INDIE_GAME_MAP!=='undefined'){
 }
 
 
+
+function toggleLovRule(){
+  const box=document.getElementById('rule-box');
+  const btn=document.getElementById('rule-btn');
+  if(!box)return;
+  const isOpen=box.style.display!=='none';
+  box.style.display=isOpen?'none':'block';
+  btn.textContent=isOpen?'❓ 규칙':'✕ 닫기';
+}
+
 function closeLov(){
   document.getElementById('lov').classList.remove('open');
   document.body.style.overflow='';
@@ -2452,7 +2473,24 @@ function openLov(catId){
   const levels=meta.levels||15;
   const DIFF=['','입문','입문','초급','초급','초급','중급','중급','중급','고급','고급','고급','심화','심화','심화','전문'];
   document.getElementById('lov-title').textContent=`${meta.icon} ${meta.label}`;
-  document.getElementById('lv-info').innerHTML=`<strong>${meta.label}</strong> — ${levels}단계${meta.autoGen?' (자동생성)':''}`;
+  const catRules={
+    '01_number':'수열의 규칙을 찾아 빈칸을 채우세요. 등차수열, 등비수열, 피보나치 등 다양한 패턴이 출제됩니다.',
+    '04_probability':'경우의 수와 확률을 계산하세요. 조건부 확률, 기댓값, 독립사건 등이 포함됩니다.',
+    '06_pattern':'숫자나 기호의 숨겨진 규칙을 발견하세요. 교차수열, 삼각수, 복합 규칙 등이 출제됩니다.',
+    '02_logic':'주어진 조건을 분석해 반드시 참인 결론을 추론하세요. 집합, 명제, 대우 등이 포함됩니다.',
+    '05_spatial':'도형을 머릿속에서 회전·반사·변환해 정답을 고르세요. 4지선다 이미지 선택형입니다.',
+  };
+  const ruleForCat=catRules[catId]||'';
+  document.getElementById('lv-info').innerHTML=`
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div><strong>${meta.label}</strong> — ${levels}단계${meta.autoGen?' (자동생성)':''}</div>
+      ${ruleForCat?`<button onclick="toggleLovRule()" id="rule-btn"
+        style="flex-shrink:0;padding:4px 10px;border-radius:8px;border:1.5px solid var(--acc);
+               background:var(--acc-l);color:var(--acc);font-size:12px;font-weight:600;cursor:pointer;
+               font-family:inherit">❓ 규칙</button>`:''}
+    </div>
+    ${ruleForCat?`<div id="rule-box" style="display:none;margin-top:.75rem;padding:.75rem;
+      background:white;border-radius:8px;font-size:12px;line-height:1.8;color:var(--t2)">${ruleForCat}</div>`:''}`;
   document.getElementById('lv-grid').innerHTML=Array.from({length:levels},(_,i)=>i+1).map(lv=>`
     <button class="lv-btn" onclick="startLevel('${catId}',${lv})">
       <span class="lv-n">${lv}</span>
@@ -2497,9 +2535,46 @@ function openIndieLov(gameId){
     tecto:'영역별 숫자 배치 · 인접 불가',
     aqua:'수족관 물 채우기 논리 퍼즐',
   };
+  const rules={
+    sudoku:'각 행·열·3×3 박스에 1~9 숫자가 정확히 한 번씩 등장해야 합니다. 주어진 숫자를 단서로 나머지를 채우세요.',
+    diagsudo:'일반 스도쿠 규칙 + 두 대각선(↘ ↙)에도 숫자가 한 번씩만 등장해야 합니다. 노란 칸이 대각선입니다.',
+    wordle:'4~6글자 한국어 단어를 6번 안에 맞히세요. 🟩 자리·숫자 모두 맞음, 🟨 숫자만 맞음, ⬜ 없음.',
+    baseball:'중복 없는 3~5자리 숫자를 10번 안에 맞히세요. S(스트라이크): 자리·숫자 모두 맞음 / B(볼): 숫자만 맞음.',
+    cipher:'암호화된 한글 문장에서 각 글자는 유니코드 값이 일정량 이동됩니다. 힌트를 보고 원래 문장을 복원하세요.',
+    mine:'숫자는 인접한 8칸의 지뢰 수를 나타냅니다. 숫자를 단서로 지뢰를 피하고 모든 빈 칸을 여세요. 우클릭으로 깃발.',
+    kenken:'각 행·열에 1~N이 한 번씩. 굵은 테두리 영역의 계산(+−×÷)도 맞아야 합니다.',
+    kakuro:'빈 칸에 1~9를 넣어 가로·세로 합을 힌트 숫자와 같게 만드세요. 같은 줄에 같은 숫자 중복 불가.',
+    nono:'각 행·열의 숫자는 해당 줄에서 연속으로 채워진 칸의 수를 순서대로 나타냅니다.',
+    magic:'모든 행·열·대각선의 합이 같아지도록 빈 칸을 채우세요. 각 숫자는 한 번씩만 사용합니다.',
+    binary:'각 행·열에 0과 1이 같은 수만큼, 같은 숫자가 3개 이상 연속으로 나오면 안 됩니다.',
+    '2048':'방향키(또는 버튼)로 타일을 밀어 같은 숫자끼리 합치세요. 목표 숫자를 달성하면 승리!',
+    sliding:'빈 칸을 이용해 타일을 밀어 1부터 순서대로 정렬하세요.',
+    hanoi:'큰 원판 위에 작은 원판을 올릴 수 없습니다. 모든 원판을 다른 기둥으로 옮기세요.',
+    euler:'모든 선을 정확히 한 번씩 지나는 경로를 찾으세요. 노드를 클릭해 경로를 이어갑니다.',
+    lights:'클릭하면 해당 칸과 상하좌우 인접 칸의 빛이 켜지거나 꺼집니다. 모든 불을 끄세요.',
+    coloring:'인접한 두 영역이 같은 색이 되지 않도록 색칠하세요. 최소 색상으로 완성하세요.',
+    tecto:'각 영역에 1~영역크기의 숫자를 한 번씩. 인접한 칸(상하좌우)에 같은 숫자 불가.',
+    aqua:'수족관에 물을 채우세요. 같은 수족관 내 물은 아래부터 연속으로 채워집니다. 행·열 힌트에 맞춰야 합니다.',
+    monty:'문을 선택한 후 사회자가 염소 문을 열어줍니다. 선택을 바꿀지 유지할지 결정하고 확률을 실험하세요.',
+    abacus:'제시된 수식을 계산해 정답을 입력하세요. 틀려도 계속 풀 수 있습니다.',
+    jigsaw:'조각을 드래그해 올바른 위치에 맞추세요. 명화를 완성해보세요.',
+  };
   const DIFF=['','입문','입문','초급','초급','초급','중급','중급','중급','고급','고급','고급','심화','심화','심화','전문'];
   document.getElementById('lov-title').textContent=titles[gameId]||gameId;
-  document.getElementById('lv-info').innerHTML=`<strong>${titles[gameId]}</strong><br><span style="font-size:12px;color:var(--t3)">${descs[gameId]||''}</span>`;
+  const ruleText=rules[gameId]||'';
+  document.getElementById('lv-info').innerHTML=`
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem">
+      <div>
+        <strong style="font-size:14px">${titles[gameId]}</strong>
+        <div style="font-size:11px;color:var(--t3);margin-top:.2rem">${descs[gameId]||''}</div>
+      </div>
+      ${ruleText?`<button onclick="toggleLovRule()" id="rule-btn"
+        style="flex-shrink:0;padding:4px 10px;border-radius:8px;border:1.5px solid var(--acc);
+               background:var(--acc-l);color:var(--acc);font-size:12px;font-weight:600;cursor:pointer;
+               font-family:inherit">❓ 규칙</button>`:''}
+    </div>
+    ${ruleText?`<div id="rule-box" style="display:none;margin-top:.75rem;padding:.75rem;
+      background:white;border-radius:8px;font-size:12px;line-height:1.8;color:var(--t2)">${ruleText}</div>`:''}`;
   document.getElementById('lv-grid').innerHTML=Array.from({length:15},(_,i)=>i+1).map(lv=>`
     <button class="lv-btn" onclick="openIndieGame('${gameId}',${lv})">
       <span class="lv-n">${lv}</span>
