@@ -687,7 +687,7 @@ const CATS = [
   {id:'indie_tecto',    icon:'🧩', label:'텍투오닉',    desc:'영역별 1~N 숫자를 인접 규칙에 맞게 배치하세요.',   color:'#059669',    levels:15, action:"openIndieLov('tecto')",    group:'논리 퍼즐'},
   {id:'indie_aqua',     icon:'🐠', label:'아쿠아리움',  desc:'수족관 물 높이를 힌트에 맞게 채우세요.',            color:'#0891b2',    levels:15, action:"openIndieLov('aqua')",     group:'논리 퍼즐'},
   // ── 시각/창작 ──
-  {id:'indie_jigsaw',   icon:'🖼️', label:'직소퍼즐',   desc:'명화를 조각으로 맞추어 완성하세요.',                color:'#d97706',    levels:15, action:"openIndieLov('jigsaw')",   group:'시각 게임'},
+  {id:'indie_jigsaw',   icon:'🖼️', label:'직소퍼즐',   desc:'명화를 조각으로 맞추어 완성하세요.',                color:'#d97706',    levels:20, action:"openIndieLov('jigsaw')",   group:'시각 게임'},
   {id:'indie_abacus',   icon:'🧮', label:'주산연습',    desc:'단계별 암산 훈련으로 계산 속도를 높이세요.',        color:'#7c3aed',    levels:15, action:"openIndieLov('abacus')",   group:'시각 게임'},
   {id:'indie_monty',    icon:'🚗', label:'몬티홀',      desc:'확률적 직관을 실험으로 검증하는 시뮬레이션.',        color:'#16a34a',    levels:15, action:"openIndieLov('monty')",    group:'시각 게임'},
 ];
@@ -2635,7 +2635,7 @@ function openIndieLov(gameId){
     sudoku:'Lv1~5: 4×4 · Lv6~10: 6×6 · Lv11~15: 9×9',
     wordle:'Lv1~5: 4글자 · Lv6~10: 5글자 · Lv11~15: 6글자',
     abacus:'단계별 암산 훈련 · 자동 생성 무제한',
-    jigsaw:'명화 직소퍼즐 · Lv1~5: 3×3 · Lv6~10: 4×4 · Lv11~15: 5×5',
+    jigsaw:'명화 직소퍼즐 · 20단계 (최대 20×20=400조각) · 타이머 도전',
     baseball:'Lv1~5: 3자리 · Lv6~10: 4자리 · Lv11~15: 5자리',
     sliding:'Lv1~5: 3×3 · Lv6~10: 4×4 · Lv11~15: 5×5',
     hanoi:'원판 3~7개 · 최소 이동 횟수 도전',
@@ -3561,255 +3561,514 @@ function nextAbacusGame(){BG.idx++;renderAbacusGame();}
 // ═══════════════════════════════════
 
 // 퍼블릭 도메인 명화 15개 (Wikimedia Commons)
+// ═══════════════════════════════════════════════════════
+// 직소퍼즐 v3 — Canvas 기반, 마우스 드래그, 명화, 고난이도
+// ═══════════════════════════════════════════════════════
+
+// 명화 15점 (Wikimedia Commons 안정 URL)
 const MASTERPIECES = [
-  {id:1,  name:'별이 빛나는 밤',      artist:'반 고흐',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/640px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'},
-  {id:2,  name:'아이리스',            artist:'반 고흐',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Irises-Vincent_van_Gogh.jpg/640px-Irises-Vincent_van_Gogh.jpg'},
-  {id:3,  name:'진주 귀걸이를 한 소녀',artist:'페르메이르',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/480px-1665_Girl_with_a_Pearl_Earring.jpg'},
-  {id:4,  name:'모나리자',            artist:'다 빈치',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/480px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg'},
-  {id:5,  name:'절규',               artist:'뭉크',         url:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/471px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg'},
-  {id:6,  name:'수련',               artist:'모네',         url:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg/640px-Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg'},
-  {id:7,  name:'인상, 해돋이',        artist:'모네',         url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Monet_-_Impression%2C_Sunrise.jpg/640px-Monet_-_Impression%2C_Sunrise.jpg'},
-  {id:8,  name:'아테네 학당',         artist:'라파엘로',     url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/640px-%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg'},
-  {id:9,  name:'자유의 여신',         artist:'들라크루아',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg/547px-Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg'},
-  {id:10, name:'야경',               artist:'렘브란트',     url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Rembrandt_van_Rijn_-_De_Nachtwacht_-_Google_Art_Project.jpg/640px-Rembrandt_van_Rijn_-_De_Nachtwacht_-_Google_Art_Project.jpg'},
-  {id:11, name:'비너스의 탄생',       artist:'보티첼리',     url:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/640px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg'},
-  {id:12, name:'그랑드 자트의 일요일', artist:'쇠라',         url:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884-86.jpg/640px-A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884-86.jpg'},
-  {id:13, name:'진주 목걸이',         artist:'페르메이르',   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Vermeer_-_Woman_with_a_Pearl_Necklace.jpg/447px-Vermeer_-_Woman_with_a_Pearl_Necklace.jpg'},
-  {id:14, name:'씨 뿌리는 사람',      artist:'반 고흐',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/The_Sower.jpg/640px-The_Sower.jpg'},
-  {id:15, name:'붓꽃',               artist:'반 고흐',      url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Irises-Vincent_van_Gogh.jpg/640px-Irises-Vincent_van_Gogh.jpg'},
+  {id:1,  name:'별이 빛나는 밤',      artist:'반 고흐',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/600px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'},
+  {id:2,  name:'아이리스',            artist:'반 고흐',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Irises-Vincent_van_Gogh.jpg/600px-Irises-Vincent_van_Gogh.jpg'},
+  {id:3,  name:'진주 귀걸이를 한 소녀',artist:'페르메이르',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/450px-1665_Girl_with_a_Pearl_Earring.jpg'},
+  {id:4,  name:'모나리자',            artist:'다 빈치',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/402px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg'},
+  {id:5,  name:'절규',               artist:'뭉크',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/450px-Edvard_Munch%2C_1893%2C_The_Scream.jpg'},
+  {id:6,  name:'수련',               artist:'모네',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg/600px-Claude_Monet_-_Water_Lilies_-_1906%2C_Ryerson.jpg'},
+  {id:7,  name:'인상 해돋이',         artist:'모네',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Monet_-_Impression%2C_Sunrise.jpg/600px-Monet_-_Impression%2C_Sunrise.jpg'},
+  {id:8,  name:'아테네 학당',         artist:'라파엘로',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/600px-The_School_of_Athens.jpg'},
+  {id:9,  name:'자유의 여신',         artist:'들라크루아',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg/500px-Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg'},
+  {id:10, name:'야경',               artist:'렘브란트',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Rembrandt_van_Rijn_-_De_Nachtwacht_-_Google_Art_Project.jpg/600px-Rembrandt_van_Rijn_-_De_Nachtwacht.jpg'},
+  {id:11, name:'비너스의 탄생',       artist:'보티첼리',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/600px-Sandro_Botticelli_-_La_nascita_di_Venere.jpg'},
+  {id:12, name:'그랑드 자트의 일요일', artist:'쇠라',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/A_Sunday_on_La_Grande_Jatte%2C_Georges_Seurat%2C_1884-86.jpg/600px-A_Sunday_on_La_Grande_Jatte.jpg'},
+  {id:13, name:'진주 목걸이',         artist:'페르메이르',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Vermeer_-_Woman_with_a_Pearl_Necklace.jpg/400px-Vermeer_-_Woman_with_a_Pearl_Necklace.jpg'},
+  {id:14, name:'씨 뿌리는 사람',      artist:'반 고흐',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/The_Sower.jpg/600px-The_Sower.jpg'},
+  {id:15, name:'최후의 만찬',         artist:'다 빈치',
+   url:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/%C3%9Altima_Cena_-_Da_Vinci_5.jpg/600px-%C3%9Altima_Cena_-_Da_Vinci_5.jpg'},
 ];
 
-// ── 퍼즐 조각 SVG 클립패스 생성 ──
-// 각 조각은 "탭(볼록)"과 "슬롯(오목)" 연결부를 가짐
-function generatePuzzlePath(col, row, cols, rows, cellW, cellH, tabs){
-  // tabs: {top, right, bottom, left} 각 1=볼록, -1=오목, 0=직선(가장자리)
-  const x=0, y=0, w=cellW, h=cellH;
-  const tab=0.3; // 탭 크기 비율
-  const curve=0.2;
-  const cx=w/2, cy=h/2;
+// 레벨별 설정 (20레벨 확장)
+const JIGSAW_LEVELS = [
+  {n:2, label:'2×2',   pieces:4,   time:60},   // 1
+  {n:3, label:'3×3',   pieces:9,   time:120},  // 2
+  {n:3, label:'3×3',   pieces:9,   time:90},   // 3
+  {n:4, label:'4×4',   pieces:16,  time:150},  // 4
+  {n:4, label:'4×4',   pieces:16,  time:120},  // 5
+  {n:5, label:'5×5',   pieces:25,  time:200},  // 6
+  {n:5, label:'5×5',   pieces:25,  time:150},  // 7
+  {n:6, label:'6×6',   pieces:36,  time:240},  // 8
+  {n:6, label:'6×6',   pieces:36,  time:180},  // 9
+  {n:7, label:'7×7',   pieces:49,  time:300},  // 10
+  {n:7, label:'7×7',   pieces:49,  time:240},  // 11
+  {n:8, label:'8×8',   pieces:64,  time:360},  // 12
+  {n:9, label:'9×9',   pieces:81,  time:420},  // 13
+  {n:10,label:'10×10', pieces:100, time:480},  // 14
+  {n:12,label:'12×12', pieces:144, time:600},  // 15
+  {n:12,label:'12×12', pieces:144, time:480},  // 16
+  {n:14,label:'14×14', pieces:196, time:720},  // 17
+  {n:15,label:'15×15', pieces:225, time:840},  // 18
+  {n:18,label:'18×18', pieces:324, time:1200}, // 19
+  {n:20,label:'20×20', pieces:400, time:1500}, // 20
+];
 
-  let path=`M ${x},${y} `;
+// openIndieLov에서 jigsaw를 20단계로 표시하기 위해 오버라이드
+function getJigsawLevelCount(){ return 20; }
 
-  // 위쪽
-  if(tabs.top===0){
-    path+=`L ${x+w},${y} `;
-  } else {
-    const d=tabs.top;
-    path+=`L ${cx-w*0.2},${y} `;
-    path+=`C ${cx-w*0.2},${y+d*h*tab*-0.5} ${cx+w*0.2},${y+d*h*tab*-0.5} ${cx+w*0.2},${y} `;
-    path+=`L ${x+w},${y} `;
-  }
+// ── 직소퍼즐 v3 메인 ──
+function startJigsawLevel(level){
+  const cfg = JIGSAW_LEVELS[Math.min(level-1, JIGSAW_LEVELS.length-1)];
+  const n = cfg.n;
+  const painting = MASTERPIECES[(level-1) % MASTERPIECES.length];
 
-  // 오른쪽
-  if(tabs.right===0){
-    path+=`L ${x+w},${y+h} `;
-  } else {
-    const d=tabs.right;
-    path+=`L ${x+w},${cy-h*0.2} `;
-    path+=`C ${x+w+d*w*tab*0.5},${cy-h*0.2} ${x+w+d*w*tab*0.5},${cy+h*0.2} ${x+w},${cy+h*0.2} `;
-    path+=`L ${x+w},${y+h} `;
-  }
+  BG = {
+    gameId:'jigsaw', level, n, cfg, painting,
+    pieces:[], dragPiece:null, dragOffX:0, dragOffY:0,
+    timer:cfg.time, timerInterval:null,
+    solved:0, _streak:BG._streak||0
+  };
 
-  // 아래쪽 (역방향)
-  if(tabs.bottom===0){
-    path+=`L ${x},${y+h} `;
-  } else {
-    const d=tabs.bottom;
-    path+=`L ${cx+w*0.2},${y+h} `;
-    path+=`C ${cx+w*0.2},${y+h+d*h*tab*0.5} ${cx-w*0.2},${y+h+d*h*tab*0.5} ${cx-w*0.2},${y+h} `;
-    path+=`L ${x},${y+h} `;
-  }
-
-  // 왼쪽 (역방향)
-  if(tabs.left===0){
-    path+=`L ${x},${y} `;
-  } else {
-    const d=tabs.left;
-    path+=`L ${x},${cy+h*0.2} `;
-    path+=`C ${x-d*w*tab*0.5},${cy+h*0.2} ${x-d*w*tab*0.5},${cy-h*0.2} ${x},${cy-h*0.2} `;
-    path+=`L ${x},${y} `;
-  }
-
-  path+='Z';
-  return path;
+  renderJigsawV3();
 }
 
-// 퍼즐 탭 구조 생성
-function generatePuzzleTabs(n){
-  // n×n 그리드의 각 조각 탭 방향 결정
-  // 인접한 조각끼리 반대 방향
-  const hTabs=Array.from({length:n},()=>Array(n-1).fill(0));
-  const vTabs=Array.from({length:n-1},()=>Array(n).fill(0));
+function renderJigsawV3(){
+  const {painting, cfg, level} = BG;
+  const n = cfg.n;
 
-  for(let r=0;r<n;r++)
-    for(let c=0;c<n-1;c++)
-      hTabs[r][c]=(Math.random()>0.5?1:-1);
+  document.getElementById('gov-body').innerHTML = `
+    <div style="text-align:center;margin-bottom:.5rem">
+      <div style="font-size:14px;font-weight:700">${painting.name}</div>
+      <div style="font-size:11px;color:var(--t3)">${painting.artist} · ${cfg.label} (${cfg.pieces}조각) · Lv.${level}</div>
+    </div>
+    <div id="jig-loading" style="text-align:center;padding:2rem;color:var(--t3);font-size:13px">
+      🖼️ 명화 불러오는 중...
+    </div>
+    <canvas id="jig-canvas" style="display:none;border-radius:8px;cursor:grab;touch-action:none"></canvas>
+    <div id="jig-hud" style="display:none;margin-top:.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .75rem;
+                  background:var(--bg2);border-radius:8px;font-size:13px">
+        <span id="jig-progress">0/${cfg.pieces} 완료</span>
+        <span id="jig-timer" style="font-weight:700;color:var(--acc)">${formatTime(cfg.time)}</span>
+        <button onclick="showJigsawRef()" style="padding:3px 8px;border-radius:6px;border:1px solid var(--bd);
+                background:white;font-size:11px;cursor:pointer">🔍 원본 보기</button>
+      </div>
+      <div id="jig-ref" style="display:none;margin-top:.4rem;text-align:center">
+        <img src="${painting.url}" style="max-height:120px;border-radius:6px;opacity:.8">
+      </div>
+    </div>`;
 
-  for(let r=0;r<n-1;r++)
-    for(let c=0;c<n;c++)
-      vTabs[r][c]=(Math.random()>0.5?1:-1);
+  // 이미지 로드 후 Canvas 초기화
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => initJigsawCanvas(img);
+  img.onerror = () => {
+    document.getElementById('jig-loading').textContent = '⚠️ 이미지 로드 실패. 다른 레벨을 선택해주세요.';
+  };
+  img.src = painting.url;
+}
 
-  // 각 조각의 탭 {top,right,bottom,left}
-  const tabs=[];
+function formatTime(s){ return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+
+function showJigsawRef(){
+  const ref = document.getElementById('jig-ref');
+  if(ref) ref.style.display = ref.style.display==='none'?'block':'none';
+}
+
+function initJigsawCanvas(img){
+  const {n, cfg} = BG;
+  const canvas = document.getElementById('jig-canvas');
+  if(!canvas) return;
+
+  // 캔버스 크기 설정
+  const maxW = Math.min(360, window.innerWidth - 80);
+  const cellSize = Math.floor(maxW / n);
+  const boardW = cellSize * n;
+  const boardH = cellSize * n;
+  // 트레이 포함 전체 높이
+  const trayH = Math.ceil(n*n / Math.floor(maxW/60)) * 65 + 20;
+  const totalH = boardH + 12 + trayH;
+
+  canvas.width = maxW;
+  canvas.height = totalH;
+  canvas.style.width = maxW + 'px';
+  canvas.style.height = totalH + 'px';
+  canvas.style.display = 'block';
+  canvas.style.margin = '0 auto';
+
+  document.getElementById('jig-loading').style.display = 'none';
+  document.getElementById('jig-hud').style.display = 'block';
+
+  BG.canvas = canvas;
+  BG.ctx = canvas.getContext('2d');
+  BG.img = img;
+  BG.cellSize = cellSize;
+  BG.boardW = boardW;
+  BG.boardH = boardH;
+  BG.trayY = boardH + 12;
+
+  // 조각 생성
+  createJigsawPieces();
+  drawJigsaw();
+  startJigsawTimer();
+
+  // 이벤트 리스너
+  canvas.addEventListener('mousedown', onJigMouseDown);
+  canvas.addEventListener('mousemove', onJigMouseMove);
+  canvas.addEventListener('mouseup', onJigMouseUp);
+  canvas.addEventListener('mouseleave', onJigMouseUp);
+  // 터치
+  canvas.addEventListener('touchstart', e=>{ e.preventDefault(); onJigMouseDown(e.touches[0]); }, {passive:false});
+  canvas.addEventListener('touchmove', e=>{ e.preventDefault(); onJigMouseMove(e.touches[0]); }, {passive:false});
+  canvas.addEventListener('touchend', e=>{ e.preventDefault(); onJigMouseUp(e.changedTouches[0]); }, {passive:false});
+}
+
+function createJigsawPieces(){
+  const {n, cellSize, boardW, boardH} = BG;
+  const trayY = boardH + 12;
+  const trayItemSize = Math.min(55, Math.floor(boardW / Math.ceil(n*n/5)));
+  const perRow = Math.floor(boardW / (trayItemSize + 8));
+
+  BG.pieces = [];
   for(let r=0;r<n;r++){
     for(let c=0;c<n;c++){
-      tabs.push({
-        top:    r===0?0:vTabs[r-1][c]*-1,  // 위 조각의 아래탭 반대
-        right:  c===n-1?0:hTabs[r][c],
-        bottom: r===n-1?0:vTabs[r][c],
-        left:   c===0?0:hTabs[r][c-1]*-1,  // 왼 조각의 오른탭 반대
+      const idx = r*n+c;
+      // 트레이 위치
+      const trayCol = idx % perRow;
+      const trayRow = Math.floor(idx / perRow);
+      const tx = trayCol*(trayItemSize+8) + 4;
+      const ty = trayY + trayRow*(trayItemSize+8) + 4;
+
+      BG.pieces.push({
+        id: idx, r, c,
+        // 현재 위치 (트레이에서 섞인 상태)
+        x: tx, y: ty,
+        size: trayItemSize,
+        placed: false,
+        // 정답 위치
+        targetX: c*cellSize, targetY: r*cellSize,
       });
     }
   }
-  return tabs;
+  // 트레이에서 순서 섞기
+  const trayPieces = [...BG.pieces];
+  for(let i=trayPieces.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [trayPieces[i].x, trayPieces[j].x] = [trayPieces[j].x, trayPieces[i].x];
+    [trayPieces[i].y, trayPieces[j].y] = [trayPieces[j].y, trayPieces[i].y];
+  }
 }
 
-// ── 직소퍼즐 게임 함수 ──
-function startJigsawLevel(level){
-  const painting = MASTERPIECES[level-1] || MASTERPIECES[0];
-  const n = level<=5?3 : level<=10?4 : 5;
-  const totalPieces = n*n;
-  const tabs = generatePuzzleTabs(n);
+function drawJigsaw(){
+  const {ctx, canvas, n, cellSize, boardW, boardH, pieces, img, trayY, dragPiece} = BG;
+  if(!ctx) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 조각 배열 (r,c 좌표 + 탭 정보)
-  const pieces = [];
-  for(let r=0;r<n;r++)
-    for(let c=0;c<n;c++)
-      pieces.push({id:r*n+c, r, c, tabs:tabs[r*n+c]});
+  // 보드 배경
+  ctx.fillStyle = '#e5e7eb';
+  ctx.beginPath();
+  ctx.roundRect(0, 0, boardW, boardH, 8);
+  ctx.fill();
 
-  const shuffled = [...pieces].sort(()=>Math.random()-.5);
-  BG = {gameId:'jigsaw', level, painting, n, pieces, shuffled,
-        placed:Array(n*n).fill(null), dragId:null, start:Date.now()};
-  renderJigsawGame();
+  // 보드 격자선
+  ctx.strokeStyle = '#d1d5db';
+  ctx.lineWidth = 1;
+  for(let i=0;i<=n;i++){
+    ctx.beginPath();
+    ctx.moveTo(i*cellSize, 0); ctx.lineTo(i*cellSize, boardH); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, i*cellSize); ctx.lineTo(boardW, i*cellSize); ctx.stroke();
+  }
+
+  // 완성된 칸 표시
+  pieces.filter(p=>p.placed).forEach(p=>{
+    drawPieceOnBoard(p);
+  });
+
+  // 트레이 배경
+  ctx.fillStyle = '#f3f4f6';
+  ctx.beginPath();
+  ctx.roundRect(0, trayY-4, boardW, canvas.height-trayY+4, 8);
+  ctx.fill();
+
+  // 트레이 조각들 (드래그 중인 것 제외, 마지막에 그리기)
+  pieces.filter(p=>!p.placed && p!==dragPiece).forEach(p=>{
+    drawPieceInTray(p);
+  });
+
+  // 드래그 중인 조각 (맨 위에)
+  if(dragPiece && !dragPiece.placed){
+    drawPieceInTray(dragPiece, true);
+  }
 }
 
-function renderJigsawGame(){
-  const {painting, n, placed, shuffled} = BG;
-  const boardSize = Math.min(280, Math.floor((window.innerWidth||800)*0.7));
-  const cellW = Math.floor(boardSize/n);
-  const cellH = cellW;
-  const totalW = cellW*n, totalH = cellH*n;
-  const isComplete = placed.every((p,i)=>p&&p.id===i);
+function drawPieceOnBoard(p){
+  const {ctx, img, n, cellSize, boardW, boardH} = BG;
+  const sx = (p.c/n)*img.width;
+  const sy = (p.r/n)*img.height;
+  const sw = img.width/n;
+  const sh = img.height/n;
 
-  // 보드 SVG (클립패스로 조각 모양 표현)
-  let boardSvg = `<svg width="${totalW}" height="${totalH}" viewBox="0 0 ${totalW} ${totalH}"
-    xmlns="http://www.w3.org/2000/svg" style="border:2px solid var(--bd);border-radius:8px;background:#f0f0f0"
-    id="jig-board-svg">
-    <defs>`;
+  // 클립 경로로 퍼즐 모양
+  ctx.save();
+  drawPuzzlePiecePath(ctx, p.targetX, p.targetY, cellSize, cellSize, p.tabs||{top:0,right:0,bottom:0,left:0});
+  ctx.clip();
+  ctx.drawImage(img, sx, sy, sw, sh, p.targetX, p.targetY, cellSize, cellSize);
+  ctx.restore();
 
-  // 클립패스 정의
-  BG.pieces.forEach(piece=>{
-    const px=piece.c*cellW, py=piece.r*cellH;
-    const path=generatePuzzlePath(piece.c,piece.r,n,n,cellW,cellH,piece.tabs);
-    boardSvg+=`<clipPath id="clip-${piece.id}">
-      <path d="${path}" transform="translate(${px},${py})"/>
-    </clipPath>`;
-  });
-  boardSvg+='</defs>';
+  // 테두리
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  drawPuzzlePiecePath(ctx, p.targetX, p.targetY, cellSize, cellSize, p.tabs||{top:0,right:0,bottom:0,left:0});
+  ctx.stroke();
+}
 
-  // 배치된 조각들
-  placed.forEach((piece,slotIdx)=>{
-    if(!piece) return;
-    const slotR=Math.floor(slotIdx/n), slotC=slotIdx%n;
-    const px=slotC*cellW, py=slotR*cellH;
-    const srcX=(piece.c/n)*100, srcY=(piece.r/n)*100;
-    boardSvg+=`
-      <image href="${painting.url}"
-        x="${px-piece.c*cellW}" y="${py-piece.r*cellH}"
-        width="${totalW}" height="${totalH}"
-        clip-path="url(#clip-${piece.id})"
-        preserveAspectRatio="xMidYMid slice"/>
-      <path d="${generatePuzzlePath(piece.c,piece.r,n,n,cellW,cellH,piece.tabs)}"
-        transform="translate(${px},${py})"
-        fill="none" stroke="white" stroke-width="1.5" opacity="0.6"/>`;
-  });
+function drawPieceInTray(p, isDragging=false){
+  const {ctx, img, n, cellSize} = BG;
+  const size = p.size;
+  const sx = (p.c/n)*img.width;
+  const sy = (p.r/n)*img.height;
+  const sw = img.width/n;
+  const sh = img.height/n;
 
-  // 빈 슬롯 표시
-  placed.forEach((piece,slotIdx)=>{
-    if(piece) return;
-    const slotR=Math.floor(slotIdx/n), slotC=slotIdx%n;
-    const px=slotC*cellW, py=slotR*cellH;
-    boardSvg+=`<rect x="${px+1}" y="${py+1}" width="${cellW-2}" height="${cellH-2}"
-      fill="rgba(200,200,200,0.3)" stroke="#bbb" stroke-dasharray="4,2" stroke-width="1"
-      rx="2" data-slot="${slotIdx}" style="cursor:pointer" onclick="dropJigsawSlot(${slotIdx})"/>`;
-  });
+  ctx.save();
+  if(isDragging){
+    ctx.shadowColor = 'rgba(0,0,0,0.4)';
+    ctx.shadowBlur = 12;
+  }
 
-  boardSvg+='</svg>';
+  // 조각 클립
+  ctx.beginPath();
+  ctx.roundRect(p.x, p.y, size, size, 4);
+  ctx.clip();
 
-  // 트레이: 남은 조각들 (작은 SVG로 표시)
-  const trayPieceSize = Math.min(60, Math.floor(boardSize*0.22));
-  let trayHtml = `<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
-    padding:.75rem;background:var(--bg2);border-radius:12px;min-height:70px;margin-top:.75rem" id="jig-tray">`;
+  // 이미지 그리기
+  ctx.drawImage(img, sx, sy, sw, sh, p.x, p.y, size, size);
+  ctx.restore();
 
-  shuffled.forEach(piece=>{
-    if(placed.some(p=>p&&p.id===piece.id)) return;
-    const scale = trayPieceSize/cellW;
-    const tw = Math.ceil(cellW*scale), th = Math.ceil(cellH*scale);
-    const path = generatePuzzlePath(piece.c,piece.r,n,n,cellW,cellH,piece.tabs);
-    trayHtml+=`
-      <div draggable="true" ondragstart="dragJigsawPiece(event,${piece.id})"
-        onclick="selectJigsawPiece(${piece.id})"
-        data-piece="${piece.id}"
-        style="cursor:grab;border-radius:4px;overflow:visible;
-               ${BG.selectedPiece===piece.id?'outline:3px solid var(--acc);outline-offset:2px':''}">
-        <svg width="${tw+10}" height="${th+10}" viewBox="-5 -5 ${cellW+10} ${cellH+10}"
-          xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <clipPath id="tclip-${piece.id}">
-              <path d="${path}"/>
-            </clipPath>
-          </defs>
-          <image href="${painting.url}"
-            x="${-piece.c*cellW}" y="${-piece.r*cellH}"
-            width="${totalW}" height="${totalH}"
-            clip-path="url(#tclip-${piece.id})"
-            preserveAspectRatio="xMidYMid slice"
-            transform="scale(${scale})"/>
-          <path d="${path}" transform="scale(${scale})"
-            fill="none" stroke="white" stroke-width="1" opacity="0.7"/>
-        </svg>
-      </div>`;
-  });
-  trayHtml+='</div>';
+  // 테두리
+  ctx.strokeStyle = isDragging ? 'var(--acc)' : 'rgba(0,0,0,0.15)';
+  ctx.lineWidth = isDragging ? 2 : 1;
+  ctx.beginPath();
+  ctx.roundRect(p.x, p.y, size, size, 4);
+  ctx.stroke();
+}
 
-  document.getElementById('gov-body').innerHTML=`
-    <div style="text-align:center;margin-bottom:.5rem">
-      <div style="font-size:14px;font-weight:700">${painting.name}</div>
-      <div style="font-size:11px;color:var(--t3)">${painting.artist} · ${n}×${n} · Lv.${BG.level}</div>
-    </div>
-    <div style="display:flex;justify-content:center">${boardSvg}</div>
-    ${!isComplete ? trayHtml : `
-      <div class="fb-box ok">🎉 완성했습니다!</div>
-      <div style="display:flex;justify-content:center;margin:.75rem 0">
-        <img src="${painting.url}" style="max-width:200px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.2)">
+function drawPuzzlePiecePath(ctx, x, y, w, h, tabs){
+  const tab = 0.28;
+  const cx = x+w/2, cy = y+h/2;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  // 위
+  if(tabs.top===0){
+    ctx.lineTo(x+w, y);
+  } else {
+    const d=tabs.top;
+    ctx.lineTo(cx-w*0.18, y);
+    ctx.bezierCurveTo(cx-w*0.18, y+d*h*tab*-0.6, cx+w*0.18, y+d*h*tab*-0.6, cx+w*0.18, y);
+    ctx.lineTo(x+w, y);
+  }
+  // 오른쪽
+  if(tabs.right===0){
+    ctx.lineTo(x+w, y+h);
+  } else {
+    const d=tabs.right;
+    ctx.lineTo(x+w, cy-h*0.18);
+    ctx.bezierCurveTo(x+w+d*w*tab*0.6, cy-h*0.18, x+w+d*w*tab*0.6, cy+h*0.18, x+w, cy+h*0.18);
+    ctx.lineTo(x+w, y+h);
+  }
+  // 아래 (역방향)
+  if(tabs.bottom===0){
+    ctx.lineTo(x, y+h);
+  } else {
+    const d=tabs.bottom;
+    ctx.lineTo(cx+w*0.18, y+h);
+    ctx.bezierCurveTo(cx+w*0.18, y+h+d*h*tab*0.6, cx-w*0.18, y+h+d*h*tab*0.6, cx-w*0.18, y+h);
+    ctx.lineTo(x, y+h);
+  }
+  // 왼쪽 (역방향)
+  if(tabs.left===0){
+    ctx.lineTo(x, y);
+  } else {
+    const d=tabs.left;
+    ctx.lineTo(x, cy+h*0.18);
+    ctx.bezierCurveTo(x-d*w*tab*0.6, cy+h*0.18, x-d*w*tab*0.6, cy-h*0.18, x, cy-h*0.18);
+    ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+}
+
+// ── 마우스/터치 드래그 ──
+function getCanvasPos(e){
+  const canvas = BG.canvas;
+  if(!canvas) return {x:0,y:0};
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
+  };
+}
+
+function onJigMouseDown(e){
+  const {x, y} = getCanvasPos(e);
+  const {pieces, boardH, trayY} = BG;
+
+  // 트레이 영역 클릭 → 조각 선택
+  if(y > trayY){
+    // 역순으로 확인 (위에 있는 조각 우선)
+    for(let i=pieces.length-1;i>=0;i--){
+      const p=pieces[i];
+      if(!p.placed && x>=p.x && x<=p.x+p.size && y>=p.y && y<=p.y+p.size){
+        BG.dragPiece=p;
+        BG.dragOffX=x-p.x;
+        BG.dragOffY=y-p.y;
+        BG.canvas.style.cursor='grabbing';
+        // 드래그 조각을 배열 맨 뒤로 (위에 그려짐)
+        pieces.splice(i,1);
+        pieces.push(p);
+        drawJigsaw();
+        return;
+      }
+    }
+  }
+  // 보드 영역 클릭 → 배치된 조각 들기 (선택적)
+}
+
+function onJigMouseMove(e){
+  if(!BG.dragPiece) return;
+  const {x, y} = getCanvasPos(e);
+  BG.dragPiece.x = x - BG.dragOffX;
+  BG.dragPiece.y = y - BG.dragOffY;
+  drawJigsaw();
+}
+
+function onJigMouseUp(e){
+  if(!BG.dragPiece) return;
+  const p = BG.dragPiece;
+  const {cellSize, n, boardW, boardH} = BG;
+
+  // 보드 위에 놓았는지 확인
+  const cx = p.x + p.size/2;
+  const cy = p.y + p.size/2;
+
+  if(cx>=0 && cx<=boardW && cy>=0 && cy<=boardH){
+    const col = Math.floor(cx/cellSize);
+    const row = Math.floor(cy/cellSize);
+    if(row>=0 && row<n && col>=0 && col<n){
+      // 맞는 위치인지 확인
+      if(row===p.r && col===p.c){
+        // 정확한 위치 → 스냅
+        p.placed = true;
+        p.targetX = p.c*cellSize;
+        p.targetY = p.r*cellSize;
+        BG.solved++;
+        updateJigsawProgress();
+      } else {
+        // 틀린 위치 → 트레이로 복귀
+        returnToTray(p);
+      }
+    } else {
+      returnToTray(p);
+    }
+  } else {
+    returnToTray(p);
+  }
+
+  BG.dragPiece = null;
+  BG.canvas.style.cursor = 'grab';
+  drawJigsaw();
+
+  // 완성 체크
+  if(BG.solved >= BG.cfg.pieces){
+    clearInterval(BG.timerInterval);
+    setTimeout(()=>showJigsawComplete(), 300);
+  }
+}
+
+function returnToTray(p){
+  const {boardW, boardH, cfg, n, pieces} = BG;
+  const trayItemSize = p.size;
+  const perRow = Math.floor(boardW / (trayItemSize+8));
+  const unplacedPieces = pieces.filter(pp=>!pp.placed && pp!==p);
+  const idx = unplacedPieces.length;
+  const col = idx % perRow;
+  const row = Math.floor(idx / perRow);
+  p.x = col*(trayItemSize+8)+4;
+  p.y = (boardH+12) + row*(trayItemSize+8)+4;
+}
+
+function startJigsawTimer(){
+  if(BG.timerInterval) clearInterval(BG.timerInterval);
+  BG.timerInterval = setInterval(()=>{
+    BG.timer--;
+    const el = document.getElementById('jig-timer');
+    if(el){
+      el.textContent = formatTime(BG.timer);
+      if(BG.timer<=30) el.style.color='#dc2626';
+    }
+    if(BG.timer<=0){
+      clearInterval(BG.timerInterval);
+      showJigsawTimeUp();
+    }
+  }, 1000);
+}
+
+function updateJigsawProgress(){
+  const el = document.getElementById('jig-progress');
+  if(el) el.textContent = `${BG.solved}/${BG.cfg.pieces} 완료`;
+}
+
+function showJigsawComplete(){
+  const elapsed = BG.cfg.time - BG.timer;
+  const body = document.getElementById('gov-body');
+  if(!body) return;
+  // 완성 이미지 표시
+  body.innerHTML = `
+    <div style="text-align:center;padding:1rem 0">
+      <div style="font-size:48px;margin-bottom:.75rem">🎉</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:.25rem">완성!</div>
+      <div style="font-size:13px;color:var(--t3);margin-bottom:1rem">
+        ${BG.painting.name} · ${formatTime(elapsed)} 소요
+      </div>
+      <img src="${BG.painting.url}" style="max-width:240px;max-height:200px;border-radius:10px;
+           box-shadow:0 4px 16px rgba(0,0,0,.2);margin-bottom:1rem">
+      <div class="gbtns" style="justify-content:center">
+        <button class="gbp" style="background:var(--acc)" onclick="nextGame()">다음 게임 →</button>
+        <button class="gbs" onclick="closeGame()">종료</button>
+      </div>
+    </div>`;
+}
+
+function showJigsawTimeUp(){
+  const body = document.getElementById('gov-body');
+  if(!body) return;
+  body.innerHTML = `
+    <div style="text-align:center;padding:1rem 0">
+      <div style="font-size:48px;margin-bottom:.75rem">⏰</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:.5rem">시간 초과!</div>
+      <div style="font-size:13px;color:var(--t3);margin-bottom:1rem">
+        ${BG.solved}/${BG.cfg.pieces} 완료
       </div>
       <div class="gbtns" style="justify-content:center">
-        <button class="gbp" style="background:var(--acc)" onclick="openIndieLov('jigsaw')">다른 레벨</button>
-        <button class="gbs" onclick="closeGame()">나가기</button>
-      </div>`}`;
+        <button class="gbp" style="background:var(--acc)" onclick="nextGame()">다시 도전 →</button>
+        <button class="gbs" onclick="closeGame()">종료</button>
+      </div>
+    </div>`;
 }
 
-// 모바일/클릭용: 조각 선택 후 슬롯 클릭
-function selectJigsawPiece(pieceId){
-  BG.selectedPiece = BG.selectedPiece===pieceId ? null : pieceId;
-  renderJigsawGame();
-}
-function dropJigsawSlot(slotIdx){
-  const pid = BG.selectedPiece;
-  if(pid===null||pid===undefined) return;
-  const piece=BG.pieces.find(p=>p.id===pid);
-  if(!piece) return;
-  BG.placed=BG.placed.map(p=>p&&p.id===pid?null:p);
-  BG.placed[slotIdx]=piece;
-  BG.selectedPiece=null;
-  renderJigsawGame();
-}
-
-// 드래그앤드롭
-function dragJigsawPiece(e,pieceId){
-  BG.dragId=pieceId;
-  e.dataTransfer.setData('text/plain',String(pieceId));
-}
 // (보드 슬롯 drop은 onclick=dropJigsawSlot으로 통일)
 
 
