@@ -1048,14 +1048,22 @@ function genMagicSquare(level){
       const i=Math.floor(Math.random()*9);
       if(!blankIdx.includes(i)) blankIdx.push(i);
     }
-    return {size:3,grid:modified,magic:actualMagic,blanks:blankIdx,userGrid:modified.map(r=>[...r])};
+    // userGrid에서 빈칸을 0으로 설정
+    const userGrid3 = modified.map((r,ri)=>r.map((v,ci)=>
+      blankIdx.includes(ri*3+ci)?0:v
+    ));
+    return {size:3,grid:modified,magic:actualMagic,blanks:blankIdx,userGrid:userGrid3};
   }
   // 4×4는 단순화된 방식
   const magic4 = 34;
   const base4=[[16,3,2,13],[5,10,11,8],[9,6,7,12],[4,15,14,1]];
   const blanks4=[];
   while(blanks4.length<6){const i=Math.floor(Math.random()*16);if(!blanks4.includes(i))blanks4.push(i);}
-  return {size:4,grid:base4,magic:magic4,blanks:blanks4,userGrid:base4.map(r=>[...r])};
+  // userGrid에서 빈칸을 0으로 설정
+  const userGrid4 = base4.map((r,ri)=>r.map((v,ci)=>
+    blanks4.includes(ri*4+ci)?0:v
+  ));
+  return {size:4,grid:base4,magic:magic4,blanks:blanks4,userGrid:userGrid4};
 }
 function startMagicSquare(level){
   BG={gameId:'magic',level,...genMagicSquare(level),selected:null};
