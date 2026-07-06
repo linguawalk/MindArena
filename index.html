@@ -1100,15 +1100,17 @@ function renderMagicSquare(){
       모든 행·열·대각선의 합이 <strong>${magic}</strong>이 되도록 채우세요
     </div>
     ${g}
-    <div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-bottom:.75rem">
-      ${Array.from({length:size===3?9:16},(_,i)=>i+1).map(n=>
-        `<button onclick="inputMagic(${n})"
-          style="width:36px;height:36px;border-radius:7px;border:1.5px solid var(--bd);
-                 background:white;font-size:13px;font-weight:700;cursor:pointer">${n}</button>`
-      ).join('')}
-      <button onclick="inputMagic(0)"
-        style="width:36px;height:36px;border-radius:7px;border:1.5px solid var(--bd);
-               background:var(--bg2);font-size:12px;cursor:pointer">✕</button>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:.75rem;padding:0 .5rem">
+      <div style="font-size:12px;color:var(--t3);white-space:nowrap">선택한 칸에 입력:</div>
+      <input id="magic-inp" type="number" placeholder="숫자"
+        style="flex:1;padding:.6rem .75rem;border-radius:8px;border:2px solid var(--acc);
+               font-family:inherit;font-size:18px;font-weight:700;text-align:center;
+               outline:none;color:var(--acc)"
+        onkeydown="if(event.key==='Enter')confirmMagic()"
+        oninput="confirmMagic()">
+      <button onclick="clearMagic()"
+        style="padding:.6rem .9rem;border-radius:8px;border:1.5px solid var(--bd);
+               background:var(--bg2);font-size:14px;cursor:pointer">✕</button>
     </div>
     ${allCorrect&&blanks.every(i=>userGrid[Math.floor(i/size)][i%size]>0)?`
       <div class="fb-box ok">🎉 완성!</div>
@@ -1117,11 +1119,32 @@ function renderMagicSquare(){
         <button class="gbs" onclick="closeGame()">나가기</button>
       </div>`:''} `;
 }
-function selectMagic(i){BG.selected=i;renderMagicSquare();}
-function inputMagic(n){
+function selectMagic(i){
+  BG.selected=i;
+  renderMagicSquare();
+  setTimeout(()=>{
+    const inp=document.getElementById('magic-inp');
+    if(inp){
+      const cur=BG.userGrid[Math.floor(i/BG.size)][i%BG.size];
+      inp.value=cur||'';
+      inp.focus();inp.select();
+    }
+  },50);
+}
+function confirmMagic(){
   if(BG.selected===null)return;
-  const i=BG.selected;
-  BG.userGrid[Math.floor(i/BG.size)][i%BG.size]=n||0;
+  const inp=document.getElementById('magic-inp');
+  if(!inp)return;
+  const n=parseInt(inp.value)||0;
+  BG.userGrid[Math.floor(BG.selected/BG.size)][BG.selected%BG.size]=n;
+  renderMagicSquare();
+  setTimeout(()=>inp&&inp.focus(),20);
+}
+function clearMagic(){
+  if(BG.selected===null)return;
+  BG.userGrid[Math.floor(BG.selected/BG.size)][BG.selected%BG.size]=0;
+  const inp=document.getElementById('magic-inp');
+  if(inp){inp.value='';inp.focus();}
   renderMagicSquare();
 }
 
