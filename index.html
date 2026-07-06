@@ -739,8 +739,8 @@ function startBaseball(level){
 }
 function renderBaseball(){
   const {secret,digits,guesses,maxTry} = BG;
-  const isOver = guesses.some(g=>g.result===`${digits}S`) || guesses.length>=maxTry;
-  const isWin = guesses.some(g=>g.result===`${digits}S`);
+  const isWin = guesses.some(g=>g.result===`${digits}S 0B`||g.result.startsWith(`${digits}S`));
+  const isOver = isWin || guesses.length>=maxTry;
 
   let histHtml = guesses.map(g=>`
     <div style="display:flex;gap:.5rem;align-items:center;padding:.5rem;background:var(--bg2);border-radius:8px">
@@ -1188,6 +1188,42 @@ function nextMontyRound(){
 
 // ── 7. 암호 해독 ──
 function startCipher(level){
+  // 첫 시작 시 규칙 설명 화면 표시
+  if(!BG.cipherRuleShown){
+    BG={cipherRuleShown:true,gameId:'cipher_intro',level};
+    document.getElementById('gov-body').innerHTML=`
+      <div style="padding:.5rem 0">
+        <div style="font-size:16px;font-weight:700;margin-bottom:1rem;text-align:center">🔐 암호 해독 규칙</div>
+        <div style="background:var(--bg2);border-radius:12px;padding:1.25rem;margin-bottom:1rem">
+          <div style="font-size:14px;font-weight:600;margin-bottom:.75rem;color:var(--acc)">게임 방법</div>
+          <div style="font-size:13px;line-height:1.8;color:var(--t2)">
+            1. 암호화된 한글 문장이 제시됩니다.<br>
+            2. 각 글자는 유니코드 값이 일정량 이동된 순환 암호입니다.<br>
+            3. 힌트를 통해 이동 크기를 확인하고 원래 문장을 복원하세요.<br>
+            4. 정확한 한글 문장을 입력하면 정답입니다.
+          </div>
+        </div>
+        <div style="background:#fef3c7;border-radius:12px;padding:1.25rem;margin-bottom:1rem">
+          <div style="font-size:14px;font-weight:600;margin-bottom:.75rem;color:#d97706">💡 예시</div>
+          <div style="font-size:13px;line-height:1.8;color:var(--t2)">
+            원문: <strong>안녕하세요</strong><br>
+            암호: <strong style="color:var(--acc)">욌럱할욏슣</strong> (10만큼 이동)<br>
+            → 각 글자를 10만큼 되돌리면 원문이 됩니다
+          </div>
+        </div>
+        <div style="background:#f0fdf4;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem">
+          <div style="font-size:13px;color:#15803d;line-height:1.7">
+            ✅ 레벨이 높을수록 이동 크기가 커지고 문장이 길어집니다.<br>
+            ✅ 힌트 버튼으로 이동 크기를 확인할 수 있습니다.
+          </div>
+        </div>
+        <button class="submit-btn" style="background:var(--acc)" onclick="startCipherGame(${level})">게임 시작!</button>
+      </div>`;
+    return;
+  }
+  startCipherGame(level);
+}
+function startCipherGame(level){
   const messages = [
     '안녕하세요','오늘날씨맑음','수학은재밌어','퍼즐을풀어라',
     '두뇌를훈련해','논리적사고력','창의력키우기','문제해결능력',
@@ -1214,7 +1250,7 @@ function startCipher(level){
   }
   const encoded=msg.split('').map(encodeChar).join('');
 
-  BG={gameId:'cipher',level,original:msg,encoded,shift,userAnswer:'',hint:false};
+  BG={gameId:'cipher',level,original:msg,encoded,shift,userAnswer:'',hint:false,cipherRuleShown:true};
   renderCipher();
 }
 function renderCipher(){
@@ -2475,8 +2511,16 @@ function openIndieLov(gameId){
 
 function openIndieGame(gameId,level){
   closeLov();
-  const titles={sudoku:'🔢 스도쿠',wordle:'🔤 워들',abacus:'🧮 주산연습',jigsaw:'🧩 직소퍼즐'};
-  document.getElementById('gov-title').textContent=titles[gameId]||gameId;
+  const allTitles={
+    sudoku:'🔢 스도쿠',wordle:'🔤 워들',abacus:'🧮 주산연습',jigsaw:'🖼️ 직소퍼즐',
+    baseball:'⚾ 숫자 야구',sliding:'🔲 슬라이딩 퍼즐',hanoi:'🗼 하노이의 탑',
+    euler:'✏️ 한붓그리기',magic:'🔮 마방진',monty:'🚗 몬티홀',
+    cipher:'🔐 암호 해독',nono:'📋 네모네모로직',kenken:'🧮 켄켄',kakuro:'➕ 카쿠로',
+    mine:'💣 지뢰 찾기','2048':'🔢 2048',lights:'💡 라이트 끄기',
+    binary:'01 바이너리',coloring:'🎨 색칠하기',
+    diagsudo:'✳️ 대각선 스도쿠',tecto:'🧩 텍투오닉',aqua:'🐠 아쿠아리움',
+  };
+  document.getElementById('gov-title').textContent=allTitles[gameId]||gameId;
   document.getElementById('gov-prog').textContent=`Lv.${level}`;
   document.getElementById('gov').classList.add('open');
   document.body.style.overflow='hidden';
